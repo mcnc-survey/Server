@@ -8,11 +8,15 @@
 > ``` shell
 > cd ./infra/ 
 >    ```
-> 3. docker compose명령어 실행
+> 3. docker compose 실행
 > ``` shell
 > docker-compose up -d # -d는 옵션
-> ```
-> 또는
-> ``` shell
+> # 또는
 > docker compose up -d # -d는 옵션
+> ```
+> 4. docker compose 종료
+> ``` shell
+> docker-compose down 
+> # 또는
+> docker compose down 
 > ```
