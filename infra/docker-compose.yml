@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_survey
+    environment:
+      POSTGRES_DB: survey           # 데이터베이스 이름
+      POSTGRES_USER: survey         # 사용자 이름
+      POSTGRES_PASSWORD: survey12!@  # 비밀번호
+    ports:
+      - "5432:5432"                 # 호스트와 컨테이너의 포트 매핑
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # 데이터 영속성 유지
+
+volumes:
+  postgres_data:
