@@ -1,0 +1,100 @@
+%%- Admin
+%%- Surveys
+%%- Question_Types
+%%- Questions
+%%- Responses
+%%- Answers
+
+%%-    Books {
+%%-        int id PK "서적 ID"
+%%-        string title "서적 제목"
+%%-        string publisher "출판사"
+%%-        date publishedDate "출판일"
+%%-    }
+%%-
+%%-    Authors {
+%%-        int id PK "저자 ID"
+%%-        string name "저자 이름"
+%%-    }
+%%-
+%%-    Reviews {
+%%-        int id PK "리뷰 ID"
+%%-        int bookID FK "서적 ID"
+%%-        string content "리뷰 내용"
+%%-        float rating "평점"
+%%-        date createdDate "작성일"
+%%-    }
+%%-
+%%-    BooksAuthors {
+%%-        int bookId FK "서적 ID"
+%%-        int authorId FK "저자 ID"
+%%-    }
+%%-
+%%-    Books ||--o{ Reviews : "has"
+%%-    Books ||--|{ BooksAuthors : "has"
+%%-    Authors ||--|{ BooksAuthors : "writes"
+
+erDiagram
+    Admin {
+        uuid id PK "관리자 id"
+        string email "관리자 email"
+        string password "관리자 비밀번호"
+        string role "권한"
+        date created_at "생성일"
+        string creator_id "생성자"
+        date updated_at "수정일"
+        string updator_id "수정자"
+    }
+
+    Surveys {
+        uuid id PK "설문지 id"
+        uuid admin_id FK "소유자 id"
+        string title "설문지 제목"
+        string description "설문지 상세 설명"
+        string status "설문지 상태"
+        date end_at "설문지 마감 날짜"
+        date created_at "생성일"
+        string creator_id "생성자"
+        date created_at "수정일"
+        string updator_id "수정자"
+    }
+
+    Question_Types {
+        uuid id PK "항목 id"
+        string type UK "항목 이름"
+    }
+
+    Questions {
+        uuid id PK "질문 id"
+        uuid survey_id FK "설문지 id"
+        uuid question_type_id FK "질문 항목 id"
+        string question_title "질문 제목"
+        int order "질문 순서"
+        jsonb question "질문 항목 상세"
+    }
+
+    Responses {
+        uuid id PK "응답지 id"
+        uuid id FK, UK "설문지 id"
+        string creator_id UK "응답자 아이디"
+        date created_at "생성일"
+    }
+
+    Answers {
+        uuid id PK "응답 id"
+        uuid response_id FK "응답지 id"
+        uuid question_id FK "질문 id"
+        uuid question_type_id FK "질문 항목 id"
+        int order "질문 순서"
+        jsonb answer "질문 응답 상세"
+    }
+
+
+    Admin ||--o{ Surveys : "has"
+    Surveys ||--o{ Responses : "has"
+    Surveys ||--|{ Questions : "has"
+    Question_Types ||--|{ Questions: "has"
+    Question_Types ||--|{ Answers: "has"
+    Responses ||--o{ Answers: "has"
+    Questions ||--o{ Answers: "has"
+
