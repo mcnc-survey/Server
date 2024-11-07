@@ -39,18 +39,18 @@ CREATE TABLE QUESTION_TYPES (
 CREATE TABLE questions (
     ID VARCHAR(40) PRIMARY KEY,                                             -- UUID 기본
     SURVEY_ID VARCHAR(40) REFERENCES SURVEYS(ID) ON DELETE CASCADE,         -- 설문 테이블 id를 참조하는 외래키
-    QUESTION_TYPE_ID UUID REFERENCES QUESTION_TYPES(ID) ON DELETE CASCADE,  -- 질문 유형을 참조하는 외래키
+    QUESTION_TYPE_ID VARCHAR(40) REFERENCES QUESTION_TYPES(ID) ON DELETE CASCADE,  -- 질문 유형을 참조하는 외래키
     QUESTION_TITLE VARCHAR(255) NOT NULL,                                   -- 질문 내용
     "ORDER" INT NOT NULL,                                                   -- 질문 순서
     QUESTION JSONB NOT NULL                                                 -- 선택 항목
 );
 
 CREATE TABLE RESPONSES (
-    ID VARCHAR(40) PRIMARY KEY                                                  -- uuid
+    ID VARCHAR(40) PRIMARY KEY,                                                 -- uuid
     SURVEY_ID VARCHAR(40) NOT NULL REFERENCES SURVEYS(ID) ON DELETE CASCADE,    -- 설문 테이블 id를 참조하는 외래키
     CREATED_AT TIMESTAMP DEFAULT NOW(),                                         -- 응답 시간
     CREATED_BY VARCHAR(255) NOT NULL,                                           -- 응답자 email
-    UNIQUE (SURVEY_ID, CREATOR_ID)                                              -- 하나의 설문에 하나의 응답자
+    UNIQUE (SURVEY_ID, CREATED_BY)                                              -- 하나의 설문에 하나의 응답자
 );
 
 CREATE TABLE ANSWERS (
