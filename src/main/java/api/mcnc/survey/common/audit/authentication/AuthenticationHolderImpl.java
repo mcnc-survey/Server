@@ -10,7 +10,7 @@ public class AuthenticationHolderImpl implements AuthenticationHolder, Requested
 
     @Override
     public Optional<Authentication> getAuthentication() {
-        return Optional.ofNullable(this.authentication);
+        return Optional.of(this.authentication);
     }
 
     @Override
