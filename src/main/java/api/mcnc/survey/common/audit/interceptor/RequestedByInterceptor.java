@@ -2,20 +2,18 @@ package api.mcnc.survey.common.audit.interceptor;
 
 import api.mcnc.survey.common.audit.authentication.AuthenticationHolder;
 import api.mcnc.survey.common.audit.authentication.RequestedBy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 
 @Component
+@RequiredArgsConstructor
 public class RequestedByInterceptor implements WebRequestInterceptor {
     public static final String REQUESTED_BY_HEADER = "requested-by";
 
     private final AuthenticationHolder authenticationHolder;
-
-    public RequestedByInterceptor(AuthenticationHolder authenticationHolder) {
-        this.authenticationHolder = authenticationHolder;
-    }
 
     @Override
     public void preHandle(WebRequest request) {
