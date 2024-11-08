@@ -14,8 +14,9 @@ public record RequestedByAuditorAware(ApplicationContext applicationContext) imp
     @Override
     public Optional<String> getCurrentAuditor() {
         try {
-            return Optional.of(applicationContext.getBean(RequestedByProvider.class))
-                    .flatMap(RequestedByProvider::requestedBy);
+            RequestedByProvider provider = applicationContext.getBean(RequestedByProvider.class);
+            return provider.requestedBy().or(() -> Optional.of(SYSTEM));
+
         } catch (Exception e) {
             return Optional.of(SYSTEM); // 입력되지 않은 경우에는 기본값 "system" 으로 사용
         }
