@@ -39,6 +39,11 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                         .onErrorResume(e -> handleAuthenticationError(exchange, e)); // Handle errors
             }
 
+            if (authHeader == null) {
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return exchange.getResponse().setComplete();
+            }
+
             return chain.filter(exchange);
         };
     }
