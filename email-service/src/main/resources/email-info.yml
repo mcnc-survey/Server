@@ -1,0 +1,7 @@
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: n5ybro2@gmail.com
+  password: powaiewgmupfixcz
+  protocol: smtp
+  tls: true
