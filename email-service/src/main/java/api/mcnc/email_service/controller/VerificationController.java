@@ -1,8 +1,10 @@
 package api.mcnc.email_service.controller;
 
 
+import api.mcnc.email_service.dto.HtmlEmailRequest;
 import api.mcnc.email_service.service.EmailService;
 import api.mcnc.email_service.service.VerificationCode;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +48,7 @@ public class VerificationController {
         VerificationCode storedCode = emailService.getVerificationCode(email);//해당 이메일에서 해당 인증UUID가져오기
 
         if (storedCode == null) {
-            return "이메일에 대한 인증 요청을 찾을 수 없습니다.";
+            return "해당 이메일에 대한 인증 요청을 찾을 수 없습니다.";
         }
 
         if (!storedCode.getCode().equals(code)) {
@@ -59,5 +61,25 @@ public class VerificationController {
 
         return "인증 성공!";
     }
+
+    @PostMapping("/html-email")
+    public String sendHtmlVerificationEmails(@RequestBody HtmlEmailRequest request) {
+        try {
+            // 이메일 서비스 메서드 호출
+            emailService.sendHtmlVerificationEmails(
+                    request.getEmails(),
+                    request.getUserName(),
+                    request.getProjectName(),
+                    request.getDynamicLink()
+            );
+            return "HTML 이메일 전송 완료.";
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return "이메일 전송 실패: " + e.getMessage();
+        }
+    }
+
+
+
 }
 
