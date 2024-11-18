@@ -1,0 +1,12 @@
+spring:
+  application:
+  name: email-service
+
+  config:
+    import: email-info.yml
+
+server:
+  port: 9090
+
+
+
