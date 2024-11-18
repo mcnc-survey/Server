@@ -1,4 +1,4 @@
-package api.mcnc.surveyresponseservice.entity.answer;
+package api.mcnc.surveyresponseservice.entity.response;
 
 /**
  * please explain class!

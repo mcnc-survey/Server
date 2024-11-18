@@ -20,7 +20,7 @@ public class RequestedByInterceptor implements WebRequestInterceptor {
         String requestedBy = request.getHeader(REQUESTED_BY_HEADER);
 
         RequestedBy requestUser = new RequestedBy(requestedBy);
-
+        
         authenticationHolder.setAuthentication(requestUser);
     }
 
