@@ -1,0 +1,16 @@
+// index.adoc
+
+= Respondent Response Application API Document
+:doctype: book
+:source-highlighter: highlightjs
+:sectlinks:
+:toc: left
+:toclevels: 3
+
+= 응답자 페이지
+---
+include::responses.adoc[]
+
+= 응답자 페이지 - 관리자
+---
+include::response-aggregation.adoc[]

@@ -1,0 +1,15 @@
+== 사용자 응답 집계 - 관리자
+
+=== 설문에 대한 사용자의 응답 집계
+
+==== Request
+include::{snippets}/get-response-aggregation/curl-request.adoc[]
+include::{snippets}//get-response-aggregation/http-request.adoc[]
+include::{snippets}//get-response-aggregation/httpie-request.adoc[]
+
+==== pathParam
+include::{snippets}//get-response-aggregation/path-parameters.adoc[]
+
+==== Response
+include::{snippets}//get-response-aggregation/http-response.adoc[]
+include::{snippets}//get-response-aggregation/response-fields.adoc[]

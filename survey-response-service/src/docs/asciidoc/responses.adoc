@@ -1,0 +1,54 @@
+== 사용자 응답
+
+=== 설문에 대한 사용자의 응답
+
+==== Request
+include::{snippets}/saveResponse/http-request.adoc[]
+
+==== pathParam
+include::{snippets}/saveResponse/path-parameters.adoc[]
+
+==== body
+include::{snippets}/saveResponse/request-body.adoc[]
+include::{snippets}/saveResponse/request-fields.adoc[]
+
+==== Response
+include::{snippets}/saveResponse/http-response.adoc[]
+
+'''
+
+=== 사용자가 작성한 응답 전체 조회
+
+==== Request
+
+include::{snippets}/getAllResponseByRespondent/http-request.adoc[]
+
+==== pathParam
+
+include::{snippets}/getAllResponseByRespondent/path-parameters.adoc[]
+
+==== queryParam
+include::{snippets}/getAllResponseByRespondent/query-parameters.adoc[]
+
+==== Response
+
+include::{snippets}/getAllResponseByRespondent/response-body.adoc[]
+include::{snippets}/getAllResponseByRespondent/response-fields.adoc[]
+
+'''
+
+=== 응답 수정
+
+==== Request
+include::{snippets}/updateResponse/http-request.adoc[]
+
+==== pathParam
+include::{snippets}/updateResponse/path-parameters.adoc[]
+
+==== body
+include::{snippets}/updateResponse/request-body.adoc[]
+include::{snippets}/updateResponse/request-fields.adoc[]
+
+==== Response
+include::{snippets}/updateResponse/http-response.adoc[]
+

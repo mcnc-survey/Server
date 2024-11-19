@@ -2,15 +2,11 @@ spring:
   application:
   name: email-service
 
+  config:
+    import: email-info.yml
+
 server:
   port: 9090
 
 
 
-mail:
-  host: smtp.gmail.com
-  port: 587
-  username: n5ybro2@gmail.com
-  password: powaiewgmupfixcz
-  protocol: smtp
-  tls: true
