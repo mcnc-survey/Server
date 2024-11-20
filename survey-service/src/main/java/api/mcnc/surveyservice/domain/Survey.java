@@ -1,5 +1,6 @@
 package api.mcnc.surveyservice.domain;
 
+import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import lombok.Builder;
 
@@ -31,6 +32,17 @@ public record Survey(
       .status(SurveyStatus.WAIT)
       .startAt(startAt)
       .endAt(endAt)
+      .build();
+  }
+
+  public SurveyResponse toResponse() {
+    return SurveyResponse.builder()
+      .id(this.id)
+      .title(this.title)
+      .description(this.description)
+      .status(this.status)
+      .startAt(this.startAt.toString())
+      .endAt(this.endAt.toString())
       .build();
   }
 

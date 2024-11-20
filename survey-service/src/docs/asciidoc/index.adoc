@@ -7,6 +7,9 @@
 :toc: left
 :toclevels: 3
 
-= 관리자
 '''
-include::survey-save.adoc[]
+include::survey_save.adoc[]
+
+''''
+include::survey_fetch.adoc[]
+

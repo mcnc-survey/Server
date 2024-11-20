@@ -4,13 +4,16 @@ import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
 import api.mcnc.surveyservice.common.exception.custom.QuestionException;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.common.result.Api;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,13 +34,13 @@ public class SurveyExceptionHandler {
 
   @ExceptionHandler(SurveyException.class)
   public ResponseEntity<Api<String>> handleResponseException(SurveyException e) {
-    Api<String> response = Api.fail(e.getCode(), e.getMessage());
+    Api<String> response = Api.fail(e.getCode(), null);
     return ResponseEntity.ok(response);
   }
 
   @ExceptionHandler(QuestionException.class)
   public ResponseEntity<Api<String>> handleQuestionException(QuestionException e) {
-    Api<String> response = Api.fail(e.getCode(), e.getMessage());
+    Api<String> response = Api.fail(e.getCode(), null);
     return ResponseEntity.ok(response);
   }
 
@@ -50,6 +53,11 @@ public class SurveyExceptionHandler {
       .toList();
     Api<Object> response = Api.fail(SurveyErrorCode.INVALID_REQUEST, errorList);
     return ResponseEntity.ok(response);
+  }
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<Api<Object>> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    return ResponseEntity.ok(Api.fail(SurveyErrorCode.INVALID_JSON_REQUEST, null));
   }
 
 

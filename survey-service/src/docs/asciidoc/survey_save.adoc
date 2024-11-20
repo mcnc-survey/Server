@@ -10,4 +10,6 @@ include::{snippets}/saveSurvey/request-fields.adoc[]
 
 ==== response
 include::{snippets}/saveSurvey/http-response.adoc[]
+===== fields
+include::{snippets}/saveSurvey/response-fields.adoc[]
 

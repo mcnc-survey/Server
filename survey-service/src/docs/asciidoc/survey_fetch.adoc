@@ -1,0 +1,10 @@
+
+=== 제작한 설문 조회
+==== request
+include::{snippets}/getSurveyList/http-request.adoc[]
+
+==== response
+include::{snippets}/getSurveyList/http-response.adoc[]
+===== fields
+include::{snippets}/getSurveyList/response-fields.adoc[]
+

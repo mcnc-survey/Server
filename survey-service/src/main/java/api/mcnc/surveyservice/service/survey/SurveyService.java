@@ -1,17 +1,21 @@
 package api.mcnc.surveyservice.service.survey;
 
 import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
+import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
+import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.domain.Survey;
+import api.mcnc.surveyservice.repository.survey.FetchSurveyRepository;
 import api.mcnc.surveyservice.repository.survey.InsertSurveyAndQuestionListRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.START_TIME_MUST_BE_BEFORE_END_TIME;
 
 /**
  * please explain class!
@@ -22,16 +26,22 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SurveyService {
+  private final FetchSurveyRepository fetchSurveyRepository;
   private final InsertSurveyAndQuestionListRepository insertSurveyAndQuestionListRepository;
   private final RequestedByProvider provider;
 
 //  @Transactional
   public void setSurveyAndQuestions(SurveyCreateRequest surveyCreateRequest) {
-    String adminId = provider.requestedBy().orElse("SYSTEM");
+    String adminId = getAdminId();
     String title = surveyCreateRequest.title();
     String description = surveyCreateRequest.description();
     LocalDateTime startAt = surveyCreateRequest.startAt();
     LocalDateTime endAt = surveyCreateRequest.endAt();
+
+    if(startAt.isAfter(endAt)) {
+      throw new SurveyException(START_TIME_MUST_BE_BEFORE_END_TIME);
+    }
+
     Survey survey = Survey.fromRequest(adminId, title, description, startAt, endAt);
 
     List<QuestionCreateRequest> questionCreateRequestList = surveyCreateRequest.questions();
@@ -41,6 +51,12 @@ public class SurveyService {
   }
 
 
+  public List<SurveyResponse> getSurveyList() {
+    String adminId = getAdminId();
+    return fetchSurveyRepository.fetchAllByAdminId(adminId).stream().map(Survey::toResponse).toList();
+  }
 
-
+  private String getAdminId() {
+    return provider.requestedBy().orElse("SYSTEM");
+  }
 }

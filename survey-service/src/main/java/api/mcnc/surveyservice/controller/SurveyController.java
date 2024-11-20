@@ -3,12 +3,16 @@ package api.mcnc.surveyservice.controller;
 import api.mcnc.surveyservice.common.enums.SuccessCode;
 import api.mcnc.surveyservice.common.result.Api;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
+import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.service.survey.SurveyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * please explain class!
@@ -26,6 +30,12 @@ public class SurveyController {
   public Api<Void> createSurvey(@RequestBody @Valid SurveyCreateRequest surveyCreateRequest) {
     surveyService.setSurveyAndQuestions(surveyCreateRequest);
     return Api.ok(SuccessCode.SURVEY_CREATE_SUCCESS, null);
+  }
+
+  @GetMapping("/surveys")
+  public Api<List<SurveyResponse>> getSurveyList() {
+    List<SurveyResponse> surveyList = surveyService.getSurveyList();
+    return Api.ok(SuccessCode.SUCCESS, surveyList);
   }
 
 }
