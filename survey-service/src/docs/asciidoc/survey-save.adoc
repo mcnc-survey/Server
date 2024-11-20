@@ -1,0 +1,13 @@
+== 설문
+
+=== 설문 생성
+==== request
+include::{snippets}/saveSurvey/http-request.adoc[]
+
+===== fields
+include::{snippets}/saveSurvey/request-fields.adoc[]
+
+
+==== response
+include::{snippets}/saveSurvey/http-response.adoc[]
+
