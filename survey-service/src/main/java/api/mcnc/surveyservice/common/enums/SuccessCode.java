@@ -14,8 +14,8 @@ import lombok.Getter;
 public enum SuccessCode implements Code{
 
   SUCCESS("200","OK"),
-  RESPONSE_CREATE_SUCCESS("201","CREATED"),
-  RESPONSE_UPDATE_SUCCESS("200", "UPDATED"),
+  SURVEY_CREATE_SUCCESS("201","CREATED"),
+  SURVEY_UPDATE_SUCCESS("200", "UPDATED"),
 
 
   ;

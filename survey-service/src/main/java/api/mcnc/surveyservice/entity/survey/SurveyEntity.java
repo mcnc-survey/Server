@@ -42,7 +42,7 @@ public class SurveyEntity extends MutableBaseEntity {
   private LocalDateTime startAt;
   @Column(name = "END_AT")
   private LocalDateTime endAt;
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "surveyId", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
   List<QuestionEntity> questions;
 
   public Survey toDomain() {
@@ -60,17 +60,20 @@ public class SurveyEntity extends MutableBaseEntity {
   }
 
   public static SurveyEntity fromDomain(Survey survey) {
-    List<QuestionEntity> questionEntityList = survey.question().stream().map(QuestionEntity::fromDomain).toList();
     return SurveyEntity.builder()
       .id(UUID.randomUUID().toString())
       .adminId(survey.adminId())
       .title(survey.title())
       .description(survey.description())
-      .questions(questionEntityList)
       .status(survey.status())
       .startAt(survey.startAt())
       .endAt(survey.endAt())
       .build();
+  }
+
+  public void addQuestions(List<QuestionEntity> questionEntityList) {
+    questionEntityList.forEach(questionEntity -> questionEntity.addSurvey(this));
+    this.questions = questionEntityList;
   }
 
   public boolean isEqualsAdminId(String adminId) {

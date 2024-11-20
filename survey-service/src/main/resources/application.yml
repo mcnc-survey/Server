@@ -19,6 +19,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           batch_size: 30
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+
     hibernate:
       ddl-auto: validate
     open-in-view: false

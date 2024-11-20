@@ -1,6 +1,7 @@
 package api.mcnc.surveyservice.entity.question;
 
 import api.mcnc.surveyservice.domain.Question;
+import api.mcnc.surveyservice.entity.audit.MutableBaseEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,16 +22,19 @@ import java.util.UUID;
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionEntity {
+public class QuestionEntity extends MutableBaseEntity {
   @Id
   @Column(name = "ID")
   private String id;
   @JoinColumn(name = "SURVEY_ID")
-  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private SurveyEntity survey;
+  @Column(name = "TITLE")
+  private String title;
   @Column(name = "TYPE")
-  private String questionType;
-  @Column(name = "ORDER")
+  @Enumerated(EnumType.STRING)
+  private QuestionType questionType;
+  @Column(name = "ORDER_NUMBER")
   private Integer order;
   @Column(name = "COLUMNS")
   private String columns;
@@ -41,6 +45,7 @@ public class QuestionEntity {
     return Question.builder()
       .id(id)
       .questionType(questionType)
+      .title(title)
       .order(order)
       .columns(columns)
       .rows(rows)
@@ -51,10 +56,14 @@ public class QuestionEntity {
     return QuestionEntity.builder()
       .id(UUID.randomUUID().toString())
       .questionType(question.questionType())
+      .title(question.title())
       .order(question.order())
       .columns(question.columns())
       .rows(question.rows())
       .build();
   }
 
+  public void addSurvey(SurveyEntity surveyEntity) {
+    this.survey = surveyEntity;
+  }
 }

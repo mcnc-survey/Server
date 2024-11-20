@@ -1,6 +1,6 @@
 package api.mcnc.surveyservice.common.audit;
 
-import api.mcnc.surveyresponseservice.common.audit.authentication.RequestedByProvider;
+import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
