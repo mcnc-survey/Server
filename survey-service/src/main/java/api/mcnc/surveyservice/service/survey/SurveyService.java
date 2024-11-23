@@ -1,5 +1,6 @@
 package api.mcnc.surveyservice.service.survey;
 
+import api.mcnc.surveyservice.client.AdminServiceClientService;
 import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.INVALID_REQUEST;
 import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.START_TIME_MUST_BE_BEFORE_END_TIME;
 
 /**
@@ -28,6 +30,7 @@ import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.START_TIME_MUS
 public class SurveyService {
   private final FetchSurveyRepository fetchSurveyRepository;
   private final InsertSurveyAndQuestionListRepository insertSurveyAndQuestionListRepository;
+  private final AdminServiceClientService adminServiceClientService;
   private final RequestedByProvider provider;
 
 //  @Transactional
@@ -57,7 +60,12 @@ public class SurveyService {
   }
 
   private String getAdminId() {
-    return provider.requestedBy().orElse("SYSTEM");
+    String adminId = provider.requestedBy().orElse("SYSTEM");
+    boolean isExistAdmin = adminServiceClientService.isExistAdmin(adminId);
+    if (!isExistAdmin) {
+      throw new SurveyException(INVALID_REQUEST, "관리자 아이디가 일치하지 않습니다.");
+    }
+    return adminId;
   }
 
   public boolean existsBySurveyId(String surveyId) {

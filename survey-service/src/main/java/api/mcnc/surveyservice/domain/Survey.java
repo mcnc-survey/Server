@@ -22,7 +22,8 @@ public record Survey(
   List<Question> question,
   SurveyStatus status,
   LocalDateTime startAt,
-  LocalDateTime endAt
+  LocalDateTime endAt,
+  LocalDateTime modifiedAt
 ) {
   public static Survey fromRequest(String adminId, String title, String description, LocalDateTime startAt, LocalDateTime endAt) {
     return Survey.builder()
@@ -39,10 +40,8 @@ public record Survey(
     return SurveyResponse.builder()
       .id(this.id)
       .title(this.title)
-      .description(this.description)
       .status(this.status)
-      .startAt(this.startAt.toString())
-      .endAt(this.endAt.toString())
+      .lastModifiedAt(this.modifiedAt.toString())
       .build();
   }
 

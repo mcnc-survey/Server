@@ -56,6 +56,7 @@ public class SurveyEntity extends MutableBaseEntity {
       .status(status)
       .startAt(startAt)
       .endAt(endAt)
+      .modifiedAt(modifiedAt)
       .build();
   }
 
