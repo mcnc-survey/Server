@@ -1,22 +1,28 @@
 server:
-  port: 10000
+  port: 9091
+
 spring:
   application:
-    name: survey-admin-service
+    name: survey-service
 
   datasource:
     hikari:
-      jdbc-url: jdbc:postgresql://localhost:5432/admin
+      jdbc-url: jdbc:postgresql://localhost:5432/survey
+      driver-class-name: org.postgresql.Driver
       username: survey
       password: survey12!@
-      driver-class-name: org.postgresql.Driver
-
   jpa:
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 30
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+
     hibernate:
       ddl-auto: validate
     open-in-view: false
@@ -36,9 +42,3 @@ eureka:
 
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
-jwt:
-  secret-key: mNg2HmZ+PLALRs2Q6t6AZupdKDSXTOUikLt4dHwIWmHxW047aQRzg4xMBCY9r8li
-  expire:
-    access-token: 60 * 5
-    refresh-token: 60 * 60 * 24 * 30
