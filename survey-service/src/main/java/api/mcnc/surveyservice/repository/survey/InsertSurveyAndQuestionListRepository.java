@@ -37,7 +37,6 @@ public class InsertSurveyAndQuestionListRepository {
       List<QuestionEntity> questionEntityList = questionList.stream().map(QuestionEntity::fromDomain).toList();
       surveyEntity.addQuestions(questionEntityList);
       entityManager.persist(surveyEntity);
-//      questionEntityList.forEach(entityManager::persist);
       entityManager.flush();
     });
   }

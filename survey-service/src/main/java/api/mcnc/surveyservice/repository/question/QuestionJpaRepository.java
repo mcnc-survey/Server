@@ -2,7 +2,7 @@ package api.mcnc.surveyservice.repository.question;
 
 import api.mcnc.surveyservice.entity.question.QuestionEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @author :Uheejoon
  * @since :2024-11-19 오후 1:43
  */
-public interface QuestionJpaRepository extends CrudRepository<QuestionEntity, String> {
+public interface QuestionJpaRepository extends ListCrudRepository<QuestionEntity, String> {
   List<QuestionEntity> findAllBySurvey(SurveyEntity survey);
   boolean existsBySurveyId(String surveyId);
 }
