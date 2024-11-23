@@ -2,10 +2,7 @@ package api.mcnc.surveyrespondentservice.entity;
 
 import api.mcnc.surveyrespondentservice.domain.Respondent;
 import api.mcnc.surveyrespondentservice.entity.audit.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

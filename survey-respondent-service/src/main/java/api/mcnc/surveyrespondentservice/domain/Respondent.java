@@ -17,4 +17,13 @@ public record Respondent(
   String provider,
   String surveyId
 ) {
+  public static Respondent of(AuthenticatedUser user, String surveyId) {
+    return Respondent.builder()
+      .name(user.name())
+      .email(user.email())
+      .phoneNumber(user.phoneNumber())
+      .provider(user.provider())
+      .surveyId(surveyId)
+      .build();
+  }
 }
