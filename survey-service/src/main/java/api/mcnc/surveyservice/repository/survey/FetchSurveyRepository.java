@@ -38,4 +38,10 @@ public class FetchSurveyRepository {
     );
   }
 
+  public Boolean existsBySurveyId(String id) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository.existsById(id)
+    );
+  }
+
 }

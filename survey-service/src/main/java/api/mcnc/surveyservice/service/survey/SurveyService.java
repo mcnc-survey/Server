@@ -59,4 +59,8 @@ public class SurveyService {
   private String getAdminId() {
     return provider.requestedBy().orElse("SYSTEM");
   }
+
+  public boolean existsBySurveyId(String surveyId) {
+    return fetchSurveyRepository.existsBySurveyId(surveyId);
+  }
 }
