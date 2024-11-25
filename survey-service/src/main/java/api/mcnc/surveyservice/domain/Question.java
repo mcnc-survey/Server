@@ -1,6 +1,8 @@
 package api.mcnc.surveyservice.domain;
 
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
+import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
+import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
 import api.mcnc.surveyservice.entity.question.QuestionType;
 import lombok.Builder;
 
@@ -13,7 +15,6 @@ import lombok.Builder;
 @Builder
 public record Question(
   String id,
-//  Survey survey, // 순환 참조 때문에 있어야 할 지 고민
   String title,
   QuestionType questionType,
   Integer order,
@@ -22,6 +23,27 @@ public record Question(
 ) {
   public static Question fromRequest(QuestionCreateRequest request) {
     return Question.builder()
+      .title(request.title())
+      .questionType(request.questionType())
+      .order(request.order())
+      .columns(request.columns())
+      .rows(request.rows())
+      .build();
+  }
+  public QuestionDetailsResponse toDetailsResponse() {
+    return QuestionDetailsResponse.builder()
+      .id(this.id)
+      .title(this.title)
+      .questionType(this.questionType)
+      .order(this.order)
+      .columns(this.columns)
+      .rows(this.rows)
+      .build();
+  }
+
+  public static Question fromRequest(SurveyUpdateRequest.Question request) {
+    return Question.builder()
+      .id(request.id())
       .title(request.title())
       .questionType(request.questionType())
       .order(request.order())

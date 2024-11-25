@@ -18,7 +18,7 @@ public abstract class MutableBaseEntity extends BaseEntity {
 
     @LastModifiedDate
     @Column(name = "MODIFIED_AT")
-    private LocalDateTime modifiedAt;
+    protected LocalDateTime modifiedAt;
 
     @LastModifiedBy
     @Column(name = "MODIFIED_BY")
