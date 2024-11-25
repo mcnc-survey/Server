@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * please explain class!
@@ -18,13 +19,20 @@ import java.util.List;
  */
 public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String> {
   List<SurveyEntity> findAllByAdminId(String adminId);
+  List<SurveyEntity> findAllByAdminIdAndStatus(String adminId, SurveyStatus status);
+
+  Optional<SurveyEntity> findByIdAndAdminId(String id, String adminId);
 
   @Modifying
-  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status = :currentStatus AND s.startAt <= :now")
+  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status != 'DELETE' AND s.status = :currentStatus AND s.startAt <= :now")
   void updateSurveyStatusToStart(@Param("status") SurveyStatus status, @Param("currentStatus") SurveyStatus currentStatus, @Param("now") LocalDateTime now);
 
   @Modifying
-  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status = :currentStatus AND s.endAt <= :now")
+  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status != 'DELETE' AND s.status = :currentStatus AND s.endAt <= :now")
   void updateSurveyStatusToEnd(@Param("status") SurveyStatus status, @Param("currentStatus") SurveyStatus currentStatus, @Param("now") LocalDateTime now);
+
+  @Modifying
+  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.id = :id")
+  void updateSurveyStatus(@Param("id") String id, @Param("status") SurveyStatus status);
 
 }

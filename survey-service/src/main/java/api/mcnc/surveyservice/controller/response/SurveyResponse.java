@@ -15,9 +15,7 @@ import java.time.LocalDateTime;
 public record SurveyResponse(
   String id,
   String title,
-  String description,
   SurveyStatus status,
-  String startAt,
-  String endAt
+  String lastModifiedAt
 ) {
 }

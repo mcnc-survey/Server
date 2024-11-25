@@ -445,23 +445,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_설문">설문</a>
 <ul class="sectlevel2">
-<li><a href="#_설문_생성">설문 생성</a>
-<ul class="sectlevel3">
-<li><a href="#_request">request</a></li>
-<li><a href="#_response">response</a></li>
-</ul>
-</li>
-<li><a href="#_제작한_설문_조회">제작한 설문 조회</a>
-<ul class="sectlevel3">
-<li><a href="#_request_2">request</a></li>
-<li><a href="#_response_2">response</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><a href="#_설문_생성">설문 생성</a></li>
+<li><a href="#_설문_조회">설문 조회</a></li>
+<li><a href="#_설문_상세_조회_수정">설문 상세 조회 - 수정</a></li>
+<li><a href="#_삭제한_설문_조회">삭제한 설문 조회</a></li>
+<li><a href="#_설문_조회캘린더_일정_등록">설문 조회(캘린더 일정 등록)</a></li>
+<li><a href="#_설문_삭제">설문 삭제</a></li>
+<li><a href="#_설문_수정">설문 수정</a></li>
 </ul>
 </div>
 </div>
@@ -471,9 +462,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <hr>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_설문"><a class="link" href="#_설문">설문</a></h2>
-<div class="sectionbody">
 <div class="sect2">
 <h3 id="_설문_생성"><a class="link" href="#_설문_생성">설문 생성</a></h3>
 <div class="sect3">
@@ -482,14 +470,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /surveys HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1065
+Content-Length: 1081
 Host: localhost:8080
 
 {
   "title" : "고객 만족도 조사",
   "description" : "서비스에 대한 피드백을 받고자 설문을 진행합니다.",
-  "startAt" : "2024-11-22T13:55:00",
-  "endAt" : "2024-11-24T13:56:00",
+  "startAt" : "2024-11-26T17:22:05.3137187",
+  "endAt" : "2024-11-29T17:22:05.3137187",
   "questions" : [ {
     "title" : "서비스에 만족하셨습니까?",
     "questionType" : "SINGLE_CHOICE",
@@ -647,7 +635,7 @@ Content-Length: 54
 </div>
 </div>
 <div class="sect2">
-<h3 id="_제작한_설문_조회"><a class="link" href="#_제작한_설문_조회">제작한 설문 조회</a></h3>
+<h3 id="_설문_조회"><a class="link" href="#_설문_조회">설문 조회</a></h3>
 <div class="sect3">
 <h4 id="_request_2"><a class="link" href="#_request_2">request</a></h4>
 <div class="listingblock">
@@ -663,7 +651,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 360
+Content-Length: 235
 
 {
   "resultCode" : "200",
@@ -671,10 +659,8 @@ Content-Length: 360
   "body" : [ {
     "id" : "7a762f88-0aa9-48b0-8a12-fc680523cd67",
     "title" : "고객 만족도 조사",
-    "description" : "서비스에 대한 피드백을 받고자 설문을 진행합니다.",
     "status" : "ON",
-    "startAt" : "2024-11-20T13:55:00",
-    "endAt" : "2024-11-20T13:56:00"
+    "lastModifiedAt" : "2024-11-20T13:56:00"
   } ]
 }</code></pre>
 </div>
@@ -721,22 +707,12 @@ Content-Length: 360
 <td class="tableblock halign-left valign-top"><p class="tableblock">설문 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].description</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설문 설명</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].status</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설문 상태 (ON, WAIT, END)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].startAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">설문 시작일 (ISO-8601 형식, 예: 2024-11-20T13:55:00)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].endAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].lastModifiedAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
 </tr>
@@ -745,13 +721,558 @@ Content-Length: 360
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_설문_상세_조회_수정"><a class="link" href="#_설문_상세_조회_수정">설문 상세 조회 - 수정</a></h3>
+<div class="paragraph">
+<p>※ <code>수정을 위한 상세 조회 시 status가 'EDIT&#8217;으로 변경됨</code></p>
+</div>
+<div class="sect3">
+<h4 id="_request_3"><a class="link" href="#_request_3">request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /surveys/survey-id/5ef3c3cf-329a-46bf-801b-e2fef6d9f339/edit HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_3"><a class="link" href="#_response_3">response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 817
+
+{
+  "resultCode" : "200",
+  "message" : "OK",
+  "body" : {
+    "id" : "5ef3c3cf-329a-46bf-801b-e2fef6d9f339",
+    "title" : "Customer Satisfaction Survey",
+    "description" : "This survey aims to collect feedback on customer satisfaction.",
+    "startAt" : "2024-11-26T09:00",
+    "endAt" : "2024-11-30T18:00",
+    "question" : [ {
+      "id" : "3220c2f8-92f5-40ba-991f-0b07a3c361bc",
+      "title" : "만족도",
+      "questionType" : "SINGLE_CHOICE",
+      "order" : 1,
+      "columns" : "매우 불만족,불만족,보통,만족,매우 만족",
+      "rows" : null
+    }, {
+      "id" : "3220c2f8-92f5-40ba-991f-0b07a3c361bc",
+      "title" : "후기를 남겨주세요",
+      "questionType" : "SHORT_ANSWER",
+      "order" : 1,
+      "columns" : null,
+      "rows" : null
+    } ]
+  }
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_fields_4"><a class="link" href="#_fields_4">fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>resultCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.startAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 시작일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.endAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.question[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 항목 리스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.question[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 항목 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.question[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 항목 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.question[].questionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 항목 타입 (SINGLE_CHOICE, MULTIPLE_CHOICE, SHORT_ANSWER, TABLE_SELECT 등)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.question[].order</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 항목 순서</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.question[].columns</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">항목에 대한 선택 항목 (콤마로 구분된 문자열)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.question[].rows</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">표 형식 항목에서 행 항목 (콤마로 구분된 문자열)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_삭제한_설문_조회"><a class="link" href="#_삭제한_설문_조회">삭제한 설문 조회</a></h3>
+<div class="sect3">
+<h4 id="_request_4"><a class="link" href="#_request_4">request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /surveys/delete HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_4"><a class="link" href="#_response_4">response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 239
+
+{
+  "resultCode" : "200",
+  "message" : "OK",
+  "body" : [ {
+    "id" : "258f2844-a2d9-44af-a058-02b199615656",
+    "title" : "고객 만족도 조사",
+    "status" : "DELETE",
+    "lastModifiedAt" : "2024-11-25T15:36:00"
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_fields_5"><a class="link" href="#_fields_5">fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>resultCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 상태 (ON, WAIT, END)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].lastModifiedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_설문_조회캘린더_일정_등록"><a class="link" href="#_설문_조회캘린더_일정_등록">설문 조회(캘린더 일정 등록)</a></h3>
+<div class="sect3">
+<h4 id="_request_5"><a class="link" href="#_request_5">request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /surveys/calendar HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_5"><a class="link" href="#_response_5">response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 244
+
+{
+  "resultCode" : "200",
+  "message" : "OK",
+  "body" : [ {
+    "id" : "258f2844-a2d9-44af-a058-02b199615656",
+    "title" : "고객 만족도 조사",
+    "startAt" : "2024-11-25T15:36:00",
+    "endAt" : "2024-12-25T15:36:00"
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_fields_6"><a class="link" href="#_fields_6">fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>resultCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].startAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 시작일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].endAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료일</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_설문_삭제"><a class="link" href="#_설문_삭제">설문 삭제</a></h3>
+<div class="paragraph">
+<p>※ <code>처음 요청시에는 status를 DELETE로만 변경 - 반복 요청시에는 물리적인 삭제</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /surveys/survey-id/5ef3c3cf-329a-46bf-801b-e2fef6d9f339 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_6"><a class="link" href="#_response_6">response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 54
+
+{
+  "resultCode" : "204",
+  "message" : "DELETED"
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_fields_7"><a class="link" href="#_fields_7">fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>resultCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_설문_수정"><a class="link" href="#_설문_수정">설문 수정</a></h3>
+<div class="paragraph">
+<p>※<code>새롭게 추가된 것은 id null | 값 수정인 것에는 기존 id를 담아서</code></p>
+</div>
+<div class="sect3">
+<h4 id="_request_6"><a class="link" href="#_request_6">request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /surveys/survey-id/5ef3c3cf-329a-46bf-801b-e2fef6d9f339 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 664
+Host: localhost:8080
+
+{
+  "title" : "Customer Satisfaction Survey",
+  "description" : "This survey aims to collect feedback on customer satisfaction.",
+  "startAt" : "2024-11-26T17:22:05.5328827",
+  "endAt" : "2024-11-29T17:22:05.5328827",
+  "updateQuestionList" : [ {
+    "id" : null,
+    "title" : "만족도",
+    "questionType" : "SINGLE_CHOICE",
+    "order" : 1,
+    "columns" : "매우 불만족, 불만족, 보통, 만족, 매우 만족",
+    "rows" : null
+  }, {
+    "id" : "157020b2-0009-4858-9bcb-b2c30e091514",
+    "title" : "후기를 남겨주세요",
+    "questionType" : "SHORT_ANSWER",
+    "order" : 2,
+    "columns" : null,
+    "rows" : null
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_fields_8"><a class="link" href="#_fields_8">fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">필드명</th>
+<th class="tableblock halign-left valign-top">타입</th>
+<th class="tableblock halign-left valign-top">필수값</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 시작일 (ISO-8601 형식, 예: 2024-11-20T13:55:00)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>endAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>updateQuestionList</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 질문 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>updateQuestionList[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 항목 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>updateQuestionList[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">항목 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>updateQuestionList[].questionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">항목 타입 (SINGLE_CHOICE, MULTIPLE_CHOICE, SHORT_ANSWER, TABLE_SELECT 등)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>updateQuestionList[].order</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">항목 순서</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>updateQuestionList[].columns</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">항목에 대한 선택 항목 (콤마로 구분된 문자열)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>updateQuestionList[].rows</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">표 형식 항목에서 행 항목 (콤마로 구분된 문자열)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_7"><a class="link" href="#_response_7">response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 54
+
+{
+  "resultCode" : "200",
+  "message" : "UPDATED"
+}</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_fields_9"><a class="link" href="#_fields_9">fields</a></h5>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>resultCode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-11-20 20:02:19 +0900
+Last updated 2024-11-25 17:24:59 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

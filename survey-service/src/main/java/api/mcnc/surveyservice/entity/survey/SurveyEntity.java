@@ -5,10 +5,7 @@ import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.audit.MutableBaseEntity;
 import api.mcnc.surveyservice.entity.question.QuestionEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,6 +39,7 @@ public class SurveyEntity extends MutableBaseEntity {
   private LocalDateTime startAt;
   @Column(name = "END_AT")
   private LocalDateTime endAt;
+  @Getter
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
   List<QuestionEntity> questions;
 
@@ -56,6 +54,7 @@ public class SurveyEntity extends MutableBaseEntity {
       .status(status)
       .startAt(startAt)
       .endAt(endAt)
+      .modifiedAt(modifiedAt)
       .build();
   }
 
@@ -69,6 +68,14 @@ public class SurveyEntity extends MutableBaseEntity {
       .startAt(survey.startAt())
       .endAt(survey.endAt())
       .build();
+  }
+
+  public void updateFrom(Survey survey) {
+    this.title = survey.title();
+    this.description = survey.description();
+    this.status = survey.status();
+    this.startAt = survey.startAt();
+    this.endAt = survey.endAt();
   }
 
   public void addQuestions(List<QuestionEntity> questionEntityList) {

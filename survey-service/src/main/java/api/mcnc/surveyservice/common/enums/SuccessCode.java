@@ -16,9 +16,11 @@ public enum SuccessCode implements Code{
   SUCCESS("200","OK"),
   SURVEY_CREATE_SUCCESS("201","CREATED"),
   SURVEY_UPDATE_SUCCESS("200", "UPDATED"),
-
+  SURVEY_DELETE_SUCCESS("204", "DELETED" ),
 
   ;
+
+
 
   private final String code;
   private final String message;

@@ -1,5 +1,9 @@
 package api.mcnc.surveyservice.domain;
 
+import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
+import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
+import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
+import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import lombok.Builder;
@@ -22,7 +26,8 @@ public record Survey(
   List<Question> question,
   SurveyStatus status,
   LocalDateTime startAt,
-  LocalDateTime endAt
+  LocalDateTime endAt,
+  LocalDateTime modifiedAt
 ) {
   public static Survey fromRequest(String adminId, String title, String description, LocalDateTime startAt, LocalDateTime endAt) {
     return Survey.builder()
@@ -39,11 +44,31 @@ public record Survey(
     return SurveyResponse.builder()
       .id(this.id)
       .title(this.title)
-      .description(this.description)
       .status(this.status)
+      .lastModifiedAt(this.modifiedAt.toString())
+      .build();
+  }
+
+  public SurveyDetailsResponse toDetailsResponse() {
+    List<QuestionDetailsResponse> questionDeatilsList = this.question.stream().map(Question::toDetailsResponse).toList();
+    return SurveyDetailsResponse.builder()
+      .id(this.id)
+      .title(this.title)
+      .description(this.description)
+      .question(questionDeatilsList)
       .startAt(this.startAt.toString())
       .endAt(this.endAt.toString())
       .build();
   }
+
+  public SurveyCalendarResponse toCalendarResponse() {
+    return SurveyCalendarResponse.builder()
+      .id(this.id)
+      .title(this.title)
+      .startAt(this.startAt.toString())
+      .endAt(this.endAt.toString())
+      .build();
+  }
+
 
 }
