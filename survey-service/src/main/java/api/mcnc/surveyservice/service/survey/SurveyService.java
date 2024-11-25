@@ -11,10 +11,7 @@ import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
-import api.mcnc.surveyservice.repository.survey.FetchSurveyRepository;
-import api.mcnc.surveyservice.repository.survey.InsertSurveyAndQuestionListRepository;
-import api.mcnc.surveyservice.repository.survey.UpdateSurveyRepository;
-import api.mcnc.surveyservice.repository.survey.UpdateSurveyStatusRepository;
+import api.mcnc.surveyservice.repository.survey.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,9 +37,11 @@ public class SurveyService {
   private final FetchSurveyRepository fetchSurveyRepository;
   private final InsertSurveyAndQuestionListRepository insertSurveyAndQuestionListRepository;
   private final UpdateSurveyRepository updateSurveyRepository;
+  private final DeleteSurveyRepository deleteSurveyRepository;
+
   private final UpdateSurveyStatusRepository updateSurveyStatusRepository;
+
   private final AdminServiceClientService adminServiceClientService;
-  private final RequestedByProvider provider;
 
   // 설문 저장
   public void setSurveyAndQuestions(SurveyCreateRequest surveyCreateRequest) {
@@ -72,16 +71,16 @@ public class SurveyService {
 
   // 설문 수정을 위한 상세 보기
   public SurveyDetailsResponse getDetail(String surveyId) {
-    SurveyDetailsResponse surveyDetail = getSurveyDetail(surveyId);
+    Survey survey = this.getSurvey(surveyId);
+    SurveyDetailsResponse surveyDetail = survey.toDetailsResponse();
     updateSurveyStatusRepository.updateSurveyStatusToBeginEdit(surveyId);
     return surveyDetail;
   }
 
+  // 설문 수정
   public void updateSurvey(String surveyId, SurveyUpdateRequest surveyUpdateRequest) {
-    String adminId = getAdminId();
-    // 내가 작성한 설문인지
-    Survey survey = fetchSurveyRepository.fetchBySurveyIdAndAdminId(surveyId, adminId)
-      .orElseThrow(() -> new SurveyException(INVALID_REQUEST, "설문이 존재하지 않습니다."));
+    Survey survey = this.getSurvey(surveyId);
+
 
     // EDIT 상태의 설문에 대한 요청이 아니면 exception
     if (!SurveyStatus.EDIT.equals(survey.status())){
@@ -101,7 +100,7 @@ public class SurveyService {
         question -> question.id() != null && !question.id().isBlank()
       ));
 
-    Survey updateSurvey = Survey.fromRequest(adminId, surveyUpdateRequest.title(), surveyUpdateRequest.description(), surveyUpdateRequest.startAt(), surveyUpdateRequest.endAt());
+    Survey updateSurvey = Survey.fromRequest(survey.adminId(), surveyUpdateRequest.title(), surveyUpdateRequest.description(), surveyUpdateRequest.startAt(), surveyUpdateRequest.endAt());
     List<Question> withId = partitioned.get(true);
     List<Question> withoutId = partitioned.get(false);
     Set<String> updateIds = withId.stream().map(Question::id).collect(Collectors.toSet());
@@ -113,6 +112,28 @@ public class SurveyService {
     updateSurveyStatusRepository.updateSurveyStatusToEndEdit(surveyId, changedStatus);
   }
 
+  // 설문 삭제
+  public void deleteSurvey(String surveyId) {
+    Survey survey = this.getSurvey(surveyId);
+    /**
+     * 처음 삭제 요청 시 status만 delete로 변경 - 논리적인 삭제
+     * delete 상태의 설문에 한 번 더 요청시 데이터 베이스에서 삭제 - 물리적인 삭제
+     */
+
+    if (SurveyStatus.DELETE.equals(survey.status())) {
+    // 물리적인 삭제
+      deleteSurveyRepository.deleteSurvey(surveyId);
+    } else {
+    // 논리적인 삭제
+      updateSurveyStatusRepository.updateSurveyStatusToDelete(surveyId);
+    }
+  }
+
+  // ==============================
+  // private method
+  // ==============================
+
+  // 시간 계산
   private SurveyStatus calculateTime(LocalDateTime editStart, LocalDateTime editEnd) {
     if(editStart.isAfter(editEnd)) {
       throw new SurveyException(START_TIME_MUST_BE_BEFORE_END_TIME);
@@ -127,15 +148,15 @@ public class SurveyService {
     }
   }
 
-  // 설문 아이디와 작성자 아이디로 설문 상세 조회
-  private SurveyDetailsResponse getSurveyDetail(String surveyId) {
+  // 설문 아이디와 작성자 아이디로 설문 조회
+  private Survey getSurvey(String surveyId) {
     String adminId = getAdminId();
-    Survey survey = fetchSurveyRepository.fetchBySurveyIdAndAdminId(surveyId, adminId)
+    return fetchSurveyRepository.fetchBySurveyIdAndAdminId(surveyId, adminId)
       .orElseThrow(() -> new SurveyException(INVALID_REQUEST, "설문이 존재하지 않습니다."));
-    return survey.toDetailsResponse();
   }
 
   // 작성자 아이디 가져오기
+  private final RequestedByProvider provider;
   private String getAdminId() {
     String adminId = provider.requestedBy().orElse("SYSTEM");
     boolean isExistAdmin = adminServiceClientService.isExistAdmin(adminId);

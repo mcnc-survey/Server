@@ -49,4 +49,10 @@ public class SurveyController {
     return Api.ok(SuccessCode.SURVEY_UPDATE_SUCCESS, null);
   }
 
+  @DeleteMapping("/surveys/{surveyId}")
+  public Api<Void> deleteSurvey(@PathVariable("surveyId") String surveyId) {
+    surveyService.deleteSurvey(surveyId);
+    return Api.ok(SuccessCode.SURVEY_DELETE_SUCCESS, null);
+  }
+
 }

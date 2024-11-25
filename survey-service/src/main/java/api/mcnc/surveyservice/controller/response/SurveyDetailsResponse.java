@@ -15,8 +15,8 @@ public record SurveyDetailsResponse(
   String id,
   String title,
   String description,
-  List<QuestionDetailsResponse> question,
   String startAt,
-  String endAt
+  String endAt,
+  List<QuestionDetailsResponse> question
 ) {
 }
