@@ -24,11 +24,11 @@ public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String
   Optional<SurveyEntity> findByIdAndAdminId(String id, String adminId);
 
   @Modifying
-  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status = :currentStatus AND s.startAt <= :now")
+  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status != 'DELETE' AND s.status = :currentStatus AND s.startAt <= :now")
   void updateSurveyStatusToStart(@Param("status") SurveyStatus status, @Param("currentStatus") SurveyStatus currentStatus, @Param("now") LocalDateTime now);
 
   @Modifying
-  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status = :currentStatus AND s.endAt <= :now")
+  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status != 'DELETE' AND s.status = :currentStatus AND s.endAt <= :now")
   void updateSurveyStatusToEnd(@Param("status") SurveyStatus status, @Param("currentStatus") SurveyStatus currentStatus, @Param("now") LocalDateTime now);
 
   @Modifying

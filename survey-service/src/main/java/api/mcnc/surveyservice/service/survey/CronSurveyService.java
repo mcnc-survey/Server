@@ -1,8 +1,5 @@
 package api.mcnc.surveyservice.service.survey;
 
-import api.mcnc.surveyservice.entity.survey.SurveyEntity;
-import api.mcnc.surveyservice.entity.survey.SurveyStatus;
-import api.mcnc.surveyservice.repository.survey.SurveyJpaRepository;
 import api.mcnc.surveyservice.repository.survey.UpdateSurveyStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static api.mcnc.surveyservice.entity.survey.SurveyStatus.*;
 
