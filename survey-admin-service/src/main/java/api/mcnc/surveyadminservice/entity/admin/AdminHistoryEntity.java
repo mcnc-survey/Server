@@ -1,11 +1,13 @@
 package api.mcnc.surveyadminservice.entity.admin;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import api.mcnc.surveyadminservice.domain.AdminHistory;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 /**
  * please explain class!
@@ -15,6 +17,8 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "ADMIN_HISTORIES")
+@Builder(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AdminHistoryEntity {
   @Id
@@ -23,7 +27,7 @@ public class AdminHistoryEntity {
   @Column(name = "ADMIN_ID")
   private String adminId;
   @Column(name = "ADMIN_ROLE")
-  private AdminRole adminRole;
+  private String adminRole;
   @Column(name = "REQ_IP")
   private String clientIp;
   @Column(name = "REQ_METHOD")
@@ -34,4 +38,17 @@ public class AdminHistoryEntity {
   private String reqHeader;
   @Column(name = "REQ_PAYLOAD")
   private String reqPayload;
+
+  public static AdminHistoryEntity from(AdminHistory adminHistory) {
+    return AdminHistoryEntity.builder()
+      .id(UUID.randomUUID().toString())
+      .adminId(adminHistory.adminId())
+      .adminRole(adminHistory.adminRole())
+      .clientIp(adminHistory.clientIp())
+      .reqMethod(adminHistory.reqMethod())
+      .reqUrl(adminHistory.reqUrl())
+      .reqHeader(adminHistory.reqHeader())
+      .reqPayload(adminHistory.reqPayload())
+      .build();
+  }
 }

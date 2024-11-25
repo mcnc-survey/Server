@@ -1,7 +1,7 @@
 package api.mcnc.surveyadminservice.common.audit.interceptor;
 
-import api.mcnc.surveyresponseservice.common.audit.authentication.AuthenticationHolder;
-import api.mcnc.surveyresponseservice.common.audit.authentication.RequestedBy;
+import api.mcnc.surveyadminservice.common.audit.authentication.AuthenticationHolder;
+import api.mcnc.surveyadminservice.common.audit.authentication.RequestedBy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
