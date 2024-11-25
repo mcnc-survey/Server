@@ -2,6 +2,7 @@ package api.mcnc.surveyservice.domain;
 
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
+import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
@@ -55,6 +56,15 @@ public record Survey(
       .title(this.title)
       .description(this.description)
       .question(questionDeatilsList)
+      .startAt(this.startAt.toString())
+      .endAt(this.endAt.toString())
+      .build();
+  }
+
+  public SurveyCalendarResponse toCalendarResponse() {
+    return SurveyCalendarResponse.builder()
+      .id(this.id)
+      .title(this.title)
       .startAt(this.startAt.toString())
       .endAt(this.endAt.toString())
       .build();

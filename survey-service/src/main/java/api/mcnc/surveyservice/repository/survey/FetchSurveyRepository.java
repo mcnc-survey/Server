@@ -4,10 +4,12 @@ import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
+import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,16 @@ public class FetchSurveyRepository {
     return readTransactionOperations.execute(status ->
       surveyJpaRepository
         .findAllByAdminId(adminId)
+        .stream()
+        .map(SurveyEntity::toDomain)
+        .toList()
+    );
+  }
+
+  public List<Survey> fetchAllByAdminIdForDelete(String adminId) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository
+        .findAllByAdminIdAndStatus(adminId, SurveyStatus.DELETE)
         .stream()
         .map(SurveyEntity::toDomain)
         .toList()

@@ -19,6 +19,7 @@ import java.util.Optional;
  */
 public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String> {
   List<SurveyEntity> findAllByAdminId(String adminId);
+  List<SurveyEntity> findAllByAdminIdAndStatus(String adminId, SurveyStatus status);
 
   Optional<SurveyEntity> findByIdAndAdminId(String id, String adminId);
 

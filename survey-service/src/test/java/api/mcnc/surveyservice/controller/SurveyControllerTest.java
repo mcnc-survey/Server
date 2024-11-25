@@ -6,6 +6,7 @@ import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
+import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.entity.question.QuestionType;
@@ -19,7 +20,6 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.restdocs.request.RequestDocumentation;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -144,7 +144,7 @@ class SurveyControllerTest {
   }
 
   @Test
-  void 설문_상세_보기() throws Exception {
+  void 수정할_설문_상세_보기() throws Exception {
     SurveyDetailsResponse surveyDetailsResponse = new SurveyDetailsResponse(
       "5ef3c3cf-329a-46bf-801b-e2fef6d9f339",
       "Customer Satisfaction Survey",
@@ -159,7 +159,7 @@ class SurveyControllerTest {
 
     given(surveyService.getDetail("5ef3c3cf-329a-46bf-801b-e2fef6d9f339")).willReturn(surveyDetailsResponse);
 
-    mockMvc.perform(get("/surveys/{surveyId}", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339"))
+    mockMvc.perform(get("/surveys/survey-id/{surveyId}/edit", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339"))
       .andExpect(status().isOk())
       .andDo(
         document("getSurveyDetail", // RestDocs 문서화 작업
@@ -205,13 +205,13 @@ class SurveyControllerTest {
 
 
     mockMvc.perform(
-        put("/surveys/{surveyId}", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339")
+        put("/surveys/survey-id/{surveyId}", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339")
           .contentType(APPLICATION_JSON)
           .content(objectMapper.writeValueAsString(surveyUpdateRequest))
       )
       .andExpect(status().isOk())
       .andDo(
-        document("update survey", // RestDocs 문서화 작업
+        document("updateSurvey", // RestDocs 문서화 작업
           requestFields(
             fieldWithPath("title").type(STRING).description("설문 제목"),
             fieldWithPath("description").type(STRING).description("설문 설명").optional(),
@@ -240,7 +240,7 @@ class SurveyControllerTest {
 
     doNothing().when(surveyService).deleteSurvey(anyString());
 
-    mockMvc.perform(get("/surveys/{surveyId}", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339"))
+    mockMvc.perform(delete("/surveys/survey-id/{surveyId}", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339"))
       .andExpect(status().isOk())
       .andDo(
         document("getSurveyList", // RestDocs 문서화 작업
@@ -254,7 +254,68 @@ class SurveyControllerTest {
         )
       )
       .andDo(print());
+  }
 
+  @Test
+  void 삭제된_항목_조회() throws Exception {
+
+    List<SurveyResponse> surveyResponse =
+      List.of(SurveyResponse.builder()
+        .id("258f2844-a2d9-44af-a058-02b199615656")
+        .title("고객 만족도 조사")
+        .status(SurveyStatus.DELETE)
+        .lastModifiedAt("2024-11-25T15:36:00")
+        .build());
+    given(surveyService.getSurveyListForDelete()).willReturn(surveyResponse);
+
+
+    mockMvc.perform(get("/surveys/delete"))
+      .andExpect(status().isOk())
+      .andDo(
+        document("getSurveyList", // RestDocs 문서화 작업
+          responseFields(
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지"),
+            fieldWithPath("body[]").type(ARRAY).description("설문 목록"),
+            fieldWithPath("body[].id").type(STRING).description("설문 ID"),
+            fieldWithPath("body[].title").type(STRING).description("설문 제목"),
+            fieldWithPath("body[].status").type(STRING).description("설문 상태 (ON, WAIT, END)"),
+            fieldWithPath("body[].lastModifiedAt").type(STRING).description("설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)")
+          )
+        )
+      )
+      .andDo(print());
+  }
+
+  @Test
+  void 캘린더_용_항목_조회() throws Exception {
+
+    List<SurveyCalendarResponse> surveyResponse =
+      List.of(SurveyCalendarResponse.builder()
+        .id("258f2844-a2d9-44af-a058-02b199615656")
+        .title("고객 만족도 조사")
+        .startAt("2024-11-25T15:36:00")
+        .endAt("2024-12-25T15:36:00")
+        .build());
+    given(surveyService.getSurveyListForCalendar()).willReturn(surveyResponse);
+
+
+    mockMvc.perform(get("/surveys/calendar"))
+      .andExpect(status().isOk())
+      .andDo(
+        document("getSurveyListForCalendar", // RestDocs 문서화 작업
+          responseFields(
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지"),
+            fieldWithPath("body[]").type(ARRAY).description("설문 목록"),
+            fieldWithPath("body[].id").type(STRING).description("설문 ID"),
+            fieldWithPath("body[].title").type(STRING).description("설문 제목"),
+            fieldWithPath("body[].startAt").type(STRING).description("설문 시작일"),
+            fieldWithPath("body[].endAt").type(STRING).description("설문 종료일")
+          )
+        )
+      )
+      .andDo(print());
   }
 
 }

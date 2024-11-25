@@ -4,6 +4,7 @@ import api.mcnc.surveyservice.common.enums.SuccessCode;
 import api.mcnc.surveyservice.common.result.Api;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
+import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.service.survey.SurveyService;
@@ -37,19 +38,31 @@ public class SurveyController {
     return Api.ok(SuccessCode.SUCCESS, surveyList);
   }
 
-  @GetMapping("/surveys/{surveyId}")
+  @GetMapping("/surveys/calendar")
+  public Api<List<SurveyCalendarResponse>> getSurveyListForCalendar() {
+    List<SurveyCalendarResponse> surveyList = surveyService.getSurveyListForCalendar();
+    return Api.ok(SuccessCode.SUCCESS, surveyList);
+  }
+
+  @GetMapping("/surveys/delete")
+  public Api<List<SurveyResponse>> getSurveyListForDelete() {
+    List<SurveyResponse> surveyList = surveyService.getSurveyListForDelete();
+    return Api.ok(SuccessCode.SUCCESS, surveyList);
+  }
+
+  @GetMapping("/surveys/survey-id/{surveyId}/edit")
   public Api<SurveyDetailsResponse> getSurveyDetailForEdit(@PathVariable("surveyId") String surveyId) {
     SurveyDetailsResponse surveyList = surveyService.getDetail(surveyId);
     return Api.ok(SuccessCode.SUCCESS, surveyList);
   }
 
-  @PutMapping("/surveys/{surveyId}")
+  @PutMapping("/surveys/survey-id/{surveyId}")
   public Api<Void> updateSurvey(@PathVariable("surveyId") String surveyId, @RequestBody @Valid SurveyUpdateRequest surveyUpdateRequest) {
     surveyService.updateSurvey(surveyId, surveyUpdateRequest);
     return Api.ok(SuccessCode.SURVEY_UPDATE_SUCCESS, null);
   }
 
-  @DeleteMapping("/surveys/{surveyId}")
+  @DeleteMapping("/surveys/survey-id/{surveyId}")
   public Api<Void> deleteSurvey(@PathVariable("surveyId") String surveyId) {
     surveyService.deleteSurvey(surveyId);
     return Api.ok(SuccessCode.SURVEY_DELETE_SUCCESS, null);

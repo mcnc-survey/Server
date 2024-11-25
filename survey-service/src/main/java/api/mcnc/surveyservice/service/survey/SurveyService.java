@@ -6,6 +6,7 @@ import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
+import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.domain.Question;
@@ -67,6 +68,16 @@ public class SurveyService {
   public List<SurveyResponse> getSurveyList() {
     String adminId = getAdminId();
     return fetchSurveyRepository.fetchAllByAdminId(adminId).stream().map(Survey::toResponse).toList();
+  }
+
+  public List<SurveyCalendarResponse> getSurveyListForCalendar() {
+    String adminId = getAdminId();
+    return fetchSurveyRepository.fetchAllByAdminId(adminId).stream().map(Survey::toCalendarResponse).toList();
+  }
+
+  public List<SurveyResponse> getSurveyListForDelete() {
+    String adminId = getAdminId();
+    return fetchSurveyRepository.fetchAllByAdminIdForDelete(adminId).stream().map(Survey::toResponse).toList();
   }
 
   // 설문 수정을 위한 상세 보기
