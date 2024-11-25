@@ -243,7 +243,7 @@ class SurveyControllerTest {
     mockMvc.perform(delete("/surveys/survey-id/{surveyId}", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339"))
       .andExpect(status().isOk())
       .andDo(
-        document("getSurveyList", // RestDocs 문서화 작업
+        document("deleteSurvey", // RestDocs 문서화 작업
           pathParameters(
             parameterWithName("surveyId").description("설문 ID")
           ),
@@ -272,7 +272,7 @@ class SurveyControllerTest {
     mockMvc.perform(get("/surveys/delete"))
       .andExpect(status().isOk())
       .andDo(
-        document("getSurveyList", // RestDocs 문서화 작업
+        document("getSurveyListForDelete", // RestDocs 문서화 작업
           responseFields(
             fieldWithPath("resultCode").type(STRING).description("응답 코드"),
             fieldWithPath("message").type(STRING).description("응답 메시지"),
