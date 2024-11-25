@@ -3,6 +3,7 @@ package api.mcnc.surveyservice.service.survey;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import api.mcnc.surveyservice.repository.survey.SurveyJpaRepository;
+import api.mcnc.surveyservice.repository.survey.UpdateSurveyStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,15 +24,15 @@ import static api.mcnc.surveyservice.entity.survey.SurveyStatus.*;
 @RequiredArgsConstructor
 public class CronSurveyService {
 
-  private final SurveyJpaRepository surveyRepository;
+  private final UpdateSurveyStatusRepository updateSurveyStatusRepository;
 
   @Scheduled(cron = "0 * * * * *") // 1분 마다
   @Transactional
   public void updateSurveyStatus() {
     try {
       LocalDateTime now = LocalDateTime.now();
-      surveyRepository.updateSurveyStatusToStart(ON, WAIT, now);
-      surveyRepository.updateSurveyStatusToEnd(END, ON, now);
+      updateSurveyStatusRepository.updateSurveyStatusToStart(ON, WAIT, now);
+      updateSurveyStatusRepository.updateSurveyStatusToEnd(END, ON, now);
     } catch (Exception e) {
       e.printStackTrace();  // 예외 처리 및 로깅
     }

@@ -7,5 +7,5 @@ package api.mcnc.surveyservice.entity.survey;
  * @since :2024-11-19 오전 9:59
  */
 public enum SurveyStatus {
-  ON, WAIT, STOP, END
+  ON, WAIT, EDIT, END
 }

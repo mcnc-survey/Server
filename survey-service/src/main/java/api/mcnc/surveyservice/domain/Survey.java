@@ -1,5 +1,8 @@
 package api.mcnc.surveyservice.domain;
 
+import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
+import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
+import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import lombok.Builder;
@@ -44,5 +47,18 @@ public record Survey(
       .lastModifiedAt(this.modifiedAt.toString())
       .build();
   }
+
+  public SurveyDetailsResponse toDetailsResponse() {
+    List<QuestionDetailsResponse> questionDeatilsList = this.question.stream().map(Question::toDetailsResponse).toList();
+    return SurveyDetailsResponse.builder()
+      .id(this.id)
+      .title(this.title)
+      .description(this.description)
+      .question(questionDeatilsList)
+      .startAt(this.startAt.toString())
+      .endAt(this.endAt.toString())
+      .build();
+  }
+
 
 }
