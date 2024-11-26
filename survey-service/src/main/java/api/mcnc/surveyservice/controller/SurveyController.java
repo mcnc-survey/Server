@@ -6,6 +6,7 @@ import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
+import api.mcnc.surveyservice.controller.response.SurveyLikeResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.service.survey.SurveyService;
 import jakarta.validation.Valid;
@@ -47,6 +48,12 @@ public class SurveyController {
   @GetMapping("/surveys/delete")
   public Api<List<SurveyResponse>> getSurveyListForDelete() {
     List<SurveyResponse> surveyList = surveyService.getSurveyListForDelete();
+    return Api.ok(SuccessCode.SUCCESS, surveyList);
+  }
+
+  @GetMapping("/surveys/like")
+  public Api<List<SurveyLikeResponse>> getSurveyLikeList() {
+    List<SurveyLikeResponse> surveyList = surveyService.getSurveyLikeList();
     return Api.ok(SuccessCode.SUCCESS, surveyList);
   }
 

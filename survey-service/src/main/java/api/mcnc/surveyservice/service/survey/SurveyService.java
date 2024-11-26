@@ -8,12 +8,12 @@ import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
+import api.mcnc.surveyservice.controller.response.SurveyLikeResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import api.mcnc.surveyservice.repository.survey.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +78,11 @@ public class SurveyService {
   public List<SurveyResponse> getSurveyListForDelete() {
     String adminId = getAdminId();
     return fetchSurveyRepository.fetchAllByAdminIdForDelete(adminId).stream().map(Survey::toResponse).toList();
+  }
+
+  public List<SurveyLikeResponse> getSurveyLikeList() {
+    String adminId = getAdminId();
+    return fetchSurveyRepository.fetchAllLikeSurveyByAdminId(adminId).stream().map(Survey::toLikeResponse).toList();
   }
 
   // 설문 수정을 위한 상세 보기

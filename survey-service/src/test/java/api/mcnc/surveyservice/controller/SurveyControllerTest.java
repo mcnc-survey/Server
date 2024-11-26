@@ -5,10 +5,7 @@ import api.mcnc.surveyservice.common.audit.interceptor.RequestedByInterceptor;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
-import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
-import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
-import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
-import api.mcnc.surveyservice.controller.response.SurveyResponse;
+import api.mcnc.surveyservice.controller.response.*;
 import api.mcnc.surveyservice.entity.question.QuestionType;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import api.mcnc.surveyservice.service.survey.SurveyService;
@@ -29,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -335,6 +333,29 @@ class SurveyControllerTest {
           responseFields(
             fieldWithPath("resultCode").type(STRING).description("응답 코드"),
             fieldWithPath("message").type(STRING).description("응답 메시지")
+          )
+        )
+      )
+      .andDo(print());
+  }
+
+  @Test
+  void 북마크한_설문_전체_조회() throws Exception {
+    List<SurveyLikeResponse> likeList = List.of(
+      SurveyLikeResponse.builder().id("000fcb52-c77a-4b1d-b8ea-c4fea4af544f").title("고객 만족도 조사").build()
+    );
+    given(surveyService.getSurveyLikeList()).willReturn(likeList);
+
+    mockMvc.perform(get("/surveys/like"))
+      .andExpect(status().isOk())
+      .andDo(
+        document("surveyLikeList", // RestDocs 문서화 작업
+          responseFields(
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지"),
+            fieldWithPath("body[]").type(ARRAY).description("설문 목록"),
+            fieldWithPath("body[].id").type(STRING).description("설문 ID"),
+            fieldWithPath("body[].title").type(STRING).description("설문 제목")
           )
         )
       )
