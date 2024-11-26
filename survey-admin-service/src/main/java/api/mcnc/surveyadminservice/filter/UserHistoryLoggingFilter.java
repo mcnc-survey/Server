@@ -1,5 +1,6 @@
 package api.mcnc.surveyadminservice.filter;
 
+import api.mcnc.surveyadminservice.service.LogAdminHistoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -30,7 +31,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserHistoryLoggingFilter extends OncePerRequestFilter {
 
-//  private final LogUserHistoryService logUserHistoryService;
+  private final LogAdminHistoryService logAdminHistoryService;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -49,7 +50,7 @@ public class UserHistoryLoggingFilter extends OncePerRequestFilter {
     String reqHeader = getHeaders(request);
     String reqPayload = "payload";
 
-//    logUserAuditHistoryUseCase.log(userId, userRole, clientIp, reqMethod, reqUrl, reqHeader, reqPayload);
+    logAdminHistoryService.log(userId, userRole, clientIp, reqMethod, reqUrl, reqHeader, reqPayload);
   }
 
   private String getHeaders(HttpServletRequest request) {

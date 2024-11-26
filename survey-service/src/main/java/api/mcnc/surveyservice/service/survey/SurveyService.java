@@ -140,6 +140,13 @@ public class SurveyService {
     }
   }
 
+
+  public void like(String surveyId) {
+    getAdminId();
+    updateSurveyRepository.updateLike(surveyId);
+
+  }
+
   // ==============================
   // private method
   // ==============================

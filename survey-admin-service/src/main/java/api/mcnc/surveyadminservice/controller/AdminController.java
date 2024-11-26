@@ -1,8 +1,6 @@
 package api.mcnc.surveyadminservice.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * please explain class!
@@ -11,12 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
  * @since :2024-11-12 오전 10:46
  */
 @RestController
-@RequestMapping("/admin")
 public class AdminController {
 
-  @GetMapping("")
+  @GetMapping("admin")
   public String admin() {
     return "admin";
+  }
+
+  @GetMapping("/{oauth}/redirection")
+  public String redirection(@PathVariable String oauth, @RequestParam(required = false, value = "state") String state) {
+    System.out.println(oauth);
+    System.out.println(state);
+    return "redirection";
   }
 
 

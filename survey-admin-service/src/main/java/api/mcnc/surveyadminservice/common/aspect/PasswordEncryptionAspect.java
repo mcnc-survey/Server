@@ -1,6 +1,6 @@
 package api.mcnc.surveyadminservice.common.aspect;
 
-import fast.campus.netplix.annotation.PasswordEncryption;
+import api.mcnc.surveyadminservice.common.annotation.PasswordEncryption;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -25,7 +25,7 @@ public class PasswordEncryptionAspect {
 
   private final PasswordEncoder passwordEncoder;
 
-  @Around("execution(* fast.campus.netplix.controller..*.*(..))")
+  @Around("execution(* api.mcnc.surveyadminservice.controller..*.*(..))")
   public Object passwordEncryptionAspect(ProceedingJoinPoint pjp) throws Throwable {
     Arrays.stream(pjp.getArgs())
       .forEach(this::fieldEncryption);

@@ -12,3 +12,15 @@ include::{snippets}/updateSurvey/request-fields.adoc[]
 include::{snippets}/updateSurvey/http-response.adoc[]
 ===== fields
 include::{snippets}/updateSurvey/response-fields.adoc[]
+
+=== 설문 북마크
+==== request
+include::{snippets}/likeSurvey/http-request.adoc[]
+===== path parameters
+include::{snippets}/likeSurvey/path-parameters.adoc[]
+
+
+==== response
+include::{snippets}/likeSurvey/http-response.adoc[]
+===== fields
+include::{snippets}/likeSurvey/response-fields.adoc[]
