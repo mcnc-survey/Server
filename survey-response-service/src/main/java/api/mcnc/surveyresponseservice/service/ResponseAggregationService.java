@@ -36,7 +36,9 @@ public class ResponseAggregationService {
 
       result.put(key, value);
     }
-    return new ResponseAggregationResponse(result);
+
+    Integer totalRespondentCount = aggregationRepository.getRespondentCountBySurveyId(surveyId);
+    return new ResponseAggregationResponse(totalRespondentCount, result);
   }
 
 
