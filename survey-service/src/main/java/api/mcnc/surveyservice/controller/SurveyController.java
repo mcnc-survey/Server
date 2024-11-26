@@ -57,9 +57,15 @@ public class SurveyController {
     return Api.ok(SuccessCode.SUCCESS, surveyList);
   }
 
+  @GetMapping("/surveys/survey-id/{surveyId}")
+  public Api<SurveyDetailsResponse> getSurveyDetails(@PathVariable("surveyId") String surveyId) {
+    SurveyDetailsResponse surveyList = surveyService.getDetail(surveyId);
+    return Api.ok(SuccessCode.SUCCESS, surveyList);
+  }
+
   @GetMapping("/surveys/survey-id/{surveyId}/edit")
   public Api<SurveyDetailsResponse> getSurveyDetailForEdit(@PathVariable("surveyId") String surveyId) {
-    SurveyDetailsResponse surveyList = surveyService.getDetail(surveyId);
+    SurveyDetailsResponse surveyList = surveyService.getDetailForEdit(surveyId);
     return Api.ok(SuccessCode.SUCCESS, surveyList);
   }
 

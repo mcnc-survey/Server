@@ -26,7 +26,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
@@ -155,7 +154,7 @@ class SurveyControllerTest {
       )
     );
 
-    given(surveyService.getDetail("5ef3c3cf-329a-46bf-801b-e2fef6d9f339")).willReturn(surveyDetailsResponse);
+    given(surveyService.getDetailForEdit("5ef3c3cf-329a-46bf-801b-e2fef6d9f339")).willReturn(surveyDetailsResponse);
 
     mockMvc.perform(get("/surveys/survey-id/{surveyId}/edit", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339"))
       .andExpect(status().isOk())

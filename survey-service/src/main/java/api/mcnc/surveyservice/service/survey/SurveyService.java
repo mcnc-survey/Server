@@ -2,6 +2,7 @@ package api.mcnc.surveyservice.service.survey;
 
 import api.mcnc.surveyservice.client.AdminServiceClientService;
 import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
+import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
@@ -86,11 +87,19 @@ public class SurveyService {
   }
 
   // 설문 수정을 위한 상세 보기
-  public SurveyDetailsResponse getDetail(String surveyId) {
+  public SurveyDetailsResponse getDetailForEdit(String surveyId) {
     Survey survey = this.getSurvey(surveyId);
     SurveyDetailsResponse surveyDetail = survey.toDetailsResponse();
     updateSurveyStatusRepository.updateSurveyStatusToBeginEdit(surveyId);
     return surveyDetail;
+  }
+
+  // 응답을 위한 상세 보기
+  public SurveyDetailsResponse getDetail(String surveyId) {
+    // TODO: 현재는 설문 아이디만 있으면 다 조회 가능 - 추 후에 수정 필요
+    Survey survey = fetchSurveyRepository.fetchBySurveyId(surveyId)
+      .orElseThrow(() -> new SurveyException(SurveyErrorCode.FOUND_NOT_SURVEY));
+    return survey.toDetailsResponse();
   }
 
   // 설문 수정
