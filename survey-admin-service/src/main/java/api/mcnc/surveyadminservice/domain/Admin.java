@@ -1,7 +1,12 @@
 package api.mcnc.surveyadminservice.domain;
 
+import api.mcnc.surveyadminservice.auth.dto.OAuth2UserInfo;
+import api.mcnc.surveyadminservice.entity.admin.AdminEntity;
 import api.mcnc.surveyadminservice.entity.admin.AdminRole;
 import lombok.Builder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.UUID;
 
 /**
  * please explain class!
@@ -18,4 +23,13 @@ public record Admin(
   AdminRole role,
   String provider
 ) {
+  public static Admin from(OAuth2UserInfo oAuth2UserInfo) {
+    return Admin.builder()
+      .name(oAuth2UserInfo.name())
+      .email(oAuth2UserInfo.email())
+      .role(AdminRole.ADMIN)
+      .password(new BCryptPasswordEncoder().encode("{admin}password"))
+      .provider(oAuth2UserInfo.provider())
+      .build();
+  }
 }

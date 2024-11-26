@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
  * please explain class!
  *
  * @author :Uheejoon
- * @since :2024-11-25 오후 8:05
+ * @since :2024-11-25 오후 10:21
  */
-public interface AdminHistoryJpaRepository extends CrudRepository<AdminHistoryEntity, String> {
+public interface LogAdminHistoryJpaRepository extends CrudRepository<AdminHistoryEntity, String> {
 }

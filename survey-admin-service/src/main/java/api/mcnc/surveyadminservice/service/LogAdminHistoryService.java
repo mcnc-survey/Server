@@ -1,8 +1,7 @@
 package api.mcnc.surveyadminservice.service;
 
 import api.mcnc.surveyadminservice.domain.AdminHistory;
-import api.mcnc.surveyadminservice.entity.admin.AdminHistoryEntity;
-import api.mcnc.surveyadminservice.repository.LogAdminHistoryRepository;
+import api.mcnc.surveyadminservice.repository.history.LogAdminHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

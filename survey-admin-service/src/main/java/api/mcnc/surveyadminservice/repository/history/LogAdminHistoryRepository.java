@@ -1,4 +1,4 @@
-package api.mcnc.surveyadminservice.repository;
+package api.mcnc.surveyadminservice.repository.history;
 
 import api.mcnc.surveyadminservice.domain.AdminHistory;
 import api.mcnc.surveyadminservice.entity.admin.AdminHistoryEntity;

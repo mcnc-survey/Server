@@ -33,6 +33,18 @@ public class AdminExceptionHandler {
     return ResponseEntity.ok(response);
   }
 
+  @ExceptionHandler(TokenException.class)
+  public ResponseEntity<Api<String>> handleTokenException(TokenException e) {
+    Api<String> response = Api.fail(e.getCode(), e.getMessage());
+    return ResponseEntity.ok(response);
+  }
+
+  @ExceptionHandler(AuthException.class)
+  public ResponseEntity<Api<String>> handleAuthException(AuthException e) {
+    Api<String> response = Api.fail(e.getCode(), e.getMessage());
+    return ResponseEntity.ok(response);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Api<Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
     List<ErrorField> errorList = e.getBindingResult()

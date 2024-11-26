@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 public class AdminException extends RuntimeException{
-  private final Code code;
+  protected final Code code;
 
   public AdminException(Code code) {
     super(code.getMessage());
