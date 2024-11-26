@@ -1,10 +1,12 @@
 package api.mcnc.surveyservice.repository.survey;
 
+import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
+import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.question.QuestionEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
-import jakarta.persistence.EntityManager;
+import api.mcnc.surveyservice.entity.survey.SurveyLike;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
@@ -69,4 +71,13 @@ public class UpdateSurveyRepository {
     });
   }
 
+  public void updateLike(String surveyId) {
+    writeTransactionOperations.executeWithoutResult(execute -> {
+      SurveyEntity surveyEntity = surveyJpaRepository.findById(surveyId)
+        .orElseThrow(() -> new SurveyException(SurveyErrorCode.INVALID_REQUEST, "관리자 아이디가 일치하지 않습니다."));
+
+      surveyEntity.updateLikeUpdate();
+    });
+
+  }
 }

@@ -68,4 +68,10 @@ public class SurveyController {
     return Api.ok(SuccessCode.SURVEY_DELETE_SUCCESS, null);
   }
 
+  @GetMapping("/surveys/survey-id/{surveyId}/like")
+  public Api<SurveyDetailsResponse> onSurveyBookmark(@PathVariable("surveyId") String surveyId) {
+    surveyService.like(surveyId);
+    return Api.ok(SuccessCode.SUCCESS, null);
+  }
+
 }

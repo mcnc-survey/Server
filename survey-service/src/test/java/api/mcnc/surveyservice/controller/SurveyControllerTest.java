@@ -318,4 +318,26 @@ class SurveyControllerTest {
       .andDo(print());
   }
 
+
+  @Test
+  void 좋아요() throws Exception {
+
+    doNothing().when(surveyService).like(anyString());
+
+
+    mockMvc.perform(get("/surveys/survey-id/{surveyId}/like", "000fcb52-c77a-4b1d-b8ea-c4fea4af544f"))
+      .andExpect(status().isOk())
+      .andDo(
+        document("likeSurvey", // RestDocs 문서화 작업
+          pathParameters(
+            parameterWithName("surveyId").description("설문 ID")
+          ),
+          responseFields(
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지")
+          )
+        )
+      )
+      .andDo(print());
+  }
 }

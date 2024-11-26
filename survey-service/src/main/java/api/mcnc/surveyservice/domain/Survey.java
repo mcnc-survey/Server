@@ -5,6 +5,7 @@ import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
+import api.mcnc.surveyservice.entity.survey.SurveyLike;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import lombok.Builder;
 
@@ -27,6 +28,7 @@ public record Survey(
   SurveyStatus status,
   LocalDateTime startAt,
   LocalDateTime endAt,
+  SurveyLike like,
   LocalDateTime modifiedAt
 ) {
   public static Survey fromRequest(String adminId, String title, String description, LocalDateTime startAt, LocalDateTime endAt) {
