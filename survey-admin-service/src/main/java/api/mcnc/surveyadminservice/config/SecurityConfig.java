@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,18 +33,23 @@ public class SecurityConfig {
   private final UserHistoryLoggingFilter userHistoryLoggingFilter;
 
   @Bean
-  public SecurityFilterChain springSecurityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
       .httpBasic(AbstractHttpConfigurer::disable)
       .formLogin(AbstractHttpConfigurer::disable)
       .csrf(AbstractHttpConfigurer::disable)
+      .logout(AbstractHttpConfigurer::disable)
+      .sessionManagement(AbstractHttpConfigurer::disable)
       .cors(cors -> cors.configurationSource(corsConfigurationSource()))
       .authorizeHttpRequests(request ->
         request
           .requestMatchers("/api/sign-in", "/api/sign-up").permitAll()
           .anyRequest().authenticated()
       )
-      .oauth2Login(oauth2 -> oauth2.failureUrl("/login?error=true"))
+      .oauth2Login(oauth2 -> {
+        oauth2.failureUrl("/login?error=true");
+//        oauth2
+      })
 
 //      .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
       .addFilterAfter(userHistoryLoggingFilter, UsernamePasswordAuthenticationFilter.class)

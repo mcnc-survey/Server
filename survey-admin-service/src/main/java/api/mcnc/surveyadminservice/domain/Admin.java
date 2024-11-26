@@ -7,7 +7,7 @@ import lombok.Builder;
  * please explain class!
  *
  * @author :Uheejoon
- * @since :2024-11-25 오후 8:00
+ * @since :2024-11-25 오후 10:22
  */
 @Builder
 public record Admin(

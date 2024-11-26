@@ -1,13 +1,12 @@
 package api.mcnc.surveyadminservice.domain;
 
-import api.mcnc.surveyadminservice.entity.admin.AdminRole;
 import lombok.Builder;
 
 /**
  * please explain class!
  *
  * @author :Uheejoon
- * @since :2024-11-25 오후 8:02
+ * @since :2024-11-25 오후 10:18
  */
 @Builder
 public record AdminHistory(
