@@ -1,6 +1,5 @@
 package api.mcnc.surveyservice.controller;
 
-import api.mcnc.surveyservice.service.survey.SurveyService;
 import api.mcnc.surveyservice.service.survey.SurveyValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
