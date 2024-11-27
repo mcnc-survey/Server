@@ -5,12 +5,8 @@
 :source-highlighter: highlightjs
 :sectlinks:
 :toc: left
-:toclevels: 3
+:toclevels: 2
 
-= 응답자 페이지
----
 include::responses.adoc[]
 
-= 응답자 페이지 - 관리자
----
 include::response-aggregation.adoc[]
