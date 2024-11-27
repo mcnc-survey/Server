@@ -1,4 +1,4 @@
-package api.mcnc.surveyresponseservice.client;
+package api.mcnc.surveyresponseservice.client.respondent;
 
 /**
  * please explain class!

@@ -1,20 +1,17 @@
-package api.mcnc.surveyrespondentservice.client.survey;
+package api.mcnc.surveyresponseservice.client.survey;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * please explain class!
  *
  * @author :Uheejoon
- * @since :2024-11-22 오후 5:10
+ * @since :2024-11-26 오후 11:21
  */
-@FeignClient(name = "SURVEY-SERVICE")
-public interface SurveyValidationClient {
-
+@FeignClient(name = "survey", url = "${api.survey-url}")
+public interface SurveyClient {
   @GetMapping("/survey-validate/{surveyId}")
   Boolean validateSurvey(@PathVariable("surveyId") String surveyId);
-
 }

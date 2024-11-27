@@ -1,7 +1,7 @@
 package api.mcnc.surveyresponseservice.service;
 
-import api.mcnc.surveyresponseservice.client.RespondentClientService;
-import api.mcnc.surveyresponseservice.client.RespondentValidate;
+import api.mcnc.surveyresponseservice.client.respondent.RespondentValidate;
+import api.mcnc.surveyresponseservice.client.survey.SurveyValidate;
 import api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode;
 import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
@@ -11,8 +11,8 @@ import api.mcnc.surveyresponseservice.domain.Response;
 import api.mcnc.surveyresponseservice.repository.response.ResponseRepository;
 import api.mcnc.surveyresponseservice.service.request.UpdateCommand;
 import api.mcnc.surveyresponseservice.service.validation.ResponseValidator;
+import api.mcnc.surveyresponseservice.service.validation.ValidOtherService;
 import lombok.RequiredArgsConstructor;
-import org.flywaydb.core.api.ErrorCode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,10 +32,10 @@ public class ResponseService {
 
   private final ResponseRepository responseRepository;
   private final ResponseValidator validator;
-  private final RespondentValidate respondentValidate;
+  private final ValidOtherService validService;
 
   public List<ResponseResult> getAllMyResponseResults(String surveyId, String respondentId) {
-    this.validateRespondent(respondentId);
+    validService.validate(respondentId, surveyId);
     return responseRepository.getRespondentResponseList(surveyId, respondentId)
       .stream()
       .map(Response::toResponseResult)
@@ -43,7 +43,7 @@ public class ResponseService {
   }
 
   public void setResponse(String surveyId, String respondentId, List<QuestionResponse> request) {
-    this.validateRespondent(respondentId);
+    validService.validate(respondentId, surveyId);
     if (request == null || request.isEmpty()) {
       throw new ResponseException(ResponseErrorCode.EMPTY_RESPONSE);
     }
@@ -57,7 +57,7 @@ public class ResponseService {
   }
 
   public void updateResponse(String surveyId, String respondentId, List<QuestionResponseUpdate> request) {
-    this.validateRespondent(respondentId);
+    validService.validate(respondentId, surveyId);
     if (request == null || request.isEmpty()) {
       throw new ResponseException(ResponseErrorCode.EMPTY_RESPONSE);
     }
@@ -71,10 +71,4 @@ public class ResponseService {
     responseRepository.updateResponse(surveyId, respondentId, updateMap);
   }
 
-
-  private void validateRespondent(String respondentId) {
-    if (!respondentValidate.isExistRespondent(respondentId)) {
-      throw new ResponseException(ResponseErrorCode.NOT_EXIST_RESPONDENT);
-    }
-  }
 }

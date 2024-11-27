@@ -1,4 +1,4 @@
-package api.mcnc.surveyresponseservice.client;
+package api.mcnc.surveyresponseservice.client.respondent;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

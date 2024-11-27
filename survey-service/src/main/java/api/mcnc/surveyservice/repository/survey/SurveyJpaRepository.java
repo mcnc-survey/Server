@@ -18,6 +18,7 @@ import java.util.Optional;
  * @since :2024-11-19 오전 10:52
  */
 public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String> {
+  @Query("SELECT s FROM SurveyEntity s WHERE s.status != 'DELETE' AND s.adminId = :adminId")
   List<SurveyEntity> findAllByAdminId(String adminId);
   List<SurveyEntity> findAllByAdminIdAndStatus(String adminId, SurveyStatus status);
 

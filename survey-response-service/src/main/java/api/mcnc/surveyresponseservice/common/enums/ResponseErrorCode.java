@@ -19,6 +19,7 @@ public enum ResponseErrorCode implements Code {
   EMPTY_RESPONSE("R004", "빈 설문은 제출할 수 없습니다."),
   INVALID_REQUEST("R005", "잘못된 요청입니다."),
   NOT_EXIST_RESPONDENT("R006", "존재 하지 않는 응답자에 대한 요청입니다."),
+  NOT_EXIST_SURVEY("R007", "존재 하지 않는 설문에 대한 요청입니다."),
 
   ;
   private final String code;
