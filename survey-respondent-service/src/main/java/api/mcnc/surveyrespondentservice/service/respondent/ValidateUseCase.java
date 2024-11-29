@@ -8,4 +8,5 @@ package api.mcnc.surveyrespondentservice.service.respondent;
  */
 public interface ValidateUseCase {
   boolean validateRespondent(String respondentId);
+  String extractSubject(String token);
 }

@@ -1,10 +1,9 @@
 package api.mcnc.surveyrespondentservice.controller;
 
+import api.mcnc.surveyrespondentservice.domain.Token;
 import api.mcnc.surveyrespondentservice.service.respondent.ValidateUseCase;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * please explain class!
@@ -21,6 +20,11 @@ public class ValidationController {
   @GetMapping("/respondent-validation/{respondentId}")
   boolean validateRespondent(@PathVariable String respondentId){
     return validateUseCase.validateRespondent(respondentId);
+  }
+
+  @PostMapping("/token-validation")
+  String extractSubject(@RequestBody Token token){
+    return validateUseCase.extractSubject(token.accessToken());
   }
 
 }

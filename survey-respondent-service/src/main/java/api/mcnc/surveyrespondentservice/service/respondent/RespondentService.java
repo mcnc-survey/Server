@@ -48,6 +48,11 @@ public class RespondentService implements RegisterUseCase,  ValidateUseCase{
     return respondentRepository.isExist(respondentId);
   }
 
+  @Override
+  public String extractSubject(String token) {
+    return tokenService.extractSubject(token);
+  }
+
   //  토큰 만들어서 반환
   private Token getToken(Respondent respondent) {
     return tokenService.generateTokenByRespondent(respondent);
