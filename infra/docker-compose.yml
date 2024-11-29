@@ -11,6 +11,14 @@ services:
       - "5432:5432"                 # 호스트와 컨테이너의 포트 매핑
     volumes:
       - postgres_data:/var/lib/postgresql/data  # 데이터 영속성 유지
-
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
 volumes:
+  redis-data:
   postgres_data:
