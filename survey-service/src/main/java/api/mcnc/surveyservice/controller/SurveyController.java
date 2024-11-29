@@ -3,6 +3,7 @@ package api.mcnc.surveyservice.controller;
 import api.mcnc.surveyservice.common.enums.SuccessCode;
 import api.mcnc.surveyservice.common.result.Api;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
+import api.mcnc.surveyservice.controller.request.SurveyDeleteOrRestoreRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
@@ -55,6 +56,18 @@ public class SurveyController {
   public Api<List<SurveyLikeResponse>> getSurveyLikeList() {
     List<SurveyLikeResponse> surveyList = surveyService.getSurveyLikeList();
     return Api.ok(SuccessCode.SUCCESS, surveyList);
+  }
+
+  @DeleteMapping("/surveys")
+  public Api<Void> deleteSurveyList(@RequestBody @Valid SurveyDeleteOrRestoreRequest request) {
+    surveyService.deleteSurveyList(request.surveyIds());
+    return Api.ok(SuccessCode.SURVEY_DELETE_SUCCESS, null);
+  }
+
+  @PostMapping("/surveys/restore")
+  public Api<Void> restoreSurveyList(@RequestBody @Valid SurveyDeleteOrRestoreRequest request) {
+    surveyService.restoreSurveyList(request.surveyIds());
+    return Api.ok(SuccessCode.SURVEY_RESTORE_SUCCESS, null);
   }
 
   @GetMapping("/surveys/survey-id/{surveyId}")

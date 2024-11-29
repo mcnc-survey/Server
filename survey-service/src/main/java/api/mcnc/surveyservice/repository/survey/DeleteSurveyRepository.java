@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
 
+import java.util.List;
+
 /**
  * please explain class!
  *
@@ -31,4 +33,9 @@ public class DeleteSurveyRepository {
   }
 
 
+  public void deleteSurveyList(String adminId, List<String> surveyIds) {
+    writeTransactionOperations.executeWithoutResult(execute ->
+      surveyJpaRepository.deleteAllByIdAndAdminId(adminId, surveyIds)
+    );
+  }
 }

@@ -39,4 +39,11 @@ public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String
   @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.id = :id")
   void updateSurveyStatus(@Param("id") String id, @Param("status") SurveyStatus status);
 
+  @Modifying
+  @Query("UPDATE SurveyEntity s SET s.status = 'WAIT' WHERE s.id in (:ids) AND s.adminId = :adminId AND s.status = 'DELETE'")
+  void updateSurveyStatusToRestore(@Param("adminId") String adminId, @Param("ids") List<String> ids);
+
+  @Modifying
+  @Query("Delete from SurveyEntity s WHERE s.id in (:ids) AND s.adminId = :adminId AND s.status = 'DELETE'")
+  void deleteAllByIdAndAdminId(@Param("adminId") String adminId, @Param("ids") List<String> ids);
 }

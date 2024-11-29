@@ -76,6 +76,17 @@ public class SurveyService {
     return fetchSurveyRepository.fetchAllByAdminId(adminId).stream().map(Survey::toCalendarResponse).toList();
   }
 
+  public void deleteSurveyList(List<String> surveyIds) {
+    String adminId = getAdminId();
+    deleteSurveyRepository.deleteSurveyList(adminId, surveyIds);
+  }
+
+  public void restoreSurveyList(List<String> surveyIds) {
+    String adminId = getAdminId();
+
+    updateSurveyStatusRepository.updateSurveyStatusToRestore(adminId, surveyIds);
+  }
+
   public List<SurveyResponse> getSurveyListForDelete() {
     String adminId = getAdminId();
     return fetchSurveyRepository.fetchAllByAdminIdForDelete(adminId).stream().map(Survey::toResponse).toList();
@@ -140,20 +151,8 @@ public class SurveyService {
   // 설문 삭제
   public void deleteSurvey(String surveyId) {
     Survey survey = this.getSurvey(surveyId);
-    /**
-     * 처음 삭제 요청 시 status만 delete로 변경 - 논리적인 삭제
-     * delete 상태의 설문에 한 번 더 요청시 데이터 베이스에서 삭제 - 물리적인 삭제
-     */
-
-    if (SurveyStatus.DELETE.equals(survey.status())) {
-    // 물리적인 삭제
-      deleteSurveyRepository.deleteSurvey(surveyId);
-    } else {
-    // 논리적인 삭제
-      updateSurveyStatusRepository.updateSurveyStatusToDelete(surveyId);
-    }
+    updateSurveyStatusRepository.updateSurveyStatusToDelete(surveyId);
   }
-
 
   public void like(String surveyId) {
     getAdminId();
