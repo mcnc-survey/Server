@@ -10,6 +10,7 @@
 
      repositories {
          mavenCentral()
+         maven { url 'https://repo.spring.io/milestone' }
          maven { url = uri("https://maven.restlet.com") }
          maven { url = uri("https://jitpack.io") }
      }
