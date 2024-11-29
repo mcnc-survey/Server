@@ -1,7 +1,6 @@
 package api.mcnc.surveyresponseservice.service;
 
-import api.mcnc.surveyresponseservice.client.respondent.RespondentValidate;
-import api.mcnc.surveyresponseservice.client.survey.SurveyValidate;
+import api.mcnc.surveyresponseservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode;
 import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
@@ -33,8 +32,10 @@ public class ResponseService {
   private final ResponseRepository responseRepository;
   private final ResponseValidator validator;
   private final ValidOtherService validService;
+  private final RequestedByProvider provider;
 
-  public List<ResponseResult> getAllMyResponseResults(String surveyId, String respondentId) {
+  public List<ResponseResult> getAllMyResponseResults(String surveyId) {
+    String respondentId = this.getRespondentId();
     validService.validate(respondentId, surveyId);
     return responseRepository.getRespondentResponseList(surveyId, respondentId)
       .stream()
@@ -42,7 +43,8 @@ public class ResponseService {
       .toList();
   }
 
-  public void setResponse(String surveyId, String respondentId, List<QuestionResponse> request) {
+  public void setResponse(String surveyId, List<QuestionResponse> request) {
+    String respondentId = this.getRespondentId();
     validService.validate(respondentId, surveyId);
     if (request == null || request.isEmpty()) {
       throw new ResponseException(ResponseErrorCode.EMPTY_RESPONSE);
@@ -56,7 +58,8 @@ public class ResponseService {
     responseRepository.responseSurvey(surveyId, respondentId, responseList);
   }
 
-  public void updateResponse(String surveyId, String respondentId, List<QuestionResponseUpdate> request) {
+  public void updateResponse(String surveyId, List<QuestionResponseUpdate> request) {
+    String respondentId = this.getRespondentId();
     validService.validate(respondentId, surveyId);
     if (request == null || request.isEmpty()) {
       throw new ResponseException(ResponseErrorCode.EMPTY_RESPONSE);
@@ -69,6 +72,11 @@ public class ResponseService {
       // id를 키로하는 map을 생성해서 전달
       .collect(Collectors.toMap(UpdateCommand::id, Function.identity()));
     responseRepository.updateResponse(surveyId, respondentId, updateMap);
+  }
+
+  private String getRespondentId() {
+    return provider.requestedBy()
+      .orElseThrow(() -> new ResponseException(ResponseErrorCode.INVALID_REQUEST));
   }
 
 }

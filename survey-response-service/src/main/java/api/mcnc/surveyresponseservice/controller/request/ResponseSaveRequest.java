@@ -12,8 +12,6 @@ import java.util.List;
  * @since :2024-11-15 오후 1:06
  */
 public record ResponseSaveRequest(
-  @NotBlank
-  String respondentId,
   @Valid
   List<QuestionResponse> responses
 ) {

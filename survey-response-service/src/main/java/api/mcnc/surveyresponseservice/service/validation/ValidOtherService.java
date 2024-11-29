@@ -25,7 +25,7 @@ public class ValidOtherService {
     this.validateSurvey(surveyId);
   }
 
-  private void validateRespondent(String respondentId) {
+  public void validateRespondent(String respondentId) {
     if (!respondentValidate.isExistRespondent(respondentId)) {
       throw new ResponseException(ResponseErrorCode.NOT_EXIST_RESPONDENT);
     }
