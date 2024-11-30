@@ -2,18 +2,19 @@ package api.mcnc.surveyservice.service.survey;
 
 import api.mcnc.surveyservice.client.AdminServiceClientService;
 import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
+import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
+import api.mcnc.surveyservice.controller.response.SurveyLikeResponse;
 import api.mcnc.surveyservice.controller.response.SurveyResponse;
 import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import api.mcnc.surveyservice.repository.survey.*;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -75,17 +76,41 @@ public class SurveyService {
     return fetchSurveyRepository.fetchAllByAdminId(adminId).stream().map(Survey::toCalendarResponse).toList();
   }
 
+  public void deleteSurveyList(List<String> surveyIds) {
+    String adminId = getAdminId();
+    deleteSurveyRepository.deleteSurveyList(adminId, surveyIds);
+  }
+
+  public void restoreSurveyList(List<String> surveyIds) {
+    String adminId = getAdminId();
+
+    updateSurveyStatusRepository.updateSurveyStatusToRestore(adminId, surveyIds);
+  }
+
   public List<SurveyResponse> getSurveyListForDelete() {
     String adminId = getAdminId();
     return fetchSurveyRepository.fetchAllByAdminIdForDelete(adminId).stream().map(Survey::toResponse).toList();
   }
 
+  public List<SurveyLikeResponse> getSurveyLikeList() {
+    String adminId = getAdminId();
+    return fetchSurveyRepository.fetchAllLikeSurveyByAdminId(adminId).stream().map(Survey::toLikeResponse).toList();
+  }
+
   // 설문 수정을 위한 상세 보기
-  public SurveyDetailsResponse getDetail(String surveyId) {
+  public SurveyDetailsResponse getDetailForEdit(String surveyId) {
     Survey survey = this.getSurvey(surveyId);
     SurveyDetailsResponse surveyDetail = survey.toDetailsResponse();
     updateSurveyStatusRepository.updateSurveyStatusToBeginEdit(surveyId);
     return surveyDetail;
+  }
+
+  // 응답을 위한 상세 보기
+  public SurveyDetailsResponse getDetail(String surveyId) {
+    // TODO: 현재는 설문 아이디만 있으면 다 조회 가능 - 추 후에 수정 필요
+    Survey survey = fetchSurveyRepository.fetchBySurveyId(surveyId)
+      .orElseThrow(() -> new SurveyException(SurveyErrorCode.FOUND_NOT_SURVEY));
+    return survey.toDetailsResponse();
   }
 
   // 설문 수정
@@ -126,20 +151,8 @@ public class SurveyService {
   // 설문 삭제
   public void deleteSurvey(String surveyId) {
     Survey survey = this.getSurvey(surveyId);
-    /**
-     * 처음 삭제 요청 시 status만 delete로 변경 - 논리적인 삭제
-     * delete 상태의 설문에 한 번 더 요청시 데이터 베이스에서 삭제 - 물리적인 삭제
-     */
-
-    if (SurveyStatus.DELETE.equals(survey.status())) {
-    // 물리적인 삭제
-      deleteSurveyRepository.deleteSurvey(surveyId);
-    } else {
-    // 논리적인 삭제
-      updateSurveyStatusRepository.updateSurveyStatusToDelete(surveyId);
-    }
+    updateSurveyStatusRepository.updateSurveyStatusToDelete(surveyId);
   }
-
 
   public void like(String surveyId) {
     getAdminId();

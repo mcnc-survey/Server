@@ -5,10 +5,7 @@ import api.mcnc.surveyservice.common.audit.interceptor.RequestedByInterceptor;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
-import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
-import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
-import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
-import api.mcnc.surveyservice.controller.response.SurveyResponse;
+import api.mcnc.surveyservice.controller.response.*;
 import api.mcnc.surveyservice.entity.question.QuestionType;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import api.mcnc.surveyservice.service.survey.SurveyService;
@@ -157,7 +154,7 @@ class SurveyControllerTest {
       )
     );
 
-    given(surveyService.getDetail("5ef3c3cf-329a-46bf-801b-e2fef6d9f339")).willReturn(surveyDetailsResponse);
+    given(surveyService.getDetailForEdit("5ef3c3cf-329a-46bf-801b-e2fef6d9f339")).willReturn(surveyDetailsResponse);
 
     mockMvc.perform(get("/surveys/survey-id/{surveyId}/edit", "5ef3c3cf-329a-46bf-801b-e2fef6d9f339"))
       .andExpect(status().isOk())
@@ -335,6 +332,29 @@ class SurveyControllerTest {
           responseFields(
             fieldWithPath("resultCode").type(STRING).description("응답 코드"),
             fieldWithPath("message").type(STRING).description("응답 메시지")
+          )
+        )
+      )
+      .andDo(print());
+  }
+
+  @Test
+  void 북마크한_설문_전체_조회() throws Exception {
+    List<SurveyLikeResponse> likeList = List.of(
+      SurveyLikeResponse.builder().id("000fcb52-c77a-4b1d-b8ea-c4fea4af544f").title("고객 만족도 조사").build()
+    );
+    given(surveyService.getSurveyLikeList()).willReturn(likeList);
+
+    mockMvc.perform(get("/surveys/like"))
+      .andExpect(status().isOk())
+      .andDo(
+        document("surveyLikeList", // RestDocs 문서화 작업
+          responseFields(
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지"),
+            fieldWithPath("body[]").type(ARRAY).description("설문 목록"),
+            fieldWithPath("body[].id").type(STRING).description("설문 ID"),
+            fieldWithPath("body[].title").type(STRING).description("설문 제목")
           )
         )
       )

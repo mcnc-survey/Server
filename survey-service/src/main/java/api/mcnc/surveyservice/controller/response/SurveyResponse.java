@@ -16,6 +16,7 @@ public record SurveyResponse(
   String id,
   String title,
   SurveyStatus status,
-  String lastModifiedAt
+  String lastModifiedAt,
+  String surveyLink
 ) {
 }

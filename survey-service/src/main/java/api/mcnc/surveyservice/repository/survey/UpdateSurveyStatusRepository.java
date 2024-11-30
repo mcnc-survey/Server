@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * please explain class!
@@ -60,4 +61,9 @@ public class UpdateSurveyStatusRepository {
     );
   }
 
+  public void updateSurveyStatusToRestore(String adminId, List<String> surveyIds) {
+    writeTransactionOperations.executeWithoutResult(execute ->
+      surveyRepository.updateSurveyStatusToRestore(adminId, surveyIds)
+    );
+  }
 }

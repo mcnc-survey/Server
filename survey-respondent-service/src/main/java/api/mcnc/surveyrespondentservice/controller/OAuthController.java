@@ -38,7 +38,7 @@ public class OAuthController {
 
     // 성공시 redirection
     response.setHeader("accessToken", token.accessToken());
-    response.sendRedirect("http://localhost:9000/respondent/index");
+    response.sendRedirect("http://localhost:10001/respondent/index");
     return Api.ok(SuccessCode.SUCCESS, null);
   }
 

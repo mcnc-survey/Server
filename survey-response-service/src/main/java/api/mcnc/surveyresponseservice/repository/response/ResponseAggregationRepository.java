@@ -38,4 +38,10 @@ public class ResponseAggregationRepository {
 
     );
   }
+
+  public Integer getRespondentCountBySurveyId(String surveyId) {
+    return readTransactionOperations.execute(status ->
+      responseJpaRepository.countTotalRespondentsBySurveyId(surveyId)
+    );
+  }
 }

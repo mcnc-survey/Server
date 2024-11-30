@@ -24,3 +24,11 @@ include::{snippets}/likeSurvey/path-parameters.adoc[]
 include::{snippets}/likeSurvey/http-response.adoc[]
 ===== fields
 include::{snippets}/likeSurvey/response-fields.adoc[]
+
+=== 북마크한 설문 조회
+==== request
+include::{snippets}/surveyLikeList/http-request.adoc[]
+==== response
+include::{snippets}/surveyLikeList/http-response.adoc[]
+===== fields
+include::{snippets}/surveyLikeList/response-fields.adoc[]

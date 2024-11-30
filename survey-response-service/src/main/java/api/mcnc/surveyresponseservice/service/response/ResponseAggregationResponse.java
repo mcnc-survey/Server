@@ -9,5 +9,6 @@ import java.util.Map;
  * @since :2024-11-17 오후 8:07
  */
 public record ResponseAggregationResponse(
+  Integer totalResponseCount,
   Map<Integer, Object> groupByOrderNumber
 ) { }

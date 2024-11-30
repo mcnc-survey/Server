@@ -26,6 +26,10 @@ public class RespondentRepository {
     return save.toDomain();
   }
 
+  public boolean isExist(String id) {
+    return respondentJpaRepository.existsById(id);
+  }
+
   public boolean isExist(String email, String surveyId) {
     return respondentJpaRepository.existsByEmailAndSurveyId(email, surveyId);
   }

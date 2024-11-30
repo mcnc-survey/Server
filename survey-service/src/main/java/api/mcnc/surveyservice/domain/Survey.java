@@ -1,13 +1,12 @@
 package api.mcnc.surveyservice.domain;
 
+import api.mcnc.surveyservice.common.constants.SurveyLink;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
-import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
-import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
-import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
-import api.mcnc.surveyservice.controller.response.SurveyResponse;
+import api.mcnc.surveyservice.controller.response.*;
 import api.mcnc.surveyservice.entity.survey.SurveyLike;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import lombok.Builder;
+import org.apache.hc.client5.http.utils.Base64;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,11 +42,13 @@ public record Survey(
   }
 
   public SurveyResponse toResponse() {
+    String surveyLink = "http://설문 응답할 프론트 페이지 주소?t=" + Base64.encodeBase64String(this.id.getBytes());
     return SurveyResponse.builder()
       .id(this.id)
       .title(this.title)
       .status(this.status)
       .lastModifiedAt(this.modifiedAt.toString())
+      .surveyLink(surveyLink)
       .build();
   }
 
@@ -72,5 +73,11 @@ public record Survey(
       .build();
   }
 
+  public SurveyLikeResponse toLikeResponse() {
+    return SurveyLikeResponse.builder()
+      .id(this.id)
+      .title(this.title)
+      .build();
+  }
 
 }

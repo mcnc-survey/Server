@@ -1,6 +1,7 @@
 package api.mcnc.surveyresponseservice.repository.response;
 
 import api.mcnc.surveyresponseservice.entity.response.ResponseEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +28,8 @@ public interface ResponseJpaRepository extends ListCrudRepository<ResponseEntity
 
   // id에 해당하는 항목들만 가져오기
   List<ResponseEntity> findAllByIdIn(Set<String> ids);
+
+  // 설문에 해당하는 총 응답자 수
+  @Query("SELECT COUNT(DISTINCT r.respondentId) FROM ResponseEntity r WHERE r.surveyId = :surveyId")
+  Integer countTotalRespondentsBySurveyId(String surveyId);
 }

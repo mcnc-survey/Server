@@ -39,3 +39,6 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 
+api:
+  survey-url: http://localhost:9091
+
