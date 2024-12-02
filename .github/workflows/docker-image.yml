@@ -1,0 +1,102 @@
+name: Survey MSA CI/CD Pipeline
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+env:
+  DOCKER_HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKER_HUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [
+          'survey-gateway',
+          'survey-response-gateway',
+          'survey-discovery',
+          'survey-config-server',
+          'survey-service',
+          'survey-admin-service', 
+          'survey-respondent-service',
+          'survey-response-service'
+        ]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew :${{ matrix.service }}:build -x test
+    - name: Docker Hub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:${{ github.sha }} \
+                     -t ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:latest \
+                     ${{ matrix.service }}/
+        docker push ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:${{ github.sha }}
+        docker push ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:latest
+
+  deploy-to-ec2:
+    needs: build-and-push
+    runs-on: ubuntu-latest  # 추가된 부분
+    strategy:
+      matrix:
+        include:
+          - service: survey-gateway
+            instance-id: ${{ secrets.GATEWAY_INSTANCE_ID }}
+            port: 8080
+          - service: survey-response-gateway
+            instance-id: ${{ secrets.RESPONSE_GATEWAY_INSTANCE_ID }}
+            port: 8080
+          - service: survey-discovery
+            instance-id: ${{ secrets.SURVEY_DISCOVERY_INSTANCE_ID }}
+            port: 8080
+          - service: survey-config-server
+            instance-id: ${{ secrets.SURVEY_CONFIG_SERVER_INSTANCE_ID }}
+            port: 8080
+          - service: survey-service
+            instance-id: ${{ secrets.SURVEY_SERVICE_INSTANCE_ID }}
+            port: 8080
+          - service: survey-admin-service
+            instance-id: ${{ secrets.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}
+            port: 8080
+          - service: survey-respondent-service
+            instance-id: ${{ secrets.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}
+            port: 8080
+          - service: survey-response-service
+            instance-id: ${{ secrets.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}
+            port: 8080              
+    steps:
+    - name: Configure AWS credentials  # 추가된 단계
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+    
+    - name: Deploy Service via AWS SSM
+      run: |
+        aws ssm send-command \
+          --instance-ids ${{ matrix.instance-id }} \
+          --document-name "AWS-RunShellScript" \
+          --parameters "commands=[
+            'docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}',
+            'docker pull ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:latest',
+            'docker stop survey-${{ matrix.service }} || true',
+            'docker rm survey-${{ matrix.service }} || true',
+            'docker run -d \
+              --name survey-${{ matrix.service }} \
+              -p ${{ matrix.port }}:8080 \
+              ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:latest'
+          ]"
