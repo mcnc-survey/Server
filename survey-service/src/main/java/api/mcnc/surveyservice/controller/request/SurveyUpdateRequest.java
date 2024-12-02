@@ -36,7 +36,10 @@ public record SurveyUpdateRequest(
       @Min(1)
       Integer order,
       String columns,
-      String rows
+      String rows,
+      @NotNull
+      Boolean required,
+      Boolean etc
     ) { }
 
 

@@ -16,6 +16,8 @@ public record QuestionDetailsResponse(
   QuestionType questionType,
   Integer order,
   String columns,
-  String rows
+  String rows,
+  Boolean required,
+  Boolean etc
 ) {
 }

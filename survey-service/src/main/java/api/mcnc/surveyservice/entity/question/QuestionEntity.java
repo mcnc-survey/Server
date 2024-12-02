@@ -37,6 +37,10 @@ public class QuestionEntity extends MutableBaseEntity {
   private String columns;
   @Column(name = "ROWS")
   private String rows;
+  @Column(name = "REQUIRED")
+  private Boolean required;
+  @Column(name = "ETC")
+  private Boolean etc;
 
   public Question toDomain() {
     return Question.builder()
@@ -46,6 +50,8 @@ public class QuestionEntity extends MutableBaseEntity {
       .order(order)
       .columns(columns)
       .rows(rows)
+      .required(required)
+      .etc(etc)
       .build();
   }
 
@@ -57,6 +63,8 @@ public class QuestionEntity extends MutableBaseEntity {
       .order(question.order())
       .columns(question.columns())
       .rows(question.rows())
+      .required(question.required())
+      .etc(question.etc())
       .build();
   }
 
@@ -66,6 +74,8 @@ public class QuestionEntity extends MutableBaseEntity {
     this.order = question.order();
     this.columns = question.columns();
     this.rows = question.rows();
+    this.required = question.required();
+    this.etc = question.etc();
   }
 
   public void addSurvey(SurveyEntity surveyEntity) {
