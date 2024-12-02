@@ -8,6 +8,7 @@ spring:
       host: 127.0.0.1
   cloud:
     gateway:
+
       routes:
         - id: respondent_route
           uri: lb://survey-respondent-service

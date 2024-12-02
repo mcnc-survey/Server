@@ -1,10 +1,12 @@
 spring:
   application:
     name: survey-admin-service
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/survey
-    username: survey
-    password: survey12!@
-    hikari:
-      driver-class-name: org.postgresql.Driver
+  profiles:
+    active: local
+  config:
+    import: optional:configserver:http://localhost:8888
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

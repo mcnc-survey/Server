@@ -1,5 +1,8 @@
 target/*
-
+infra/.terraform/*
+infra/terraform.*
+infra/.*
+infra/*.tpl
 
 
 

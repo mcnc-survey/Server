@@ -1,0 +1,17 @@
+// index.adoc
+
+= 관리자 설문 관리 API 문서
+:doctype: book
+:source-highlighter: highlightjs
+:sectlinks:
+:toc: left
+:toclevels: 2
+
+'''
+include::survey_save.adoc[]
+
+''''
+include::survey_fetch.adoc[]
+
+'''
+include::survey_update.adoc[]

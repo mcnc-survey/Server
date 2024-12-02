@@ -1,0 +1,12 @@
+// index.adoc
+
+= Respondent Response Application API Document
+:doctype: book
+:source-highlighter: highlightjs
+:sectlinks:
+:toc: left
+:toclevels: 2
+
+include::responses.adoc[]
+
+include::response-aggregation.adoc[]
