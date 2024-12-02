@@ -19,6 +19,12 @@ services:
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes
+
+  survey-response-service:
+    image: survey-response-service:latest
+    container_name: survey-response-service
+    ports:
+      - "8080:8080"
 volumes:
   redis-data:
   postgres_data:
