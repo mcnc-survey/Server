@@ -1,48 +1,41 @@
-plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.5'
-	id 'io.spring.dependency-management' version '1.1.6'
-}
+ plugins {
+     id 'java'
+     id 'org.springframework.boot' version '3.3.5'
+     id 'io.spring.dependency-management' version '1.1.6'
+ }
 
-group = 'api.mcnc'
-version = '0.0.1-SNAPSHOT'
+ allprojects {
+     group = 'api.mcnc'
+     version = '0.0.1-SNAPSHOT'
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-}
+     repositories {
+         mavenCentral()
+         maven { url 'https://repo.spring.io/milestone' }
+         maven { url = uri("https://maven.restlet.com") }
+         maven { url = uri("https://jitpack.io") }
+     }
 
-repositories {
-	mavenCentral()
-}
+     java {
+         toolchain {
+             languageVersion = JavaLanguageVersion.of(17)
+         }
+     }
+ }
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
+ subprojects {
+     apply plugin: 'java'
+     apply plugin: 'org.springframework.boot'
+     apply plugin: 'io.spring.dependency-management'
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+     dependencies {
+         // 테스트
+         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+     }
+ }
 
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-
-	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.flywaydb:flyway-database-postgresql'
-	runtimeOnly 'org.postgresql:postgresql'
-
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
-}
+ tasks.named('test') {
+ 	useJUnitPlatform()
+ }
 

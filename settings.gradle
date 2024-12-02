@@ -1,2 +1,10 @@
 rootProject.name = 'survey'
 include("email-service")
+include("survey-admin-service")
+include("survey-response-service")
+include("survey-gateway")
+include("survey-response-gateway")
+include("survey-discovery")
+include("survey-respondent-service")
+include("survey-service")
+include("survey-config-server")
