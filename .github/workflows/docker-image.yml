@@ -91,11 +91,11 @@ jobs:
           --document-name "AWS-RunShellScript" \
           --parameters "commands=[
             'docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}',
-            'docker pull ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:latest',
-            'docker stop survey-${{ matrix.service }} || true',
-            'docker rm survey-${{ matrix.service }} || true',
+            'docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest',
+            'docker stop ${{ matrix.service }} || true',
+            'docker rm ${{ matrix.service }} || true',
             'docker run -d \
-              --name survey-${{ matrix.service }} \
+              --name ${{ matrix.service }} \
               -p ${{ matrix.port }}:8080 \
-              ${{ env.DOCKERHUB_USERNAME }}/survey-${{ matrix.service }}:latest'
+              ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest'
           ]"
