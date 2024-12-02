@@ -35,13 +35,21 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build and Push Docker Image
-      run: |
-        docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }} \
-                     -t ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest \
-                     -f ${{ matrix.service }}/Dockerfile \
-                     ${{ matrix.service }}/
-        docker push ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
-        docker push ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
+      uses: docker/build-push-action@v2
+      with:
+        context: ${{ matrix.service }}/
+        file: ./Dockerfile
+        platforms: linux/amd64
+        push: true
+        tags: ${{ steps.docker_meta.outputs.tags }}
+        labels: ${{ steps.docker_meta.outputs.labels }}
+#      run: |
+#        docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }} \
+#                     -t ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest \
+#                     -f ${{ matrix.service }}/Dockerfile \
+#                     ${{ matrix.service }}/
+#        docker push ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
+#        docker push ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
 
   deploy-to-ec2:
     needs: build-and-push
