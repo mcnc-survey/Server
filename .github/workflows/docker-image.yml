@@ -5,8 +5,8 @@ on:
   pull_request:
     branches: [ "main" ]
 env:
-  DOCKER_HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKER_HUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
