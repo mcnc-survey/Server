@@ -10,6 +10,9 @@ COPY ../gradle gradle/
 COPY ../build.gradle .
 COPY ../settings.gradle .
 
+# gradlew에 실행 권한 부여
+RUN chmod +x ./gradlew  # 실행 권한 부여
+
 # Gradle 캐시를 활용하여 의존성 설치
 RUN ./gradlew build -x test --stacktrace --no-daemon || return 0
 
