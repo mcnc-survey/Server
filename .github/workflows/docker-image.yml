@@ -28,6 +28,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '17'
+        distribution: 'temurin'
     - name: Docker Hub Login
       uses: docker/login-action@v2
       with:
