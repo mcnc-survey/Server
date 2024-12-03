@@ -89,13 +89,10 @@ jobs:
         aws ssm send-command \
           --instance-ids ${{ matrix.instance-id }} \
           --document-name "AWS-RunShellScript" \
-          --parameters "commands=[
-            'docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}',
-            'docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest',
-            'docker stop ${{ matrix.service }} || true',
-            'docker rm ${{ matrix.service }} || true',
-            'docker run -d \
-              --name ${{ matrix.service }} \
-              -p ${{ matrix.port }}:8080 \
-              ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest'
-          ]"
+          --parameters '{"commands":[
+            "docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}",
+            "docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest",
+            "docker stop ${{ matrix.service }} || true",
+            "docker rm ${{ matrix.service }} || true",
+            "docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"
+          ]}'
