@@ -375,6 +375,47 @@ resource "null_resource" "docker_setup_gateway" {
   depends_on = [aws_instance.gateway]
 }
 
+# Gateway 인스턴스에 Docker 설치
+resource "null_resource" "docker_setup_response_gateway" {
+  triggers = {
+    instance_id = aws_instance.response-gateway.id
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file(pathexpand("~/.ssh/id_rsa"))
+    host        = aws_instance.response-gateway.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      # Docker 설치를 위한 기본 패키지 업데이트
+      "sudo apt-get update",
+      "sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common",
+
+      # Docker GPG 키 추가
+      "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -",
+
+      # Docker 리포지토리 추가
+      "sudo add-apt-repository -y 'deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable'",
+
+      # Docker 설치
+      "sudo apt-get update",
+      "sudo apt-get install -y docker-ce docker-ce-cli containerd.io",
+
+      # Docker Compose 설치
+      "sudo curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose",
+      "sudo chmod +x /usr/local/bin/docker-compose",
+
+      # 현재 사용자를 docker 그룹에 추가
+      "sudo usermod -aG docker ubuntu"
+    ]
+  }
+
+  depends_on = [aws_instance.response-gateway]
+}
+
 # Other Microservices에 Docker 및 SSM Agent 설치
 resource "null_resource" "docker_setup_microservices" {
   count = length(local.microservices)
