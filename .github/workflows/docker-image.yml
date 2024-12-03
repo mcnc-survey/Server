@@ -48,28 +48,28 @@ jobs:
       matrix:
         include:
           - service: survey-gateway
-            instance-id: ${{ vars.GATEWAY_INSTANCE_ID }}
+            instance-id: ${{ secrets.GATEWAY_INSTANCE_ID }}
             port: 8080
           - service: survey-response-gateway
-            instance-id: ${{ vars.RESPONSE_GATEWAY_INSTANCE_ID }}
+            instance-id: ${{ secrets.RESPONSE_GATEWAY_INSTANCE_ID }}
             port: 8080
           - service: survey-discovery
-            instance-id: ${{ vars.SURVEY_DISCOVERY_INSTANCE_ID }}
+            instance-id: ${{ secrets.SURVEY_DISCOVERY_INSTANCE_ID }}
             port: 8080
           - service: survey-config-server
-            instance-id: ${{ vars.SURVEY_CONFIG_SERVER_INSTANCE_ID }}
+            instance-id: ${{ secrets.SURVEY_CONFIG_SERVER_INSTANCE_ID }}
             port: 8080
           - service: survey-service
-            instance-id: ${{ vars.SURVEY_SERVICE_INSTANCE_ID }}
+            instance-id: ${{ secrets.SURVEY_SERVICE_INSTANCE_ID }}
             port: 8080
           - service: survey-admin-service
-            instance-id: ${{ vars.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}
+            instance-id: ${{ secrets.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}
             port: 8080
           - service: survey-respondent-service
-            instance-id: ${{ vars.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}
+            instance-id: ${{ secrets.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}
             port: 8080
           - service: survey-response-service
-            instance-id: ${{ vars.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}
+            instance-id: ${{ secrets.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}
             port: 8080              
     steps:
     - name: Configure AWS credentials  # 추가된 단계
