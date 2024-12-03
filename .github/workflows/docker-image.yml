@@ -40,6 +40,9 @@ jobs:
         tags: |
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
+        build-args: |
+          CONFIG_USERNAME=${{ secrets.CONFIG_USERNAME }}
+          CONFIG_PASSWORD=${{ secrets.CONFIG_PASSWORD }}
 
   deploy-to-ec2:
     needs: build-and-push
@@ -88,4 +91,4 @@ jobs:
     - name: Deploy Service via AWS SSM
       run: |
         echo "Deploying to INSTANCE_ID: $INSTANCE_ID"
-        aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
+        aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p 8080:${{ matrix.port }} ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
