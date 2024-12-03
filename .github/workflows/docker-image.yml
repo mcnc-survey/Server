@@ -74,16 +74,18 @@ jobs:
     - name: Set Instance ID
       run: |
         case ${{ matrix.service }} in
-          survey-gateway) INSTANCE_ID=${{ secrets.GATEWAY_INSTANCE_ID }} ;;
-          survey-response-gateway) INSTANCE_ID=${{ secrets.RESPONSE_GATEWAY_INSTANCE_ID }} ;;
-          survey-discovery) INSTANCE_ID=${{ secrets.SURVEY_DISCOVERY_INSTANCE_ID }} ;;
-          survey-config-server) INSTANCE_ID=${{ secrets.SURVEY_CONFIG_SERVER_INSTANCE_ID }} ;;
-          survey-service) INSTANCE_ID=${{ secrets.SURVEY_SERVICE_INSTANCE_ID }} ;;
-          survey-respondent-service) INSTANCE_ID=${{ secrets.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }} ;;
-          survey-response-service) INSTANCE_ID=${{ secrets.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }} ;;
-          *) echo "Unknown service"; exit 1 ;;
+          survey-gateway) echo "INSTANCE_ID=${{ secrets.GATEWAY_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-response-gateway) echo "INSTANCE_ID=${{ secrets.RESPONSE_GATEWAY_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-discovery) echo "INSTANCE_ID=${{ secrets.SURVEY_DISCOVERY_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-config-server) echo "INSTANCE_ID=${{ secrets.SURVEY_CONFIG_SERVER_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-service) echo "INSTANCE_ID=${{ secrets.SURVEY_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-admin-service) echo "INSTANCE_ID=${{ secrets.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-respondent-service) echo "INSTANCE_ID=${{ secrets.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-response-service) echo "INSTANCE_ID=${{ secrets.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
         esac
 
     
     - name: Deploy Service via AWS SSM
-      run: aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
+      run: |
+        echo "Deploying to INSTANCE_ID: $INSTANCE_ID"
+        aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
