@@ -37,17 +37,12 @@ jobs:
         file: ./${{ matrix.service }}/Dockerfile
         platforms: linux/amd64
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
-#      run: |
-#        docker build -t ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }} \
-#                     -t ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest \
-#                     -f ${{ matrix.service }}/Dockerfile \
-#                     ${{ matrix.service }}/
-#        docker push ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
-#        docker push ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
 
   deploy-to-ec2:
-    needs: build-and-push
+    needs: build-and-push-docker
     runs-on: ubuntu-latest  # 추가된 부분
     strategy:
       matrix:
