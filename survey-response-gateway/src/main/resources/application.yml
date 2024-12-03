@@ -1,58 +1,7 @@
-server:
-  port: 10000
 spring:
   application:
     name: survey-response-gateway
-
-  cloud:
-    gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]': # 모든 라우트에 대해
-            allowedOrigins:
-              - http://localhost:8080
-            allowedMethods:
-              - GET
-              - POST
-            allowedHeaders:
-              - Content-Type
-              - Authorization
-            allowCredentials: true
-            maxAge: 3600 # pre-flight 요청의 캐시 지속 시간
-      default-filters:
-        - name: RequestRateLimiter
-          args:
-            redis-rate-limiter.replenishRate: 1 # replenishRate 는 사용자가 일정 시간 동안 발생시킬 수 있는 요청의 수를 정의
-            redis-rate-limiter.burstCapacity: 1 # burstCapacity 는 토큰 버킷이 담을 수 있는 최대 토큰 수를 정의
-            key-resolver: "#{@ipKeyResolver}"
-      routes:
-        - id: survey-response-service
-          uri: lb://SURVEY-RESPONSE-SERVICE
-          predicates:
-            - Path=/survey-response/**
-          filters:
-            - AuthenticationFilter
-            - RewritePath=/survey-response/(?<path>.*), /responses/$\{path}
-
-        - id: survey-respondent-service
-          uri: lb://SURVEY-RESPONDENT-SERVICE
-          predicates:
-            - Path=/respondent/**
-          filters:
-#            - AuthenticationFilter
-            - RewritePath=/respondent/(?<path>.*), /respondents/$\{path}
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true
-    fetch-registry: true
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
+  profiles:
+    active: local
+  config:
+    import: optional:configserver:http://localhost:8888
