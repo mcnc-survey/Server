@@ -86,4 +86,4 @@ jobs:
 
     
     - name: Deploy Service via AWS SSM
-      run: aws ssm send-command --instance-ids ${{ matrix.instance-id }} --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
+      run: aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
