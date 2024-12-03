@@ -44,40 +44,51 @@ jobs:
   deploy-to-ec2:
     needs: build-and-push
     runs-on: ubuntu-latest  # 추가된 부분
+    env:
+      GATEWAY_INSTANCE_ID: ${{ secrets.GATEWAY_INSTANCE_ID }}
+      RESPONSE_GATEWAY_INSTANCE_ID: ${{ secrets.RESPONSE_GATEWAY_INSTANCE_ID }}
+      SURVEY_DISCOVERY_INSTANCE_ID: ${{ secrets.SURVEY_DISCOVERY_INSTANCE_ID }}
+      SURVEY_CONFIG_SERVER_INSTANCE_ID: ${{ secrets.SURVEY_CONFIG_SERVER_INSTANCE_ID }}
+      SURVEY_SERVICE_INSTANCE_ID: ${{ secrets.SURVEY_SERVICE_INSTANCE_ID }}
+      SURVEY_ADMIN_SERVICE_INSTANCE_ID: ${{ secrets.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}
+      SURVEY_RESPONDENT_SERVICE_INSTANCE_ID: ${{ secrets.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}
+      SURVEY_RESPONSE_SERVICE_INSTANCE_ID: ${{ secrets.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     strategy:
       matrix:
         include:
           - service: survey-gateway
-            instance-id: ${{ secrets.GATEWAY_INSTANCE_ID }}
+            instance-id: ${{ env.GATEWAY_INSTANCE_ID }}
             port: 8080
           - service: survey-response-gateway
-            instance-id: ${{ secrets.RESPONSE_GATEWAY_INSTANCE_ID }}
+            instance-id: ${{ env.RESPONSE_GATEWAY_INSTANCE_ID }}
             port: 8080
           - service: survey-discovery
-            instance-id: ${{ secrets.SURVEY_DISCOVERY_INSTANCE_ID }}
+            instance-id: ${{ env.SURVEY_DISCOVERY_INSTANCE_ID }}
             port: 8080
           - service: survey-config-server
-            instance-id: ${{ secrets.SURVEY_CONFIG_SERVER_INSTANCE_ID }}
+            instance-id: ${{ env.SURVEY_CONFIG_SERVER_INSTANCE_ID }}
             port: 8080
           - service: survey-service
-            instance-id: ${{ secrets.SURVEY_SERVICE_INSTANCE_ID }}
+            instance-id: ${{ env.SURVEY_SERVICE_INSTANCE_ID }}
             port: 8080
           - service: survey-admin-service
-            instance-id: ${{ secrets.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}
+            instance-id: ${{ env.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}
             port: 8080
           - service: survey-respondent-service
-            instance-id: ${{ secrets.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}
+            instance-id: ${{ env.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}
             port: 8080
           - service: survey-response-service
-            instance-id: ${{ secrets.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}
-            port: 8080              
+            instance-id: ${{ env.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}
+            port: 8080
     steps:
     - name: Configure AWS credentials  # 추가된 단계
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
     
     - name: Deploy Service via AWS SSM
-      run: aws ssm send-command --instance-ids ${{ matrix.instance-id }} --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
+      run: aws ssm send-command --instance-ids ${{ matrix.instance-id }} --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ env.DOCKERHUB_USERNAME }} -p ${{ env.DOCKERHUB_TOKEN }}","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker run -d --name ${{ matrix.service }} -p ${{ matrix.port }}:8080 ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'
