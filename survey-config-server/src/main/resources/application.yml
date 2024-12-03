@@ -23,3 +23,33 @@ management:
   endpoint:
     shutdown:
       enabled: true
+
+---
+
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  config:
+    import: optional:config.yml # 로컬에서만
+  application:
+    name: survey-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/mcnc-survey/config
+          search-paths: /**
+          default-label: main
+          username: ${CONFIG_USERNAME}
+          password: ${CONFIG_PASSWORD}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
