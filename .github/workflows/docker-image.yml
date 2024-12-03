@@ -42,7 +42,7 @@ jobs:
           ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
 
   deploy-to-ec2:
-    needs: build-and-push-docker
+    needs: build-and-push
     runs-on: ubuntu-latest  # 추가된 부분
     strategy:
       matrix:
