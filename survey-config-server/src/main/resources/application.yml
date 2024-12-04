@@ -33,7 +33,6 @@ spring:
   config:
     activate:
       on-profile: dev
-    import: optional:config.yml # 로컬에서만
   application:
     name: survey-config-server
   cloud:

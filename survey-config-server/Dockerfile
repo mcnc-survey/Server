@@ -1,13 +1,6 @@
 # 1단계: 빌드 단계
 FROM gradle:8.6-jdk17 AS build
 
-# ARG로 값 받기
-ARG CONFIG_USERNAME
-ARG CONFIG_PASSWORD
-
-# ENV로 환경 변수 설정
-ENV CONFIG_USERNAME=$CONFIG_USERNAME
-ENV CONFIG_PASSWORD=$CONFIG_PASSWORD
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -41,4 +34,13 @@ COPY --from=build /app/survey-config-server/build/libs/*.jar app.jar
 
 # 컨테이너 실행 시 애플리케이션 실행
 ENV SPRING_PROFILE "dev"
+
+# ARG로 값 받기
+ARG CONFIG_USERNAME
+ARG CONFIG_PASSWORD
+
+# ENV로 환경 변수 설정
+ENV CONFIG_USERNAME=$CONFIG_USERNAME
+ENV CONFIG_PASSWORD=$CONFIG_PASSWORD
+
 ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILE}", "-jar", "app.jar"]
