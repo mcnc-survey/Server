@@ -30,9 +30,9 @@ server:
   port: 8080
 
 spring:
-  profiles:
-    active: dev
   config:
+    activate:
+      on-profile: dev
     import: optional:config.yml # 로컬에서만
   application:
     name: survey-config-server
@@ -53,3 +53,7 @@ management:
   endpoint:
     shutdown:
       enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.config.server: DEBUG
