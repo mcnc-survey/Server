@@ -43,6 +43,7 @@ jobs:
         build-args: |
           CONFIG_USERNAME=${{ secrets.CONFIG_USERNAME }}
           CONFIG_PASSWORD=${{ secrets.CONFIG_PASSWORD }}
+          CONFIG_SERVER_HOST=${{ secrets.CONFIG_SERVER_HOST }}
 
   deploy-to-ec2:
     needs: build-and-push

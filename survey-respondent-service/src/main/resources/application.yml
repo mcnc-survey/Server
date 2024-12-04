@@ -1,8 +1,17 @@
 spring:
   application:
     name: survey-respondent-service
-  profiles:
-    active: local
   config:
     import: optional:configserver:http://localhost:8888
+    activate:
+      on-profile: local
 
+---
+
+spring:
+  application:
+    name: survey-respondent-service
+  config:
+    import: optional:configserver:http://{CONFIG_SERVER_HOST}:8080
+    activate:
+      on-profile: dev

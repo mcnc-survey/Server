@@ -30,7 +30,8 @@ WORKDIR /app
 
 # 빌드 결과물 복사
 COPY --from=build /app/survey-response-service/build/libs/*.jar app.jar
-
+ARG CONFIG_SERVER_HOST
+ENV CONFIG_SERVER_HOST=$CONFIG_SERVER_HOST
 # 컨테이너 실행 시 애플리케이션 실행
 ENV SPRING_PROFILE "dev"
 ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILE}", "-jar", "app.jar"]

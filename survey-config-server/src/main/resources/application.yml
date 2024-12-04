@@ -4,6 +4,8 @@ server:
 spring:
   config:
     import: optional:config.yml # 로컬에서만
+    activate:
+      on-profile: local
   application:
     name: survey-config-server
   cloud:
