@@ -33,7 +33,7 @@ WORKDIR /app
 COPY --from=build /app/survey-config-server/build/libs/*.jar app.jar
 
 # 컨테이너 실행 시 애플리케이션 실행
-ENV SPRING_PROFILE "dev"
+ENV SPRING_PROFILE "local"
 
 # ARG로 값 받기
 ARG CONFIG_USERNAME
