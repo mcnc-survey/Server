@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * please explain class!
@@ -29,5 +30,9 @@ public class TokenService {
 
     String accessToken = tokenProvider.createToken(claims, subject);
     return Token.of(accessToken);
+  }
+
+  public String extractSubject(String token) {
+    return tokenProvider.extractSubject(token);
   }
 }

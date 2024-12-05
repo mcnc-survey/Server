@@ -54,7 +54,7 @@ class ResponseAggregationControllerTest {
       3, List.of("전반적으로 만족스러웠습니다.", "전반적으로 만족스러웠습니다.", "전반적으로 만족스러웠습니다."),
       4, Map.of("1", 3, "2", 3, "3", 3, "4", 3, "5", 3)
     );
-    ResponseAggregationResponse response = new ResponseAggregationResponse(groupByOrderNumber);
+    ResponseAggregationResponse response = new ResponseAggregationResponse(4, groupByOrderNumber);
     given(responseService.getResponseAggregationBySurveyId(anyString()))
       .willReturn(response);
 
@@ -66,7 +66,7 @@ class ResponseAggregationControllerTest {
       .andDo(
         document("get-response-aggregation",
           pathParameters(
-            parameterWithName("{survey_id}").description("설문지 ID")
+            parameterWithName("surveyId").description("설문지 ID")
           ),
           responseFields(
             // Common Response Fields
@@ -74,6 +74,7 @@ class ResponseAggregationControllerTest {
             fieldWithPath("message").description("결과 메시지"),
 
             // Body Fields
+            fieldWithPath("body.totalResponseCount").description("전체 응답자 수"),
             fieldWithPath("body.groupByOrderNumber").description("문항 순서별 응답 집계 결과"),
 
             // Question 1 (Single Choice)

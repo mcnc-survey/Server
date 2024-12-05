@@ -1,21 +1,22 @@
 package api.mcnc.surveyrespondentservice.authentication.jwt;
 
-import api.mcnc.surveyrespondentservice.domain.Token;
+import api.mcnc.surveyrespondentservice.common.exception.custom.TokenException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.security.SecurityException;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
+
+import static api.mcnc.surveyrespondentservice.common.enums.TokenErrorCode.INVALID_JWT_SIGNATURE;
+import static api.mcnc.surveyrespondentservice.common.enums.TokenErrorCode.INVALID_TOKEN;
 
 /**
  * please explain class!
@@ -26,48 +27,47 @@ import java.util.function.Function;
 @Component
 public class JwtProvider {
 
-  private final SecretKey secretKey;
+  @Value("${jwt.secret-key}")
+  private String key;
+  private SecretKey secretKey;
 
-  public JwtProvider(Environment env) {
-    this.secretKey =  Keys.hmacShaKeyFor(Objects.requireNonNull(env.getProperty("jwt.secret-key")).getBytes(StandardCharsets.UTF_8));
+  @PostConstruct
+  private void setSecretKey() {
+    secretKey = Keys.hmacShaKeyFor(key.getBytes());
   }
 
   public String createToken(Map<String, Object> claims, String subject) {
+    Date now = new Date();
+
     return Jwts.builder()
-      .claims(claims)
       .subject(subject)
-      .issuedAt(new Date())
-      .signWith(secretKey)
+      .claims(claims)
+      .issuedAt(now)
+      .expiration(new Date(now.getTime() + 1000))
+      .signWith(secretKey, Jwts.SIG.HS512)
       .compact();
   }
 
-  public boolean validateToken(String token) {
+  public String extractSubject(String token) {
+    Claims claims = parseClaims(token);
+    return claims.getSubject();
+  }
+
+  private Claims parseClaims(String token) {
     try {
-      Jwts.parser()
+      return Jwts.parser()
         .verifyWith(secretKey)
         .build()
-        .parseSignedClaims(token);
-      return true;
-    } catch (Exception e) {
-      return false;
+        .parseSignedClaims(token)
+        .getPayload();
+    } catch (ExpiredJwtException e) {
+      return e.getClaims();
+    } catch (MalformedJwtException e) {
+      throw new TokenException(INVALID_TOKEN);
+    } catch (SecurityException e) {
+      throw new TokenException(INVALID_JWT_SIGNATURE);
     }
   }
 
-  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-    final Claims claims = extractAllClaims(token);
-    return claimsResolver.apply(claims);
-  }
-
-  public String extractSubject(String token) {
-    return extractClaim(token, Claims::getSubject);
-  }
-
-  private Claims extractAllClaims(String token) {
-    return Jwts.parser()
-      .verifyWith(secretKey)
-      .build()
-      .parseSignedClaims(token)
-      .getPayload();
-  }
 
 }

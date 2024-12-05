@@ -1,6 +1,6 @@
 package api.mcnc.surveyadminservice.common.audit.config;
 
-import api.mcnc.surveyresponseservice.common.audit.interceptor.RequestedByInterceptor;
+import api.mcnc.surveyadminservice.common.audit.interceptor.RequestedByInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;

@@ -1,0 +1,34 @@
+=== 설문 수정
+※`새롭게 추가된 것은 id null | 값 수정인 것에는 기존 id를 담아서`
+
+==== request
+include::{snippets}/updateSurvey/http-request.adoc[]
+
+===== fields
+include::{snippets}/updateSurvey/request-fields.adoc[]
+
+
+==== response
+include::{snippets}/updateSurvey/http-response.adoc[]
+===== fields
+include::{snippets}/updateSurvey/response-fields.adoc[]
+
+=== 설문 북마크
+==== request
+include::{snippets}/likeSurvey/http-request.adoc[]
+===== path parameters
+include::{snippets}/likeSurvey/path-parameters.adoc[]
+
+
+==== response
+include::{snippets}/likeSurvey/http-response.adoc[]
+===== fields
+include::{snippets}/likeSurvey/response-fields.adoc[]
+
+=== 북마크한 설문 조회
+==== request
+include::{snippets}/surveyLikeList/http-request.adoc[]
+==== response
+include::{snippets}/surveyLikeList/http-response.adoc[]
+===== fields
+include::{snippets}/surveyLikeList/response-fields.adoc[]

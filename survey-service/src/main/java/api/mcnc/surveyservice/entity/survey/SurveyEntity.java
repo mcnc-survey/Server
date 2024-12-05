@@ -5,10 +5,7 @@ import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.audit.MutableBaseEntity;
 import api.mcnc.surveyservice.entity.question.QuestionEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,6 +23,9 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SurveyEntity extends MutableBaseEntity {
+  @Getter
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+  List<QuestionEntity> questions;
   @Id
   @Column(name = "ID")
   private String id;
@@ -42,8 +42,22 @@ public class SurveyEntity extends MutableBaseEntity {
   private LocalDateTime startAt;
   @Column(name = "END_AT")
   private LocalDateTime endAt;
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-  List<QuestionEntity> questions;
+  @Column(name = "SURVEY_LIKE")
+  @Enumerated(EnumType.STRING)
+  private SurveyLike like;
+
+  public static SurveyEntity fromDomain(Survey survey) {
+    return SurveyEntity.builder()
+      .id(UUID.randomUUID().toString())
+      .adminId(survey.adminId())
+      .title(survey.title())
+      .description(survey.description())
+      .status(survey.status())
+      .startAt(survey.startAt())
+      .endAt(survey.endAt())
+      .like(SurveyLike.DISLIKE)
+      .build();
+  }
 
   public Survey toDomain() {
     List<Question> questionList = questions.stream().map(QuestionEntity::toDomain).toList();
@@ -56,19 +70,25 @@ public class SurveyEntity extends MutableBaseEntity {
       .status(status)
       .startAt(startAt)
       .endAt(endAt)
+      .like(like)
+      .modifiedAt(modifiedAt)
       .build();
   }
 
-  public static SurveyEntity fromDomain(Survey survey) {
-    return SurveyEntity.builder()
-      .id(UUID.randomUUID().toString())
-      .adminId(survey.adminId())
-      .title(survey.title())
-      .description(survey.description())
-      .status(survey.status())
-      .startAt(survey.startAt())
-      .endAt(survey.endAt())
-      .build();
+  public void updateFrom(Survey survey) {
+    this.title = survey.title();
+    this.description = survey.description();
+    this.status = survey.status();
+    this.startAt = survey.startAt();
+    this.endAt = survey.endAt();
+  }
+
+  public void updateLikeUpdate() {
+    if (SurveyLike.LIKE.equals(this.like)) {
+      this.like = SurveyLike.DISLIKE;
+    } else {
+      this.like = SurveyLike.LIKE;
+    }
   }
 
   public void addQuestions(List<QuestionEntity> questionEntityList) {

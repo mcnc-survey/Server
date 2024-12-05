@@ -1,0 +1,60 @@
+server:
+  port: 8888
+
+spring:
+  config:
+    import: optional:config.yml # 로컬에서만
+    activate:
+      on-profile: local
+  application:
+    name: survey-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/mcnc-survey/config
+          search-paths: /**
+          default-label: main
+          username: ${CONFIG_USERNAME}
+          password: ${CONFIG_PASSWORD}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+
+---
+
+server:
+  port: 8080
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  application:
+    name: survey-config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/mcnc-survey/config
+          search-paths: /**
+          default-label: main
+          username: ${CONFIG_USERNAME}
+          password: ${CONFIG_PASSWORD}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.config.server: DEBUG

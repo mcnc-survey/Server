@@ -1,20 +1,21 @@
 package api.mcnc.surveyrespondentservice.controller;
 
+import api.mcnc.surveyrespondentservice.authentication.auth.EmailUserInfo;
+import api.mcnc.surveyrespondentservice.common.constant.ProviderConstant;
 import api.mcnc.surveyrespondentservice.common.enums.SuccessCode;
 import api.mcnc.surveyrespondentservice.common.result.Api;
 import api.mcnc.surveyrespondentservice.domain.AuthenticatedUser;
 import api.mcnc.surveyrespondentservice.domain.Token;
 import api.mcnc.surveyrespondentservice.service.auth.OAuthUseCase;
 import api.mcnc.surveyrespondentservice.service.respondent.RegisterUseCase;
-import api.mcnc.surveyrespondentservice.service.respondent.RespondentService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+
+import static api.mcnc.surveyrespondentservice.common.constant.ProviderConstant.DEFAULT_PROVIDER;
 
 /**
  * please explain class!
@@ -38,8 +39,15 @@ public class OAuthController {
 
     // 성공시 redirection
     response.setHeader("accessToken", token.accessToken());
-    response.sendRedirect("http://localhost:9000/respondent/index");
+    response.sendRedirect("http://localhost:10001/respondent/index");
     return Api.ok(SuccessCode.SUCCESS, null);
+  }
+
+  @PostMapping("/respondent/auth")
+  public Api<Token> oauthEmail(@RequestBody @Valid EmailUserInfo emailUser, @RequestParam("surveyId") String surveyId) {
+    AuthenticatedUser emailUserInfo = AuthenticatedUser.of(emailUser, DEFAULT_PROVIDER);
+    Token token = registerUseCase.registerRespondent(emailUserInfo, surveyId);
+    return Api.ok(SuccessCode.SUCCESS, token);
   }
 
 }

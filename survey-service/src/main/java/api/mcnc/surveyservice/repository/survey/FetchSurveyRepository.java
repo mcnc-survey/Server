@@ -2,11 +2,13 @@ package api.mcnc.surveyservice.repository.survey;
 
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
+import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * please explain class!
@@ -38,9 +40,45 @@ public class FetchSurveyRepository {
     );
   }
 
+  public List<Survey> fetchAllByAdminIdForDelete(String adminId) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository
+        .findAllByAdminIdAndStatus(adminId, SurveyStatus.DELETE)
+        .stream()
+        .map(SurveyEntity::toDomain)
+        .toList()
+    );
+  }
+
+  public Optional<Survey> fetchBySurveyIdAndAdminId(String surveyId, String adminId) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository
+        .findByIdAndAdminId(surveyId, adminId)
+        .map(SurveyEntity::toDomain)
+    );
+  }
+
+  public Optional<Survey> fetchBySurveyId(String surveyId) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository
+        .findById(surveyId)
+        .map(SurveyEntity::toDomain)
+    );
+  }
+
+  public List<Survey> fetchAllLikeSurveyByAdminId(String adminId) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository
+        .findAllLikeSurveyByAdminId(adminId)
+        .stream()
+        .map(SurveyEntity::toDomain)
+        .toList()
+    );
+  }
+
   public Boolean existsBySurveyId(String id) {
     return readTransactionOperations.execute(status ->
-      surveyJpaRepository.existsById(id)
+      surveyJpaRepository.existsByIdAndStatus(id, SurveyStatus.ON)
     );
   }
 

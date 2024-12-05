@@ -1,5 +1,5 @@
 
-=== 제작한 설문 조회
+=== 설문 조회
 ==== request
 include::{snippets}/getSurveyList/http-request.adoc[]
 
@@ -8,3 +8,44 @@ include::{snippets}/getSurveyList/http-response.adoc[]
 ===== fields
 include::{snippets}/getSurveyList/response-fields.adoc[]
 
+=== 설문 상세 조회 - 수정
+※ `수정을 위한 상세 조회 시 status가 'EDIT'으로 변경됨`
+
+==== request
+include::{snippets}/getSurveyDetail/http-request.adoc[]
+
+==== response
+include::{snippets}/getSurveyDetail/http-response.adoc[]
+===== fields
+include::{snippets}/getSurveyDetail/response-fields.adoc[]
+
+=== 삭제한 설문 조회
+==== request
+include::{snippets}/getSurveyListForDelete/http-request.adoc[]
+
+==== response
+include::{snippets}/getSurveyListForDelete/http-response.adoc[]
+===== fields
+include::{snippets}/getSurveyListForDelete/response-fields.adoc[]
+
+
+
+=== 설문 조회(캘린더 일정 등록)
+==== request
+include::{snippets}/getSurveyListForCalendar/http-request.adoc[]
+
+==== response
+include::{snippets}/getSurveyListForCalendar/http-response.adoc[]
+===== fields
+include::{snippets}/getSurveyListForCalendar/response-fields.adoc[]
+
+
+
+=== 설문 삭제
+※ `처음 요청시에는 status를 DELETE로만 변경 - 반복 요청시에는 물리적인 삭제`
+include::{snippets}/deleteSurvey/http-request.adoc[]
+
+==== response
+include::{snippets}/deleteSurvey//http-response.adoc[]
+===== fields
+include::{snippets}/deleteSurvey//response-fields.adoc[]

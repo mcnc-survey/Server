@@ -1,5 +1,7 @@
 package api.mcnc.surveyrespondentservice.client.oauth;
 
+import api.mcnc.surveyrespondentservice.authentication.auth.UserInfo;
+
 /**
 * please explain class!
 * 

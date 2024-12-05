@@ -1,5 +1,6 @@
 package api.mcnc.surveyresponseservice.service;
 
+import api.mcnc.surveyresponseservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode;
 import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
@@ -9,8 +10,8 @@ import api.mcnc.surveyresponseservice.domain.Response;
 import api.mcnc.surveyresponseservice.repository.response.ResponseRepository;
 import api.mcnc.surveyresponseservice.service.request.UpdateCommand;
 import api.mcnc.surveyresponseservice.service.validation.ResponseValidator;
+import api.mcnc.surveyresponseservice.service.validation.ValidOtherService;
 import lombok.RequiredArgsConstructor;
-import org.flywaydb.core.api.ErrorCode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,15 +31,21 @@ public class ResponseService {
 
   private final ResponseRepository responseRepository;
   private final ResponseValidator validator;
+  private final ValidOtherService validService;
+  private final RequestedByProvider provider;
 
-  public List<ResponseResult> getAllMyResponseResults(String surveyId, String respondentId) {
+  public List<ResponseResult> getAllMyResponseResults(String surveyId) {
+    String respondentId = this.getRespondentId();
+    validService.validate(respondentId, surveyId);
     return responseRepository.getRespondentResponseList(surveyId, respondentId)
       .stream()
       .map(Response::toResponseResult)
       .toList();
   }
 
-  public void setResponse(String surveyId, String respondentId, List<QuestionResponse> request) {
+  public void setResponse(String surveyId, List<QuestionResponse> request) {
+    String respondentId = this.getRespondentId();
+    validService.validate(respondentId, surveyId);
     if (request == null || request.isEmpty()) {
       throw new ResponseException(ResponseErrorCode.EMPTY_RESPONSE);
     }
@@ -51,7 +58,9 @@ public class ResponseService {
     responseRepository.responseSurvey(surveyId, respondentId, responseList);
   }
 
-  public void updateResponse(String surveyId, String respondentId, List<QuestionResponseUpdate> request) {
+  public void updateResponse(String surveyId, List<QuestionResponseUpdate> request) {
+    String respondentId = this.getRespondentId();
+    validService.validate(respondentId, surveyId);
     if (request == null || request.isEmpty()) {
       throw new ResponseException(ResponseErrorCode.EMPTY_RESPONSE);
     }
@@ -63,6 +72,11 @@ public class ResponseService {
       // id를 키로하는 map을 생성해서 전달
       .collect(Collectors.toMap(UpdateCommand::id, Function.identity()));
     responseRepository.updateResponse(surveyId, respondentId, updateMap);
+  }
+
+  private String getRespondentId() {
+    return provider.requestedBy()
+      .orElseThrow(() -> new ResponseException(ResponseErrorCode.INVALID_REQUEST));
   }
 
 }

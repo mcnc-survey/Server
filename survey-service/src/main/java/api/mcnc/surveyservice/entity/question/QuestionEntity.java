@@ -4,10 +4,7 @@ import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.entity.audit.MutableBaseEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -23,11 +20,11 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestionEntity extends MutableBaseEntity {
-  @Id
+  @Id @Getter
   @Column(name = "ID")
   private String id;
   @JoinColumn(name = "SURVEY_ID")
-  @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY)
   private SurveyEntity survey;
   @Column(name = "TITLE")
   private String title;
@@ -40,6 +37,10 @@ public class QuestionEntity extends MutableBaseEntity {
   private String columns;
   @Column(name = "ROWS")
   private String rows;
+  @Column(name = "REQUIRED")
+  private Boolean required;
+  @Column(name = "ETC")
+  private Boolean etc;
 
   public Question toDomain() {
     return Question.builder()
@@ -49,6 +50,8 @@ public class QuestionEntity extends MutableBaseEntity {
       .order(order)
       .columns(columns)
       .rows(rows)
+      .required(required)
+      .etc(etc)
       .build();
   }
 
@@ -60,7 +63,19 @@ public class QuestionEntity extends MutableBaseEntity {
       .order(question.order())
       .columns(question.columns())
       .rows(question.rows())
+      .required(question.required())
+      .etc(question.etc())
       .build();
+  }
+
+  public void updateFrom(Question question) {
+    this.title = question.title();
+    this.questionType = question.questionType();
+    this.order = question.order();
+    this.columns = question.columns();
+    this.rows = question.rows();
+    this.required = question.required();
+    this.etc = question.etc();
   }
 
   public void addSurvey(SurveyEntity surveyEntity) {

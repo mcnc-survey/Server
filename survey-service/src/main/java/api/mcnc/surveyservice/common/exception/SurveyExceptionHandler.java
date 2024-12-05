@@ -34,7 +34,7 @@ public class SurveyExceptionHandler {
 
   @ExceptionHandler(SurveyException.class)
   public ResponseEntity<Api<String>> handleResponseException(SurveyException e) {
-    Api<String> response = Api.fail(e.getCode(), null);
+    Api<String> response = Api.fail(e.getCode(), e.getMessage());
     return ResponseEntity.ok(response);
   }
 

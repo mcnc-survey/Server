@@ -4,6 +4,7 @@ import api.mcnc.surveyresponseservice.domain.Response;
 import api.mcnc.surveyresponseservice.repository.response.ResponseAggregationRepository;
 import api.mcnc.surveyresponseservice.service.response.ResponseAggregationResponse;
 import api.mcnc.surveyresponseservice.service.response.ResponseResultByQuestionType;
+import api.mcnc.surveyresponseservice.service.validation.ValidOtherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,11 @@ public class ResponseAggregationService {
 
   private final ResponseResultByQuestionType responseResult;
   private final ResponseAggregationRepository aggregationRepository;
+  private final ValidOtherService validService;
 
   public ResponseAggregationResponse getResponseAggregationBySurveyId(String surveyId) {
+    validService.validateSurvey(surveyId);
+
     Map<Integer, List<Response>> responseList = aggregationRepository.getResponseListMappingByOrderNumberBySurveyId(surveyId);
 
     Map<Integer, Object> result = new HashMap<>();
@@ -36,7 +40,9 @@ public class ResponseAggregationService {
 
       result.put(key, value);
     }
-    return new ResponseAggregationResponse(result);
+
+    Integer totalRespondentCount = aggregationRepository.getRespondentCountBySurveyId(surveyId);
+    return new ResponseAggregationResponse(totalRespondentCount, result);
   }
 
 

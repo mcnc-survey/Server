@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
-public class RespondentService implements RegisterUseCase {
+public class RespondentService implements RegisterUseCase,  ValidateUseCase{
   private final RespondentRepository respondentRepository;
   private final SurveyValidationService surveyValidationService;
   private final TokenService tokenService;
@@ -43,7 +43,17 @@ public class RespondentService implements RegisterUseCase {
     return getToken(token);
   }
 
-//  토큰 만들어서 반환
+  @Override
+  public boolean validateRespondent(String respondentId) {
+    return respondentRepository.isExist(respondentId);
+  }
+
+  @Override
+  public String extractSubject(String token) {
+    return tokenService.extractSubject(token);
+  }
+
+  //  토큰 만들어서 반환
   private Token getToken(Respondent respondent) {
     return tokenService.generateTokenByRespondent(respondent);
   }
