@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+# db
   postgres:
     image: postgres:latest
     container_name: postgres_survey
@@ -11,6 +12,10 @@ services:
       - "5432:5432"                 # 호스트와 컨테이너의 포트 매핑
     volumes:
       - postgres_data:/var/lib/postgresql/data  # 데이터 영속성 유지
+    networks:
+      - survey-network
+
+# rate limit용 redis
   redis:
     image: redis:latest
     container_name: redis
@@ -19,12 +24,88 @@ services:
     volumes:
       - redis-data:/data
     command: redis-server --appendonly yes
+    networks:
+      - survey-network
 
+# config server
+  survey-config-server:
+    image: survey-config-server:latest
+    container_name: survey-config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - survey-network
+
+  # 디스커버리
+  survey-discovery:
+    image: survey-discovery:latest
+    container_name: survey-discovery
+    ports:
+      - "8761:8761"
+    networks:
+      - survey-network
+    depends_on:
+      - survey-config-server
+
+# 응답자용 게이트 웨이
+  survey-response-gateway:
+    image: survey-response-gateway:latest
+    container_name: survey-response-gateway
+    ports:
+      - "10000:10000"
+    networks:
+      - survey-network
+    depends_on:
+      - survey-config-server
+      
+# 관리자용 게이트 웨이
+  survey-gateway:
+    image: survey-gateway:latest
+    container_name: survey-gateway
+    ports:
+      - "9000:9000"
+    networks:
+      - survey-network
+    depends_on:
+      - survey-config-server
+
+# 설문 응답 서비스
   survey-response-service:
     image: survey-response-service:latest
     container_name: survey-response-service
     ports:
-      - "8080:8080"
+      - "9090:9090"
+    networks:
+      - survey-network
+    depends_on:
+      - survey-config-server
+
+# 응답자 인증 서비스
+  survey-respondent-service:
+    image: survey-respondent-service:latest
+    container_name: survey-respondent-service
+    ports:
+      - "10001:10001"
+    networks:
+      - survey-network
+    depends_on:
+      - survey-config-server
+
+# 설문 서비스
+  survey-service:
+    image: survey-service:latest
+    container_name: survey-service
+    ports:
+      - "9091:9091"
+    networks:
+      - survey-network
+    depends_on:
+      - survey-config-server
+
 volumes:
   redis-data:
-  postgres_data:
+  postgres-data:
+
+networks:
+  survey-network:
+    driver: bridge

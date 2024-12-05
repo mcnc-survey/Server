@@ -2,7 +2,7 @@ spring:
   application:
     name: survey-gateway
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://survey-config-server:8888
     activate:
       on-profile: local
 
