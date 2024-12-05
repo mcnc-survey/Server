@@ -2,14 +2,21 @@ package api.mcnc.email_service.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -17,21 +24,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    private final Map<String, VerificationCode> verificationCodes = new HashMap<>();
-
-    public void sendMultiVerificationEmail(List<String> emails, String verificationCode) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setSubject("인증 코드 발송");
-        message.setText("인증 코드 6자리: " + verificationCode + "\n\n5분 내로 입력해주십시오.");
-
-        // 다수의 수신자 설정
-        String[] emailArray = emails.toArray(new String[0]);
-        message.setTo(emailArray);
-
-        mailSender.send(message);
-    }
-
-
+    private final Map<String, VerificationCode> verificationCodes = new ConcurrentHashMap<>();
 
     public String generateVerificationCode() {
         return UUID.randomUUID().toString().substring(0, 6);  // 앞의 6자리만 사용
@@ -41,7 +34,6 @@ public class EmailService {
     public String generateMultiVerificationCode(int index) {
         // UUID를 생성하고, 앞의 6자리만 사용
         String uuid = UUID.randomUUID().toString().substring(0, 6);
-
         // 마지막 문자 가져오기
         char lastChar = uuid.charAt(uuid.length() - 1);
 
@@ -52,11 +44,27 @@ public class EmailService {
     }
 
 
-    public void sendSingleVerificationEmail(String toEmail, String verificationCode) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("인증 코드 발송");
-        message.setText("인증 코드 6자리: " + verificationCode + "\n\n5분 내로 입력해주십시오.");
+    public void sendSingleVerificationEmail(String toEmail, String verificationCode) throws IOException, MessagingException {
+
+
+        ClassPathResource resource = new ClassPathResource("templates/VerificationEmail.html");
+        String htmlTemplate = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+
+        // 인증 코드 삽입
+        String htmlContent = htmlTemplate.replace("{{verificationCode}}", verificationCode);
+
+        // MimeMessage 생성 및 설정
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        // 이메일 수신자 설정
+        helper.setTo(toEmail);
+
+        // 이메일 제목 및 본문 설정
+        helper.setSubject("인증 코드 발송");
+        helper.setText(htmlContent, true); // HTML 형식 사용
+
+        // 이메일 전송
         mailSender.send(message);
     }
 
@@ -69,23 +77,18 @@ public class EmailService {
         return verificationCodes.get(email);
     }
 
-    public void sendHtmlVerificationEmails(List<String> toEmails, String userName, String projectName, String dynamicLink) throws MessagingException, MessagingException {
-        String htmlContentTemplate = "<!DOCTYPE html><html lang='ko'><head><meta charset='UTF-8'><style>"
-                + ".container { width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; color: #333333; text-align: center; }"
-                + ".title { font-size: 18px; font-weight: bold; margin-bottom: 10px; }"
-                + ".date { font-size: 12px; color: #888888; margin-bottom: 20px; }"
-                + ".button { display: inline-block; padding: 12px 24px; background-color: #4CAF50; color: #ffffff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 14px; margin-top: 20px; }"
-                + ".footer { font-size: 12px; color: #999999; margin-top: 20px; }"
-                + "</style></head><body>"
-                + "<div class='container'>"
-                + "<p class='title'><strong>" + userName + "</strong>님이 <strong>" + projectName + "</strong> 프로젝트에 초대했습니다.</p>"
-                + "<p class='date'>" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm")) + "</p>"
-                + "<table role='presentation' style='width: 100%; margin-top: 20px;'>"
-                + "<tr><td align='center'><a href='" + dynamicLink + "' class='button'>페이지로 이동</a></td></tr>"
-                + "</table>"
-                + "<div class='footer'><p>사이트 이름</p><p>설문 사이트 뭐시기</p>"
-                + "<a href='https://notion.so' style='color: #9e9e9e; text-decoration: underline;'>사이트 링크</a></div>"
-                + "</div></body></html>";
+    public void sendHtmlVerificationEmails(List<String> toEmails, String userName, String projectName, String dynamicLink) throws MessagingException, IOException {
+        // ClassPathResource를 사용해 resources 디렉토리의 파일 읽기
+        ClassPathResource resource = new ClassPathResource("templates/Email.html");
+        String htmlTemplate = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+
+        // 동적 데이터 삽입
+        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm"));
+        String htmlContent = htmlTemplate
+                .replace("{{userName}}", userName)
+                .replace("{{projectName}}", projectName)
+                .replace("{{date}}", currentDate)
+                .replace("{{dynamicLink}}", dynamicLink);
 
         for (String toEmail : toEmails) {
             MimeMessage message = mailSender.createMimeMessage();
@@ -93,9 +96,12 @@ public class EmailService {
 
             helper.setTo(toEmail);
             helper.setSubject("프로젝트 초대 알림");
-            helper.setText(htmlContentTemplate, true);
+            helper.setText(htmlContent, true);
 
             mailSender.send(message);
         }
     }
+
+
+
 }

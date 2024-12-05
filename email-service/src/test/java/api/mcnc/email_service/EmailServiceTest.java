@@ -62,7 +62,7 @@ public class EmailServiceTest {
     @Test
     void sendHtmlVerificationEmails() throws Exception {
         String requestJson = """
-                {
+                {   
                   "emails": ["shetoo22@gmail.com", "shetoo22@hs.ac.kr"],
                   "userName": "Sample User",
                   "projectName": "Sample Project",
