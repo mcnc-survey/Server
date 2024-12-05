@@ -10,6 +10,9 @@ COPY ../gradle gradle/
 COPY ../build.gradle .
 COPY ../settings.gradle .
 
+# gradlew에 실행 권한 부여
+RUN chmod +x ./gradlew  # 실행 권한 부여
+
 # Gradle 캐시를 활용하여 의존성 설치
 RUN ./gradlew build -x test --stacktrace --no-daemon || return 0
 
@@ -28,6 +31,8 @@ WORKDIR /app
 # 빌드 결과물 복사
 COPY --from=build /app/survey-discovery/build/libs/*.jar app.jar
 
+ARG CONFIG_SERVER_HOST
+ENV CONFIG_SERVER_HOST=$CONFIG_SERVER_HOST
 # 컨테이너 실행 시 애플리케이션 실행
-ENV SPRING_PROFILE "dev"
+ENV SPRING_PROFILE "local"
 ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILE}", "-jar", "app.jar"]

@@ -1,0 +1,94 @@
+name: Survey MSA CI/CD Pipeline
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [
+          'survey-gateway',
+          'survey-response-gateway',
+          'survey-discovery',
+          'survey-config-server',
+          'survey-service',
+#          'survey-admin-service',
+          'survey-respondent-service',
+          'survey-response-service'
+        ]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Docker Hub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./${{ matrix.service }}/Dockerfile
+        platforms: linux/amd64
+        push: true
+        tags: |
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
+          ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
+        build-args: |
+          CONFIG_USERNAME=${{ secrets.CONFIG_USERNAME }}
+          CONFIG_PASSWORD=${{ secrets.CONFIG_PASSWORD }}
+          CONFIG_SERVER_HOST=${{ secrets.CONFIG_SERVER_HOST }}
+
+  deploy-to-ec2:
+    needs: build-and-push
+    runs-on: ubuntu-latest  # 추가된 부분
+    strategy:
+      matrix:
+        include:
+          - service: survey-gateway
+            port: 8080
+          - service: survey-response-gateway
+            port: 8080
+          - service: survey-discovery
+            port: 8080
+          - service: survey-config-server
+            port: 8080
+          - service: survey-service
+            port: 8080
+#          - service: survey-admin-service
+#            port: 8080
+          - service: survey-respondent-service
+            port: 8080
+          - service: survey-response-service
+            port: 8080
+    steps:
+    - name: Configure AWS credentials  # 추가된 단계
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Set Instance ID
+      run: |
+        case ${{ matrix.service }} in
+          survey-gateway) echo "INSTANCE_ID=${{ secrets.GATEWAY_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-response-gateway) echo "INSTANCE_ID=${{ secrets.RESPONSE_GATEWAY_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-discovery) echo "INSTANCE_ID=${{ secrets.SURVEY_DISCOVERY_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-config-server) echo "INSTANCE_ID=${{ secrets.SURVEY_CONFIG_SERVER_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-service) echo "INSTANCE_ID=${{ secrets.SURVEY_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-admin-service) echo "INSTANCE_ID=${{ secrets.SURVEY_ADMIN_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-respondent-service) echo "INSTANCE_ID=${{ secrets.SURVEY_RESPONDENT_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+          survey-response-service) echo "INSTANCE_ID=${{ secrets.SURVEY_RESPONSE_SERVICE_INSTANCE_ID }}" >> $GITHUB_ENV ;;
+        esac
+
+    
+    - name: Deploy Service via AWS SSM
+      run: |
+        aws ssm send-command --instance-ids "$INSTANCE_ID" --document-name "AWS-RunShellScript" --parameters '{"commands":["sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}","sudo docker stop ${{ matrix.service }} || true","sudo docker rm ${{ matrix.service }} || true","sudo docker image prune -f","sudo docker pull ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest","sudo docker run -d --name ${{ matrix.service }} -p 8080:${{ matrix.port }} ${{ env.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest"]}'

@@ -1,143 +1,17 @@
 spring:
   application:
     name: survey-gateway
+  config:
+    import: optional:configserver:http://survey-config-server:8888
+    activate:
+      on-profile: local
 
-  data:
-    redis:
-      port: 6379
-      host: 127.0.0.1
-  cloud:
-    gateway:
+---
 
-      routes:
-        - id: respondent_route
-          uri: lb://survey-respondent-service
-          predicates:
-            - Path=/respondent/**
-            - Method=POST,GET,OPTIONS
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: authCircuitBreaker
-                fallbackUri: forward:/fallback/authFailure
-
-        - id: admin_route
-          uri: lb://survey-admin-service
-          predicates:
-            - Path=/admin/**
-            - Method=POST,GET
-          filters:
-            - AuthenticationFilter
-            - RewritePath=/admin/(?<segment>.*),/$\{segment}
-#
-#        - id: graphql_subscription_route
-#          uri: lb:ws://next-graphql
-#          predicates:
-#            - Path=/graphql
-#          filters:
-#            - AuthenticationFilter
-#
-#        - id: graphql_route
-#          uri: lb://next-graphql
-#          predicates:
-#            - Path=/graphql
-#            - Method=POST,GET,OPTIONS
-#          filters:
-#            - AuthenticationFilter
-#
-#        - id: graphiql_route
-#          uri: lb://next-graphql
-#          predicates:
-#            - Path=/graphiql
-#            - Method=GET
-
-      global-cors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: "http://localhost:9999,http://127.0.0.1:9999"
-            allowedMethods:
-              - OPTIONS
-              - POST
-              - GET
-              - PATCH
-            allowedHeaders: "*"
-            allowCredentials: true
-
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
-        - name: RequestRateLimiter
-          args:
-            redis-rate-limiter.replenishRate: 10 # replenishRate? ???? ?? ?? ??(?? ? ??) ???? ? ?? ??? ?? ??
-            redis-rate-limiter.burstCapacity: 50 # burstCapacity? ?? ??? ?? ? ?? ?? ??? ?? ??
-            key-resolver: "#{@ipKeyResolver}"
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-    registerWithEureka: true
-    fetchRegistry: true
-
-    rest-template-timeout:
-      connect-timeout: 5000
-      connect-request-timeout: 8000
-      socket-timeout: 10000
-
-logging:
-  level:
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.http.server.reactive: DEBUG
-    org.springframework.web.reactive: DEBUG
-    reactor.ipc.netty: DEBUG
-    reactor.netty: DEBUG
-    io.github.resilience4j: DEBUG
-
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      authCircuitBreaker:
-        registerHealthIndicator: true
-        slidingWindowSize: 5 # ?? ????? ??? ?? ?? ?
-        minimumNumberOfCalls: 10 # ?? ?? ??, ? ?? ??? ?? ????? ??? ???
-        permittedNumberOfCallsInHalfOpenState: 10 # ?-?? ???? ???? ?? ?
-        automaticTransitionFromOpenToHalfOpenEnabled: true # ?? ????? ???? ?-?? ??? ????? ??
-        waitDurationInOpenState: 5000 # ?? ????? ?? ??? ???? ??
-        failureRateThreshold: 50 # ??? ??, ? ??? ???? ??? ???? ?? ????? ????
-        eventConsumerBufferSize: 10
-        record-exceptions:
-          - java.util.concurrent.TimeoutException
-          - org.springframework.cloud.gateway.support.NotFoundException
-          - io.github.resilience4j.circuitbreaker.CallNotPermittedException
-#        ignoreExceptions: # ?? ????? ??? ?? ??
-#          - org.springframework.web.client.HttpClientErrorException
-
-resilience4j.timelimiter:
-  configs:
-    default:
-      timeoutDuration: 5s
-
-management:
-  tracing:
-    sampling:
-      probability: 1.0
-    propagation:
-      consume: b3
-      produce: b3_multi
-  zipkin:
-    tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
-  endpoints:
-    web:
-      exposure:
-        include:
-          - info
-          - health
-          - loggers
-          - mappings
-          - metrics
-          - shutdown
-          - prometheus
-          - circuitbreakers
-
-server:
-  port: 9000
+spring:
+  application:
+    name: survey-gateway
+  config:
+    import: optional:configserver:http://${CONFIG_SERVER_HOST}:8080
+    activate:
+      on-profile: dev

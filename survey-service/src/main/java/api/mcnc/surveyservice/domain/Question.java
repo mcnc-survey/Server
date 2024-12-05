@@ -19,7 +19,9 @@ public record Question(
   QuestionType questionType,
   Integer order,
   String columns,
-  String rows
+  String rows,
+  Boolean required,
+  Boolean etc
 ) {
   public static Question fromRequest(QuestionCreateRequest request) {
     return Question.builder()
@@ -28,6 +30,8 @@ public record Question(
       .order(request.order())
       .columns(request.columns())
       .rows(request.rows())
+      .required(request.required())
+      .etc(request.etc())
       .build();
   }
   public QuestionDetailsResponse toDetailsResponse() {
@@ -38,6 +42,8 @@ public record Question(
       .order(this.order)
       .columns(this.columns)
       .rows(this.rows)
+      .required(this.required)
+      .etc(this.etc)
       .build();
   }
 
@@ -49,6 +55,8 @@ public record Question(
       .order(request.order())
       .columns(request.columns())
       .rows(request.rows())
+      .required(request.required())
+      .etc(request.etc())
       .build();
   }
 

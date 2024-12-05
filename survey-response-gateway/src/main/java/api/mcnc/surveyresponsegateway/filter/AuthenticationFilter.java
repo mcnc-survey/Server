@@ -17,7 +17,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
   @LoadBalanced
   private final WebClient webClient;
 
-  // TODO 2024-11-27 yhj : WebClient로 교체
   public AuthenticationFilter(ReactorLoadBalancerExchangeFilterFunction lbFunction) {
     super(Config.class);
     this.webClient = WebClient.builder()

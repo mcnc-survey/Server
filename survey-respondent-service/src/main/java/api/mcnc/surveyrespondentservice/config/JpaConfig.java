@@ -4,6 +4,7 @@ import api.mcnc.surveyrespondentservice.entity.EntityModule;
 import api.mcnc.surveyrespondentservice.repository.RepositoryModule;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import javax.sql.DataSource;
 @Configuration
 @EntityScan(basePackageClasses = EntityModule.class)
 @EnableJpaRepositories(basePackageClasses = RepositoryModule.class)
+@EnableConfigurationProperties
 public class JpaConfig {
 
   @Bean

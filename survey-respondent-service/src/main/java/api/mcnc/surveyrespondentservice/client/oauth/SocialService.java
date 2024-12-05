@@ -1,5 +1,6 @@
 package api.mcnc.surveyrespondentservice.client.oauth;
 
+import api.mcnc.surveyrespondentservice.authentication.auth.UserInfo;
 import api.mcnc.surveyrespondentservice.common.enums.RespondentErrorCode;
 import api.mcnc.surveyrespondentservice.common.exception.custom.RespondentException;
 import lombok.RequiredArgsConstructor;

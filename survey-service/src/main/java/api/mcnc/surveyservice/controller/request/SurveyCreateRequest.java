@@ -18,7 +18,6 @@ public record SurveyCreateRequest(
   @NotBlank
   String title,
   String description,
-  @FutureOrPresent
   LocalDateTime startAt,
   @Future
   LocalDateTime endAt,
