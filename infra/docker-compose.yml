@@ -4,14 +4,14 @@ services:
 # db
   postgres:
     image: postgres:latest
-    container_name: postgres_survey
+    container_name: postgres-survey
     environment:
       POSTGRES_USER: survey         # 사용자 이름
       POSTGRES_PASSWORD: survey12!@  # 비밀번호
     ports:
       - "5432:5432"                 # 호스트와 컨테이너의 포트 매핑
     volumes:
-      - postgres_data:/var/lib/postgresql/data  # 데이터 영속성 유지
+      - postgres-data:/var/lib/postgresql/data  # 데이터 영속성 유지
     networks:
       - survey-network
 
