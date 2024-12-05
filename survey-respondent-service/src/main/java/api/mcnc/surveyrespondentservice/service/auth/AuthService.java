@@ -1,7 +1,7 @@
 package api.mcnc.surveyrespondentservice.service.auth;
 
 import api.mcnc.surveyrespondentservice.client.oauth.SocialService;
-import api.mcnc.surveyrespondentservice.client.oauth.UserInfo;
+import api.mcnc.surveyrespondentservice.authentication.auth.UserInfo;
 import api.mcnc.surveyrespondentservice.domain.AuthenticatedUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

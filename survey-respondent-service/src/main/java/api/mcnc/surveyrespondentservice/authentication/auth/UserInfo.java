@@ -1,4 +1,4 @@
-package api.mcnc.surveyrespondentservice.client.oauth;
+package api.mcnc.surveyrespondentservice.authentication.auth;
 
 /**
  * please explain class!
