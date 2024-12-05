@@ -29,6 +29,9 @@ FROM openjdk:17-jdk-slim
 # 작업 디렉토리 설정
 WORKDIR /app
 
+# 필수 유틸리티 설치
+RUN apt-get update && apt-get install -y curl && apt-get clean
+
 # 빌드 결과물 복사
 COPY --from=build /app/survey-config-server/build/libs/*.jar app.jar
 
