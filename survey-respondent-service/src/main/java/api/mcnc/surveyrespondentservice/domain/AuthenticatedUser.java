@@ -1,6 +1,8 @@
 package api.mcnc.surveyrespondentservice.domain;
 
-import api.mcnc.surveyrespondentservice.client.oauth.UserInfo;
+import api.mcnc.surveyrespondentservice.authentication.auth.UserInfo;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Builder;
 
@@ -12,8 +14,11 @@ import lombok.Builder;
  */
 @Builder(access = AccessLevel.PRIVATE)
 public record AuthenticatedUser(
+  @NotBlank
   String name,
+  @Email
   String email,
+  @NotBlank
   String phoneNumber,
   String provider
 ) {

@@ -1,6 +1,6 @@
 package api.mcnc.surveyrespondentservice.client.oauth.kakao;
 
-import api.mcnc.surveyrespondentservice.client.oauth.UserInfo;
+import api.mcnc.surveyrespondentservice.authentication.auth.UserInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
