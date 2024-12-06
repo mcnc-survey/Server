@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record Api <T>(
+  Boolean success,
   String resultCode,
   String message,
   T body
@@ -18,12 +19,12 @@ public record Api <T>(
   
   // 성공
   public static <T> Api<T> ok(Code code, T body) {
-    return new Api<>(code.getCode(), code.getMessage(), body);
+    return new Api<>(true, code.getCode(), code.getMessage(), body);
   }
 
   // 실패
   public static <T> Api<T> fail(Code code, T body) {
-    return new Api<>(code.getCode(), code.getMessage(), body);
+    return new Api<>(false, code.getCode(), code.getMessage(), body);
   }
   
 }

@@ -22,5 +22,6 @@ public record QuestionCreateRequest(
   String rows,
   @NotNull
   Boolean required,
+  @NotNull
   Boolean etc
 ) { }
