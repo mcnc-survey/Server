@@ -49,6 +49,7 @@ public record Survey(
       .status(this.status)
       .lastModifiedAt(this.modifiedAt.toString())
       .surveyLink(surveyLink)
+      .isLike(SurveyLike.LIKE.equals(this.like))
       .build();
   }
 
