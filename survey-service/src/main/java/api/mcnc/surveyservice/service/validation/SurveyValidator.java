@@ -6,7 +6,6 @@ import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.entity.question.QuestionType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
