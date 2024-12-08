@@ -30,6 +30,17 @@ services:
     networks:
       - survey-network
 
+  vault:
+    image: vault:1.13.1
+    container_name: vault
+    ports:
+      - "8200:8200"
+    restart: always
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - survey-network
+
 # config server
   survey-config-server:
     image: survey-config-server:latest
