@@ -14,6 +14,8 @@ include::{snippets}/updateSurvey/http-response.adoc[]
 include::{snippets}/updateSurvey/response-fields.adoc[]
 
 === 설문 북마크
+※ `LIKE 상태의 설문이 재 요청시 DISLIKE 상태로 변경`
+
 ==== request
 include::{snippets}/likeSurvey/http-request.adoc[]
 ===== path parameters

@@ -1,7 +1,5 @@
 package api.mcnc.surveyservice.domain;
 
-import api.mcnc.surveyservice.common.constants.SurveyLink;
-import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.*;
 import api.mcnc.surveyservice.entity.survey.SurveyLike;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
@@ -9,6 +7,7 @@ import lombok.Builder;
 import org.apache.hc.client5.http.utils.Base64;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -55,6 +54,7 @@ public record Survey(
 
   public SurveyDetailsResponse toDetailsResponse() {
     List<QuestionDetailsResponse> questionDeatilsList = this.question.stream().map(Question::toDetailsResponse).toList();
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     return SurveyDetailsResponse.builder()
       .id(this.id)
       .title(this.title)
@@ -62,6 +62,7 @@ public record Survey(
       .question(questionDeatilsList)
       .startAt(this.startAt.toString())
       .endAt(this.endAt.toString())
+      .lastModifiedDate(this.modifiedAt.format(dateFormat))
       .build();
   }
 

@@ -1,11 +1,9 @@
 package api.mcnc.surveyresponseservice.service.response.strategy;
 
+import api.mcnc.surveyresponseservice.controller.response.aggregation.QuestionSnippet;
 import api.mcnc.surveyresponseservice.domain.Response;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * please explain class!
@@ -15,7 +13,7 @@ import java.util.Map;
  */
 public class SingleChoiceType implements QuestionTypeIfs {
   @Override
-  public Object calculateResponseResult(List<Response> values) {
+  public List<Object> calculateResponseResult(List<Response> values) {
     if (values == null || values.isEmpty()) {
       return Collections.emptyList();
     }
@@ -27,6 +25,12 @@ public class SingleChoiceType implements QuestionTypeIfs {
         resultMap.merge(result, 1, Integer::sum);
       }
     }
-    return resultMap;
+    
+    List<QuestionSnippet> responses = new ArrayList<>();
+
+    for (Map.Entry<String, Integer> entry : resultMap.entrySet()) {
+      responses.add(QuestionSnippet.of(entry.getKey(), entry.getValue()));
+    }
+    return Collections.singletonList(responses);
   }
 }
