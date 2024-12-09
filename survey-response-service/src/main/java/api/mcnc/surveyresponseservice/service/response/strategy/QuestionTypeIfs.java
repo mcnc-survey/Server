@@ -14,6 +14,6 @@ public interface QuestionTypeIfs {
   Integer DEFAULT_COLUMN_SIZE_OPACITY = 10;
   Integer DEFAULT_COLUMN_LEN_OPACITY = 2;
 
-  Object calculateResponseResult(List<Response> values);
+  List<Object> calculateResponseResult(List<Response> values);
 
 }

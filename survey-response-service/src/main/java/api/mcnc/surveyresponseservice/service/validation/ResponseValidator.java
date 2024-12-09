@@ -18,6 +18,9 @@ import java.util.List;
  */
 @Component
 public class ResponseValidator {
+
+  private static final String SEPERATOR = "|`|";
+
   // 기존 QuestionResponse 검증
   public void validateResponses(List<QuestionResponse> responses) {
     responses.forEach(this::validateQuestionResponse);
@@ -58,26 +61,27 @@ public class ResponseValidator {
     return switch (type) {
       case SINGLE_CHOICE -> validateSingleChoice(response);
       case MULTIPLE_CHOICE -> validateMultipleChoice(response);
-      case SHORT_ANSWER -> validateShortAnswer(response);
+      case SHORT_ANSWER, LONG_ANSWER -> validateStringAnswer(response);
       case TABLE_SELECT -> validateTableSelect(response);
     };
   }
 
   private boolean validateSingleChoice(String response) {
-    try {
-      int value = Integer.parseInt(response.trim());
-      return value > 0;
-    } catch (NumberFormatException e) {
-      return false;
-    }
+//    try {
+//      int value = Integer.parseInt(response.trim());
+//      return value > 0;
+//    } catch (NumberFormatException e) {
+//      return false;
+//    }
+    // TODO 2024-12-09 yhj : 타입에 따른 검증 고려해야함
+    return true;
   }
 
   private boolean validateMultipleChoice(String response) {
-    // 연속된 콤마 체크 (e.g., "1,,2" or ",1" or "1,")
-    if (response.contains(",,") || response.startsWith(",") || response.endsWith(",")) {
+    if (response.contains(SEPERATOR + SEPERATOR) || response.startsWith(SEPERATOR) || response.endsWith(SEPERATOR)) {
       return false;
     }
-    String[] choices = response.split(",");
+    String[] choices = response.split(SEPERATOR);
     try {
       return Arrays.stream(choices)
         .map(Integer::parseInt)
@@ -87,17 +91,17 @@ public class ResponseValidator {
     }
   }
 
-  private boolean validateShortAnswer(String response) {
+  private boolean validateStringAnswer(String response) {
     return !response.trim().isEmpty();
   }
 
   private boolean validateTableSelect(String response) {
     // 연속된 콤마 체크 (e.g., "1,,2" or ",1" or "1,")
-    if (response.contains(",,") || response.startsWith(",") || response.endsWith(",")) {
+    if (response.contains(SEPERATOR) || response.startsWith(SEPERATOR) || response.endsWith(SEPERATOR)) {
       return false;
     }
 
-    String[] selections = response.split(",");
+    String[] selections = response.split(SEPERATOR);
     try {
       return Arrays.stream(selections)
         .map(String::trim)

@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class TableSelectType implements QuestionTypeIfs {
   @Override
-  public Object calculateResponseResult(List<Response> values) {
+  public List<Object> calculateResponseResult(List<Response> values) {
     if (values == null || values.isEmpty()) {
       return Collections.emptyList();
     }
@@ -40,6 +40,8 @@ public class TableSelectType implements QuestionTypeIfs {
       }
     }
 
-    return resultMap;
+//    return resultMap;
+    // TODO 2024-12-09 yhj : TABLE_SELECT는 당장에는 사용하지 않음
+    return null;
   }
 }

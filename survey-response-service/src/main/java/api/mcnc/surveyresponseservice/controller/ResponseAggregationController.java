@@ -3,7 +3,7 @@ package api.mcnc.surveyresponseservice.controller;
 import api.mcnc.surveyresponseservice.common.enums.SuccessCode;
 import api.mcnc.surveyresponseservice.common.result.Api;
 import api.mcnc.surveyresponseservice.service.ResponseAggregationService;
-import api.mcnc.surveyresponseservice.service.response.ResponseAggregationResponse;
+import api.mcnc.surveyresponseservice.controller.response.aggregation.ResponseAggregationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

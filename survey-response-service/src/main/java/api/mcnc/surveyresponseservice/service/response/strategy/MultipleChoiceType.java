@@ -1,11 +1,13 @@
 package api.mcnc.surveyresponseservice.service.response.strategy;
 
+import api.mcnc.surveyresponseservice.common.constants.Constants;
+import api.mcnc.surveyresponseservice.controller.response.aggregation.QuestionSnippet;
 import api.mcnc.surveyresponseservice.domain.Response;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPERATOR;
 
 /**
  * please explain class!
@@ -15,16 +17,35 @@ import java.util.stream.Collectors;
  */
 public class MultipleChoiceType implements QuestionTypeIfs {
   @Override
-  public Object calculateResponseResult(List<Response> values) {
+  public List<Object> calculateResponseResult(List<Response> values) {
     if (values == null || values.isEmpty()) {
       return Collections.emptyList();
     }
-    return values.stream()
-      .map(res -> res.response().split(","))
-      .flatMap(Arrays::stream)              // 배열을 하나의 스트림으로 평탄화
-      .collect(Collectors.groupingBy(      // 숫자별로 그룹화
-        num -> num,                      // 그룹 기준 (문자열 그대로 사용)
-        Collectors.counting()            // 각 그룹의 개수를 셈
-      ));
+// 결과를 저장할 맵 초기화
+    Map<String, Integer> resultMap = new HashMap<>(DEFAULT_COLUMN_SIZE_OPACITY);
+
+    // 각 응답을 순회하며 결과 맵에 카운트
+    for (Response response : values) {
+      // 응답 문자열이 null이 아닌 경우에만 처리
+      if (response.response() != null) {
+        // |`| 구분자로 문자열 분리
+        String[] responses = response.response().split(SEPERATOR);
+
+        // 분리된 각 응답에 대해 카운트 증가
+        for (String res : responses) {
+          resultMap.merge(res, 1, Integer::sum);
+        }
+      }
+    }
+
+    // 결과를 저장할 QuestionSnippet 리스트 생성
+    List<QuestionSnippet> responses = new ArrayList<>();
+
+    // 결과 맵의 각 키에 대해 QuestionSnippet 생성
+    for (Map.Entry<String, Integer> entry : resultMap.entrySet()) {
+      responses.add(QuestionSnippet.of(entry.getKey(), entry.getValue()));
+    }
+    // QuestionSnippet 리스트 반환
+    return Collections.singletonList(responses);
   }
 }
