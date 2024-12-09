@@ -40,6 +40,10 @@ services:
       - IPC_LOCK
     networks:
       - survey-network
+    volumes:
+      - vault-data:/vault/file
+      - ./vault/config.hcl:/vault/config/config.hcl # 설정 파일 마운트
+    command: server -config=/vault/config/config.hcl # 설정 파일로 서버 실행
 
 # config server
   survey-config-server:
@@ -144,6 +148,7 @@ services:
 volumes:
   redis-data:
   postgres-data:
+  vault-data:
 
 networks:
   survey-network:
