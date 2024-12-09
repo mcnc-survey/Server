@@ -35,15 +35,17 @@ services:
     container_name: vault
     ports:
       - "8200:8200"
-    restart: always
+#    restart: always
     cap_add:
       - IPC_LOCK
     networks:
       - survey-network
     volumes:
-      - vault-data:/vault/file
+      - vault-data:/vault/data
       - ./vault/config.hcl:/vault/config/config.hcl # 설정 파일 마운트
-    command: server -config=/vault/config/config.hcl # 설정 파일로 서버 실행
+    command: vault server -config=/vault/config/config.hcl # 설정 파일로 서버 실행
+    environment:
+      - VAULT_ADDR=http://0.0.0.0:8200
 
 # config server
   survey-config-server:
