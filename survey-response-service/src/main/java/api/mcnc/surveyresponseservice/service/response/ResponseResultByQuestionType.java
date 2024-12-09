@@ -33,8 +33,8 @@ public class ResponseResultByQuestionType {
       case MULTIPLE_CHOICE:
         this.questionType = new MultipleChoiceType();
         break;
-      case SHORT_ANSWER:
-        this.questionType = new ShortAnswerType();
+      case SHORT_ANSWER: case LONG_ANSWER:
+        this.questionType = new StringAnswerType();
         break;
       case TABLE_SELECT:
         this.questionType = new TableSelectType();

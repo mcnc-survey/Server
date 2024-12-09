@@ -15,6 +15,7 @@ import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import api.mcnc.surveyservice.repository.survey.*;
+import api.mcnc.surveyservice.service.validation.SurveyValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,9 +46,18 @@ public class SurveyService {
 
   private final AdminServiceClientService adminServiceClientService;
 
+  private final SurveyValidator surveyValidator;
+
   // 설문 저장
   public void setSurveyAndQuestions(SurveyCreateRequest surveyCreateRequest) {
     String adminId = getAdminId();
+
+    List<QuestionCreateRequest> questionCreateRequestList = surveyCreateRequest.questions();
+    // 객체 유효성 검사
+    surveyValidator.validateResponses(questionCreateRequestList);
+
+    List<Question> questionList = questionCreateRequestList.stream().map(Question::fromRequest).toList();
+
     String title = surveyCreateRequest.title();
     String description = surveyCreateRequest.description();
     LocalDateTime startAt = surveyCreateRequest.startAt();
@@ -58,9 +68,6 @@ public class SurveyService {
     }
 
     Survey survey = Survey.fromRequest(adminId, title, description, startAt, endAt);
-
-    List<QuestionCreateRequest> questionCreateRequestList = surveyCreateRequest.questions();
-    List<Question> questionList = questionCreateRequestList.stream().map(Question::fromRequest).toList();
 
     insertSurveyAndQuestionListRepository.createSurvey(survey, questionList);
   }
@@ -117,6 +124,9 @@ public class SurveyService {
   public void updateSurvey(String surveyId, SurveyUpdateRequest surveyUpdateRequest) {
     Survey survey = this.getSurvey(surveyId);
 
+    List<SurveyUpdateRequest.Question> questions = surveyUpdateRequest.updateQuestionList();
+    // 유효성 검사
+    surveyValidator.validateResponseUpdates(questions);
 
     // EDIT 상태의 설문에 대한 요청이 아니면 exception
     if (!SurveyStatus.EDIT.equals(survey.status())){
@@ -125,9 +135,8 @@ public class SurveyService {
 
     // 종료 날짜에 따른 변경해야 할 상태 - 날짜 검증 때문에 udpate보다 앞에
     SurveyStatus changedStatus = this.calculateTime(surveyUpdateRequest.startAt(), surveyUpdateRequest.endAt());
-    
+
     // 설문 수정
-    List<SurveyUpdateRequest.Question> questions = surveyUpdateRequest.updateQuestionList();
 
     // id가 존재하면 수정 , id 없으면 추가
     Map<Boolean, List<Question>> partitioned = questions.stream()
