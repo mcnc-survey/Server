@@ -17,6 +17,7 @@ public record SurveyDetailsResponse(
   String description,
   String startAt,
   String endAt,
+  String lastModifiedDate,
   List<QuestionDetailsResponse> question
 ) {
 }
