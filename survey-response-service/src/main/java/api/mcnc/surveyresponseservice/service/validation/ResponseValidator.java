@@ -6,6 +6,7 @@ import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponseUpdate;
 import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 @Component
 public class ResponseValidator {
 
-  private static final String SEPERATOR = "|`|";
+  private static final String SEPARATOR = "|`|";
 
   // 기존 QuestionResponse 검증
   public void validateResponses(List<QuestionResponse> responses) {
@@ -53,8 +54,12 @@ public class ResponseValidator {
     }
   }
 
+  private boolean isNotHasText(String response) {
+    return !StringUtils.hasText(response.trim());
+  }
+
   private boolean isValidResponseFormat(QuestionType type, String response) {
-    if (response == null || response.trim().isEmpty()) {
+    if (isNotHasText(response)) {
       return false;
     }
 
@@ -67,28 +72,15 @@ public class ResponseValidator {
   }
 
   private boolean validateSingleChoice(String response) {
-//    try {
-//      int value = Integer.parseInt(response.trim());
-//      return value > 0;
-//    } catch (NumberFormatException e) {
-//      return false;
-//    }
     // TODO 2024-12-09 yhj : 타입에 따른 검증 고려해야함
-    return true;
+    return !response.contains(SEPARATOR); // 구분자가 없어야함
   }
 
   private boolean validateMultipleChoice(String response) {
-    if (response.contains(SEPERATOR + SEPERATOR) || response.startsWith(SEPERATOR) || response.endsWith(SEPERATOR)) {
+    if (response.contains(SEPARATOR + SEPARATOR) || response.startsWith(SEPARATOR) || response.endsWith(SEPARATOR)) {
       return false;
     }
-    String[] choices = response.split(SEPERATOR);
-    try {
-      return Arrays.stream(choices)
-        .map(Integer::parseInt)
-        .allMatch(value -> value > 0);
-    } catch (NumberFormatException e) {
-      return false;
-    }
+    return true;
   }
 
   private boolean validateStringAnswer(String response) {
@@ -97,11 +89,11 @@ public class ResponseValidator {
 
   private boolean validateTableSelect(String response) {
     // 연속된 콤마 체크 (e.g., "1,,2" or ",1" or "1,")
-    if (response.contains(SEPERATOR) || response.startsWith(SEPERATOR) || response.endsWith(SEPERATOR)) {
+    if (response.contains(SEPARATOR) || response.startsWith(SEPARATOR) || response.endsWith(SEPARATOR)) {
       return false;
     }
 
-    String[] selections = response.split(SEPERATOR);
+    String[] selections = response.split(SEPARATOR);
     try {
       return Arrays.stream(selections)
         .map(String::trim)

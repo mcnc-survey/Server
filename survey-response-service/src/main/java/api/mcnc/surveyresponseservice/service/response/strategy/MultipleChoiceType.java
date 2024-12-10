@@ -1,13 +1,11 @@
 package api.mcnc.surveyresponseservice.service.response.strategy;
 
-import api.mcnc.surveyresponseservice.common.constants.Constants;
 import api.mcnc.surveyresponseservice.controller.response.aggregation.QuestionSnippet;
 import api.mcnc.surveyresponseservice.domain.Response;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPERATOR;
+import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPARATOR;
 
 /**
  * please explain class!
@@ -29,7 +27,7 @@ public class MultipleChoiceType implements QuestionTypeIfs {
       // 응답 문자열이 null이 아닌 경우에만 처리
       if (response.response() != null) {
         // |`| 구분자로 문자열 분리
-        String[] responses = response.response().split(SEPERATOR);
+        String[] responses = response.response().split(SEPARATOR);
 
         // 분리된 각 응답에 대해 카운트 증가
         for (String res : responses) {
