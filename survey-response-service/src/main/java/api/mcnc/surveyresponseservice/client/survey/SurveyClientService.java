@@ -1,8 +1,13 @@
 package api.mcnc.surveyresponseservice.client.survey;
 
-import api.mcnc.surveyresponseservice.client.survey.response.SurveyDetailsResponse;
+import api.mcnc.surveyresponseservice.client.survey.response.Survey;
+import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+import static api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode.NOT_FOUND_SURVEY;
 
 /**
  * please explain class!
@@ -22,7 +27,8 @@ public class SurveyClientService implements SurveyValidate, SurveyResponse{
   }
 
   @Override
-  public SurveyDetailsResponse getSurveyDetails(String surveyId) {
-    return surveyClient.getSurveyDetails(surveyId).body();
+  public Survey getSurvey(String surveyId) {
+    return Optional.ofNullable(surveyClient.getSurvey(surveyId))
+      .orElseThrow(() -> new ResponseException(NOT_FOUND_SURVEY));
   }
 }

@@ -1,6 +1,6 @@
 package api.mcnc.surveyresponseservice.service.response.strategy;
 
-import api.mcnc.surveyresponseservice.controller.response.aggregation.QuestionSnippet;
+import api.mcnc.surveyresponseservice.controller.response.aggregation.ResponseSnippet;
 import api.mcnc.surveyresponseservice.domain.Response;
 
 import java.util.*;
@@ -29,7 +29,7 @@ public class SingleChoiceType implements QuestionTypeIfs {
     List<Object> responses = new ArrayList<>();
 
     for (Map.Entry<String, Integer> entry : resultMap.entrySet()) {
-      responses.add(QuestionSnippet.of(entry.getKey(), entry.getValue()));
+      responses.add(ResponseSnippet.of(entry.getKey(), entry.getValue()));
     }
     return responses;
   }

@@ -1,6 +1,6 @@
 package api.mcnc.surveyresponseservice.client.survey;
 
-import api.mcnc.surveyresponseservice.client.survey.response.SurveyDetailsResponse;
+import api.mcnc.surveyresponseservice.client.survey.response.Survey;
 
 /**
  * please explain class!
@@ -9,5 +9,5 @@ import api.mcnc.surveyresponseservice.client.survey.response.SurveyDetailsRespon
  * @since :2024-11-27 오후 2:17
  */
 public interface SurveyResponse {
-  SurveyDetailsResponse getSurveyDetails(String surveyId);
+  Survey getSurvey(String surveyId);
 }

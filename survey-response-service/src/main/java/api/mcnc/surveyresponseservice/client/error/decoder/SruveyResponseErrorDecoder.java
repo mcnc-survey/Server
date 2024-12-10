@@ -1,4 +1,4 @@
-package api.mcnc.surveyresponseservice.client.error;
+package api.mcnc.surveyresponseservice.client.error.decoder;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;

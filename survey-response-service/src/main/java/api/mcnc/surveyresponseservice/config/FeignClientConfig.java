@@ -1,9 +1,6 @@
 package api.mcnc.surveyresponseservice.config;
 
-import api.mcnc.surveyresponseservice.client.error.SruveyResponseErrorDecoder;
-import feign.codec.ErrorDecoder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -15,8 +12,4 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableFeignClients(basePackages = "api.mcnc.surveyresponseservice.client")
 public class FeignClientConfig {
-  @Bean
-  public ErrorDecoder errorDecoder() {
-    return new SruveyResponseErrorDecoder();
-  }
 }

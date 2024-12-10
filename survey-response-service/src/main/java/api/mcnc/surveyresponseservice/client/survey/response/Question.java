@@ -10,12 +10,14 @@ import lombok.Builder;
  * @since :2024-11-27 오후 2:01
  */
 @Builder
-public record QuestionDetailsResponse(
+public record Question(
   String id,
   String title,
   QuestionType questionType,
   Integer order,
   String columns,
-  String rows
+  String rows,
+  Boolean required,
+  Boolean etc
 ) {
 }
