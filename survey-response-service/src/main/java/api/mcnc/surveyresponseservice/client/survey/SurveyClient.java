@@ -1,5 +1,6 @@
 package api.mcnc.surveyresponseservice.client.survey;
 
+import api.mcnc.surveyresponseservice.client.error.SurveyClientFallback;
 import api.mcnc.surveyresponseservice.client.survey.response.SurveyDetailsResponse;
 import api.mcnc.surveyresponseservice.common.result.Api;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author :Uheejoon
  * @since :2024-11-26 오후 11:21
  */
-@FeignClient(name = "SURVEY-SERVICE")
+@FeignClient(name = "SURVEY-SERVICE", fallback = SurveyClientFallback.class)
 public interface SurveyClient {
   @GetMapping("/survey-validate/{surveyId}")
   Boolean validateSurvey(@PathVariable("surveyId") String surveyId);

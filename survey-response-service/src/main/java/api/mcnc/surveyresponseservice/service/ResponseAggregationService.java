@@ -46,6 +46,10 @@ public class ResponseAggregationService {
       surveyDetailsResponse.lastModifiedDate()
     );
 
+    if(totalRespondentCount == 0) {
+      return new ResponseAggregationResponse(surveySummary, new HashMap<>());
+    }
+
     // 설문의 항목 순서별 응답 데이터 Map으로 가져오기 
     Map<Integer, List<Response>> responseList = aggregationRepository.getResponseListMappingByOrderNumberBySurveyId(surveyId);
 

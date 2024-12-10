@@ -19,7 +19,7 @@ public class StringAnswerType implements QuestionTypeIfs {
       return Collections.emptyList();
     }
     // 응답 개수 만큼 다양한 응답이 생김
-    List<String> results = new ArrayList<>(values.size());
+    List<Object> results = new ArrayList<>(values.size());
 
     for (Response value : values) {
       String response = value.response();
@@ -28,6 +28,6 @@ public class StringAnswerType implements QuestionTypeIfs {
       }
     }
 
-    return Collections.singletonList(results);
+    return results;
   }
 }

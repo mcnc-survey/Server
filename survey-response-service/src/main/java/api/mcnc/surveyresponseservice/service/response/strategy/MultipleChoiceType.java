@@ -37,13 +37,13 @@ public class MultipleChoiceType implements QuestionTypeIfs {
     }
 
     // 결과를 저장할 QuestionSnippet 리스트 생성
-    List<QuestionSnippet> responses = new ArrayList<>();
+    List<Object> responses = new ArrayList<>();
 
     // 결과 맵의 각 키에 대해 QuestionSnippet 생성
     for (Map.Entry<String, Integer> entry : resultMap.entrySet()) {
       responses.add(QuestionSnippet.of(entry.getKey(), entry.getValue()));
     }
     // QuestionSnippet 리스트 반환
-    return Collections.singletonList(responses);
+    return responses;
   }
 }

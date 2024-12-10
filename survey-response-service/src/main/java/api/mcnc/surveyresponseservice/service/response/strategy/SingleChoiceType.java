@@ -26,11 +26,11 @@ public class SingleChoiceType implements QuestionTypeIfs {
       }
     }
     
-    List<QuestionSnippet> responses = new ArrayList<>();
+    List<Object> responses = new ArrayList<>();
 
     for (Map.Entry<String, Integer> entry : resultMap.entrySet()) {
       responses.add(QuestionSnippet.of(entry.getKey(), entry.getValue()));
     }
-    return Collections.singletonList(responses);
+    return responses;
   }
 }
