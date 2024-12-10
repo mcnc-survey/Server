@@ -54,7 +54,6 @@ public record Survey(
 
   public SurveyDetailsResponse toDetailsResponse() {
     List<QuestionDetailsResponse> questionDeatilsList = this.question.stream().map(Question::toDetailsResponse).toList();
-    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     return SurveyDetailsResponse.builder()
       .id(this.id)
       .title(this.title)
@@ -62,7 +61,6 @@ public record Survey(
       .question(questionDeatilsList)
       .startAt(this.startAt.toString())
       .endAt(this.endAt.toString())
-      .lastModifiedDate(this.modifiedAt.format(dateFormat))
       .build();
   }
 

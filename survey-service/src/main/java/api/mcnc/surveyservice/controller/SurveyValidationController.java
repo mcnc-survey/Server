@@ -1,5 +1,6 @@
 package api.mcnc.surveyservice.controller;
 
+import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.service.survey.SurveyValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,5 +25,10 @@ public class SurveyValidationController {
     return surveyValidationService.existsBySurveyId(surveyId);
   }
 
+  // 타 서비스에서 Survey 조회
+  @GetMapping("/survey-get/{surveyId}")
+  public Survey getValidSurvey(@PathVariable("surveyId") String surveyId) {
+    return surveyValidationService.getSruvey(surveyId);
+  }
 
 }
