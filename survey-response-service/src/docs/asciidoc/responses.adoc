@@ -10,13 +10,12 @@ include::{snippets}/saveResponse/path-parameters.adoc[]
 ==== headers
 include::{snippets}/saveResponse/request-headers.adoc[]
 
-==== Response
-include::{snippets}/saveResponse/http-response.adoc[]
-
 ==== body
 include::{snippets}/saveResponse/request-body.adoc[]
 include::{snippets}/saveResponse/request-fields.adoc[]
 
+==== Response
+include::{snippets}/saveResponse/http-response.adoc[]
 
 '''
 
@@ -33,11 +32,10 @@ include::{snippets}/getAllResponseByRespondent/path-parameters.adoc[]
 ==== headers
 include::{snippets}/getAllResponseByRespondent/request-headers.adoc[]
 
-==== Response
-include::{snippets}/getAllResponseByRespondent/http-response.adoc[]
-
-==== body
+==== response
+===== body
 include::{snippets}/getAllResponseByRespondent/response-body.adoc[]
+===== fields
 include::{snippets}/getAllResponseByRespondent/response-fields.adoc[]
 
 '''
@@ -54,10 +52,9 @@ include::{snippets}/updateResponse/path-parameters.adoc[]
 include::{snippets}/updateResponse/request-headers.adoc[]
 
 ==== Response
-include::{snippets}/updateResponse/http-response.adoc[]
-
-==== body
+===== body
 include::{snippets}/updateResponse/request-body.adoc[]
+===== fields
 include::{snippets}/updateResponse/request-fields.adoc[]
 
 

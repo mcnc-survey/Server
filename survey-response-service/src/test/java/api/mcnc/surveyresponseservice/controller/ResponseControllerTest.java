@@ -28,6 +28,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -71,6 +72,7 @@ class ResponseControllerTest {
             headerWithName("Authorization").description("응답자 jwt 토큰")
           ),
           responseFields(
+            fieldWithPath("success").type(BOOLEAN).description("결과 코드"),
             fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
             fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
             fieldWithPath("body").type(JsonFieldType.ARRAY).description("응답 데이터"),

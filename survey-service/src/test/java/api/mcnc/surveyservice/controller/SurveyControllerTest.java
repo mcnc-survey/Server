@@ -157,6 +157,7 @@ class SurveyControllerTest {
       "This survey aims to collect feedback on customer satisfaction.",
       "2024-11-26T09:00",
       "2024-11-30T18:00",
+
       List.of(
         QuestionDetailsResponse.builder().id("3220c2f8-92f5-40ba-991f-0b07a3c361bc").title("만족도").questionType(QuestionType.SINGLE_CHOICE).order(1).columns("매우 불만족,불만족,보통,만족,매우 만족").rows(null).required(true).etc(false).build(),
         QuestionDetailsResponse.builder().id("3220c2f8-92f5-40ba-991f-0b07a3c361bc").title("후기를 남겨주세요").questionType(QuestionType.SHORT_ANSWER).order(1).columns(null).rows(null).required(false).etc(false).build()

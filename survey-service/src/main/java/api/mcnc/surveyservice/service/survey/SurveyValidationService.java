@@ -1,5 +1,6 @@
 package api.mcnc.surveyservice.service.survey;
 
+import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.repository.survey.FetchSurveyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,4 +22,7 @@ public class SurveyValidationService {
     return fetchSurveyRepository.existsBySurveyId(surveyId);
   }
 
+  public Survey getSruvey(String surveyId) {
+    return fetchSurveyRepository.fetchBySurveyId(surveyId).orElse(null);
+  }
 }

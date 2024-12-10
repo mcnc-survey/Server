@@ -1,8 +1,7 @@
 package api.mcnc.surveyresponseservice.service;
 
-import api.mcnc.surveyresponseservice.client.survey.response.QuestionDetailsResponse;
-import api.mcnc.surveyresponseservice.client.survey.response.SurveyDetailsResponse;
-import api.mcnc.surveyresponseservice.controller.response.aggregation.QuestionSnippet;
+import api.mcnc.surveyresponseservice.client.survey.response.Question;
+import api.mcnc.surveyresponseservice.client.survey.response.Survey;
 import api.mcnc.surveyresponseservice.controller.response.aggregation.SurveyResultValue;
 import api.mcnc.surveyresponseservice.controller.response.aggregation.SurveySummary;
 import api.mcnc.surveyresponseservice.domain.Response;
@@ -11,8 +10,10 @@ import api.mcnc.surveyresponseservice.controller.response.aggregation.ResponseAg
 import api.mcnc.surveyresponseservice.service.response.ResponseResultByQuestionType;
 import api.mcnc.surveyresponseservice.service.validation.ValidOtherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class ResponseAggregationService {
   public ResponseAggregationResponse getResponseAggregationBySurveyId(String surveyId) {
     
     // 설문 id로 설문 상세 정보 조회
-    SurveyDetailsResponse surveyDetailsResponse = validService.validateAndGetSurvey(surveyId);
+    Survey surveyDetailsResponse = validService.validateAndGetSurvey(surveyId);
 
     // 총 응답자 수
     Integer totalRespondentCount = aggregationRepository.getRespondentCountBySurveyId(surveyId);
@@ -42,20 +43,24 @@ public class ResponseAggregationService {
     // snippet
     SurveySummary surveySummary = SurveySummary.of(
       totalRespondentCount,
-      surveyDetailsResponse.endAt(),
+      surveyDetailsResponse.endAt().toString(),
       surveyDetailsResponse.lastModifiedDate()
     );
+
+    if(totalRespondentCount == 0) {
+      return new ResponseAggregationResponse(surveySummary, new HashMap<>());
+    }
 
     // 설문의 항목 순서별 응답 데이터 Map으로 가져오기 
     Map<Integer, List<Response>> responseList = aggregationRepository.getResponseListMappingByOrderNumberBySurveyId(surveyId);
 
     // 설문 질문 정보들
-    List<QuestionDetailsResponse> questionList = surveyDetailsResponse.question();
+    List<Question> questionList = surveyDetailsResponse.question();
 
     // 응답 집계
     Map<Integer, SurveyResultValue> result = new HashMap<>();
     
-    for (QuestionDetailsResponse questionDetailsResponse : questionList) {
+    for (Question questionDetailsResponse : questionList) {
       // 질문 별
       Integer key = questionDetailsResponse.order();
       // 응답 데이터들

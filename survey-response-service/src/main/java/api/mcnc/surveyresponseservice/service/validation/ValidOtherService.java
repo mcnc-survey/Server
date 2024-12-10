@@ -3,7 +3,7 @@ package api.mcnc.surveyresponseservice.service.validation;
 import api.mcnc.surveyresponseservice.client.respondent.RespondentValidate;
 import api.mcnc.surveyresponseservice.client.survey.SurveyResponse;
 import api.mcnc.surveyresponseservice.client.survey.SurveyValidate;
-import api.mcnc.surveyresponseservice.client.survey.response.SurveyDetailsResponse;
+import api.mcnc.surveyresponseservice.client.survey.response.Survey;
 import api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode;
 import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +40,8 @@ public class ValidOtherService {
     }
   }
 
-  public SurveyDetailsResponse validateAndGetSurvey(String surveyId) {
-    return surveyResponse.getSurveyDetails(surveyId);
+  public Survey validateAndGetSurvey(String surveyId) {
+    return surveyResponse.getSurvey(surveyId);
   }
 
 }
