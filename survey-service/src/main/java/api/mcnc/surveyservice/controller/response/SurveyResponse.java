@@ -3,8 +3,6 @@ package api.mcnc.surveyservice.controller.response;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
-
 /**
  * please explain class!
  *

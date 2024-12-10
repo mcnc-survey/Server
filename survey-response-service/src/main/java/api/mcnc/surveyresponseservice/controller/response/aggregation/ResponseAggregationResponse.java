@@ -1,4 +1,4 @@
-package api.mcnc.surveyresponseservice.service.response;
+package api.mcnc.surveyresponseservice.controller.response.aggregation;
 
 import java.util.Map;
 
@@ -9,6 +9,6 @@ import java.util.Map;
  * @since :2024-11-17 오후 8:07
  */
 public record ResponseAggregationResponse(
-  Integer totalResponseCount,
-  Map<Integer, Object> groupByOrderNumber
+  SurveySummary surveySummary,
+  Map<Integer, SurveyResultValue> surveyResults
 ) { }

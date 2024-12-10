@@ -12,9 +12,9 @@ import java.util.List;
  * @author :Uheejoon
  * @since :2024-11-17 오후 8:00
  */
-public class ShortAnswerType implements QuestionTypeIfs {
+public class StringAnswerType implements QuestionTypeIfs {
   @Override
-  public Object calculateResponseResult(List<Response> values) {
+  public List<Object> calculateResponseResult(List<Response> values) {
     if (values == null || values.isEmpty()) {
       return Collections.emptyList();
     }
@@ -28,6 +28,6 @@ public class ShortAnswerType implements QuestionTypeIfs {
       }
     }
 
-    return results;
+    return Collections.singletonList(results);
   }
 }

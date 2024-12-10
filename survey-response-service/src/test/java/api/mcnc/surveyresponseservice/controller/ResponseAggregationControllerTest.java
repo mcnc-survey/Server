@@ -2,7 +2,7 @@ package api.mcnc.surveyresponseservice.controller;
 
 import api.mcnc.surveyresponseservice.RestDocsConfig;
 import api.mcnc.surveyresponseservice.service.ResponseAggregationService;
-import api.mcnc.surveyresponseservice.service.response.ResponseAggregationResponse;
+import api.mcnc.surveyresponseservice.controller.response.aggregation.ResponseAggregationResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -10,9 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;

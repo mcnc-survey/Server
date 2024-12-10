@@ -6,11 +6,12 @@ import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.entity.question.QuestionType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static api.mcnc.surveyservice.common.constants.SurveySeparator.SEPARATOR;
 
 /**
  * please explain class!
@@ -54,50 +55,37 @@ public class SurveyValidator {
     }
   }
 
-  private boolean isValidResponseFormat(QuestionType type, String columns, String rows) {
-    if (StringUtils.hasText(columns)) {
-      return false;
-    }
+  private boolean isNotHasText(String columns) {
+    return !StringUtils.hasText(columns);
+  }
 
+  private boolean isValidResponseFormat(QuestionType type, String columns, String rows) {
     return switch (type) {
-      case SINGLE_CHOICE -> validateSingleChoice(columns);
-      case MULTIPLE_CHOICE -> validateMultipleChoice(columns);
-      case SHORT_ANSWER, LONG_ANSWER -> StringUtils.hasText(columns); // 빈 문자열만 아니면 됨
+      case SINGLE_CHOICE, MULTIPLE_CHOICE -> validateChoice(columns);
+      case SHORT_ANSWER, LONG_ANSWER -> true; // title만 존재하고 나머지는 있던 말던 상관 없음
       case TABLE_SELECT -> validateTableSelect(columns, rows);
     };
   }
 
-  private boolean validateSingleChoice(String columns) {
-    try {
-      int value = Integer.parseInt(columns.trim());
-      return value > 0;
-    } catch (NumberFormatException e) {
+  private boolean validateChoice(String columns) {
+    if (isNotHasText(columns)) {
       return false;
     }
-  }
-
-  private boolean validateMultipleChoice(String columns) {
     // 연속된 콤마 체크 (e.g., "1,,2" or ",1" or "1,")
-    if (columns.contains(",,") || columns.startsWith(",") || columns.endsWith(",")) {
+    if (columns.contains(SEPARATOR + SEPARATOR) || columns.startsWith(SEPARATOR) || columns.endsWith(SEPARATOR)) {
       return false;
     }
-    String[] choices = columns.split(",");
-    try {
-      return Arrays.stream(choices)
-        .map(Integer::parseInt)
-        .allMatch(value -> value > 0);
-    } catch (NumberFormatException e) {
-      return false;
-    }
-  }
 
+    return true;
+  }
+// TODO 2024-12-09 yhj : 표형 선택 도입 가능성
   private boolean validateTableSelect(String columns, String rows) {
     // 연속된 콤마 체크 (e.g., "1,,2" or ",1" or "1,")
-    if (columns.contains(",,") || columns.startsWith(",") || columns.endsWith(",")) {
+    if (columns.contains(SEPARATOR + SEPARATOR) || columns.startsWith(SEPARATOR) || columns.endsWith(SEPARATOR)) {
       return false;
     }
 
-    String[] selections = columns.split(",");
+    String[] selections = columns.split(SEPARATOR);
     try {
       return Arrays.stream(selections)
         .map(String::trim)

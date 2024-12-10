@@ -1,3 +1,6 @@
+**/application-test.yml
+**/test/**/application.yml
+
 HELP.md
 .gradle
 build/
