@@ -7,8 +7,9 @@ import lombok.Builder;
 import org.apache.hc.client5.http.utils.Base64;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static api.mcnc.surveyservice.common.constants.SurveyLink.SURVEY_LINK;
 
 /**
  * please explain class!
@@ -41,7 +42,7 @@ public record Survey(
   }
 
   public SurveyResponse toResponse() {
-    String surveyLink = "http://설문 응답할 프론트 페이지 주소?t=" + Base64.encodeBase64String(this.id.getBytes());
+    String surveyLink = SURVEY_LINK + Base64.encodeBase64String(this.id.getBytes());
     return SurveyResponse.builder()
       .id(this.id)
       .title(this.title)
