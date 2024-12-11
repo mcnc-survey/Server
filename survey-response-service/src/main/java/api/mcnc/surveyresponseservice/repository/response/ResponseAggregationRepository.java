@@ -26,7 +26,7 @@ public class ResponseAggregationRepository {
   public Map<Integer, List<Response>> getResponseListMappingByOrderNumberBySurveyId(String surveyId) {
     return readTransactionOperations.execute(status ->
         responseJpaRepository.findAllBySurveyId(surveyId)
-          .parallelStream()
+          .stream()
 //        orderNumber 별 응답 리스트
           .collect(Collectors.groupingBy(
             ResponseEntity::orderNumber,

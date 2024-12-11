@@ -1,11 +1,15 @@
 package api.mcnc.surveyresponseservice.domain;
 
+import api.mcnc.surveyresponseservice.common.constants.Constants;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponseUpdate;
 import api.mcnc.surveyresponseservice.controller.response.ResponseResult;
 import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import api.mcnc.surveyresponseservice.entity.response.ResponseEntity;
 import lombok.Builder;
+import org.yaml.snakeyaml.util.EnumUtils;
+
+import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPARATOR;
 
 /**
  * please explain class!
@@ -47,10 +51,14 @@ public record Response(
   }
 
   public ResponseResult toResponseResult() {
+    Object response = this.response;
+    // 다중 선택 이면 선택 항목 배열로 반환
+    if (QuestionType.MULTIPLE_CHOICE.equals(this.questionType)) {
+      response = this.response.split(SEPARATOR);
+    }
     return ResponseResult.builder()
       .id(this.id)
-      .orderNumber(this.orderNumber)
-      .response(this.response)
+      .response(response)
       .build();
   }
 }

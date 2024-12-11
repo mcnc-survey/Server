@@ -11,7 +11,6 @@ import lombok.Builder;
 @Builder
 public record ResponseResult(
   String id,
-  Integer orderNumber,
-  String response
+  Object response
 )
 { }
