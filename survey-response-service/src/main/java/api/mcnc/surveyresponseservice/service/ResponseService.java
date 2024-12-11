@@ -1,11 +1,14 @@
 package api.mcnc.surveyresponseservice.service;
 
+import api.mcnc.surveyresponseservice.client.survey.response.Survey;
 import api.mcnc.surveyresponseservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode;
 import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponseUpdate;
 import api.mcnc.surveyresponseservice.controller.response.ResponseResult;
+import api.mcnc.surveyresponseservice.controller.response.SurveyResponsesResponse;
+import api.mcnc.surveyresponseservice.controller.response.SurveySnippet;
 import api.mcnc.surveyresponseservice.domain.Response;
 import api.mcnc.surveyresponseservice.repository.response.ResponseRepository;
 import api.mcnc.surveyresponseservice.service.request.UpdateCommand;
@@ -34,13 +37,25 @@ public class ResponseService {
   private final ValidOtherService validService;
   private final RequestedByProvider provider;
 
-  public List<ResponseResult> getAllMyResponseResults(String surveyId) {
+  public SurveyResponsesResponse getAllMyResponseResults(String surveyId) {
     String respondentId = this.getRespondentId();
-    validService.validate(respondentId, surveyId);
-    return responseRepository.getRespondentResponseList(surveyId, respondentId)
+    validService.validateRespondent(respondentId);
+
+    Survey survey = validService.validateAndGetSurvey(surveyId);
+    SurveySnippet snippet = survey.toSnippet();
+
+    Map<Integer, List<ResponseResult>> result = responseRepository.getRespondentResponseList(surveyId, respondentId)
       .stream()
-      .map(Response::toResponseResult)
-      .toList();
+      .collect(
+        Collectors.groupingBy(
+          Response::orderNumber,
+          Collectors.mapping(
+            Response::toResponseResult,
+            Collectors.toList()
+          )
+        ));
+
+    return SurveyResponsesResponse.of(snippet, result);
   }
 
   public void setResponse(String surveyId, List<QuestionResponse> request) {

@@ -5,6 +5,7 @@ import api.mcnc.surveyresponseservice.common.result.Api;
 import api.mcnc.surveyresponseservice.controller.request.ResponseSaveRequest;
 import api.mcnc.surveyresponseservice.controller.request.ResponseUpdateRequest;
 import api.mcnc.surveyresponseservice.controller.response.ResponseResult;
+import api.mcnc.surveyresponseservice.controller.response.SurveyResponsesResponse;
 import api.mcnc.surveyresponseservice.service.ResponseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,8 @@ public class ResponseController {
   private final ResponseService responseService;
 
   @GetMapping("/responses/{surveyId}")
-  public Api<List<ResponseResult>> getAllResponse(@PathVariable("surveyId") String surveyId) {
-    List<ResponseResult> results = responseService.getAllMyResponseResults(surveyId);
+  public Api<SurveyResponsesResponse> getAllResponse(@PathVariable("surveyId") String surveyId) {
+    SurveyResponsesResponse results = responseService.getAllMyResponseResults(surveyId);
     return Api.ok(SuccessCode.SUCCESS, results);
   }
 

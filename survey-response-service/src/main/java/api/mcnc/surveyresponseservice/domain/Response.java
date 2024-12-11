@@ -49,7 +49,6 @@ public record Response(
   public ResponseResult toResponseResult() {
     return ResponseResult.builder()
       .id(this.id)
-      .orderNumber(this.orderNumber)
       .response(this.response)
       .build();
   }

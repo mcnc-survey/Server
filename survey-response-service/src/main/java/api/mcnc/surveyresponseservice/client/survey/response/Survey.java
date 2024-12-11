@@ -1,5 +1,6 @@
 package api.mcnc.surveyresponseservice.client.survey.response;
 
+import api.mcnc.surveyresponseservice.controller.response.SurveySnippet;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -28,4 +29,24 @@ public record Survey(
   public String lastModifiedDate() {
     return modifiedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
   }
+
+  public String startDateTime() {
+    return modifiedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+  }
+
+  public String endDateTime() {
+    return modifiedAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+  }
+
+  public SurveySnippet toSnippet() {
+    return SurveySnippet.builder()
+      .id(id)
+      .title(title)
+      .description(description)
+      .question(question)
+      .startDateTime(startDateTime())
+      .endDateTime(endDateTime())
+      .build();
+  }
+
 }
