@@ -11,6 +11,6 @@ import lombok.Builder;
 @Builder
 public record ResponseResult(
   String id,
-  String response
+  Object response
 )
 { }
