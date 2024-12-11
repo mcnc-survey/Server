@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +48,6 @@ public class ResponseAggregationService {
       surveyDetailsResponse.lastModifiedDate()
     );
 
-    if(totalRespondentCount == 0) {
-      return new ResponseAggregationResponse(surveySummary, new HashMap<>());
-    }
-
     // 설문의 항목 순서별 응답 데이터 Map으로 가져오기 
     Map<Integer, List<Response>> responseList = aggregationRepository.getResponseListMappingByOrderNumberBySurveyId(surveyId);
 
@@ -64,9 +61,14 @@ public class ResponseAggregationService {
       // 질문 별
       Integer key = questionDetailsResponse.order();
       // 응답 데이터들
-      List<Response> responsesGroupByOrderNumber = responseList.get(key);
-      // 응답 데이터 집계 알고리즘
-      Object responses = responseResult.calculateResponseResult(responsesGroupByOrderNumber);
+      List<Response> responsesGroupByOrderNumber = responseList.getOrDefault(key, new ArrayList<>());
+
+      Object responses = null;
+      // 응답 존재하지 않으면 null
+      if (!responsesGroupByOrderNumber.isEmpty()) {
+        // 응답 데이터 집계 알고리즘
+        responses = responseResult.calculateResponseResult(responsesGroupByOrderNumber);
+      }
       // 항목별 응답 객체
       SurveyResultValue surveyResultValue = SurveyResultValue.builder()
         .questionId(questionDetailsResponse.id())
