@@ -13,7 +13,7 @@ import lombok.Builder;
  * @since :2024-11-22 오후 4:43
  */
 @Builder(access = AccessLevel.PRIVATE)
-public record AuthenticatedUser(
+public record AuthenticatedRespondent(
   @NotBlank
   String name,
   @Email
@@ -22,8 +22,8 @@ public record AuthenticatedUser(
   String phoneNumber,
   String provider
 ) {
-  public static AuthenticatedUser of(UserInfo userInfo, String provider) {
-    return AuthenticatedUser.builder()
+  public static AuthenticatedRespondent of(UserInfo userInfo, String provider) {
+    return AuthenticatedRespondent.builder()
       .name(userInfo.name())
       .email(userInfo.email())
       .phoneNumber(userInfo.phoneNumber())
