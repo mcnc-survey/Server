@@ -3,7 +3,7 @@ package api.mcnc.surveyrespondentservice.service.respondent;
 import api.mcnc.surveyrespondentservice.client.survey.SurveyValidationService;
 import api.mcnc.surveyrespondentservice.common.enums.RespondentErrorCode;
 import api.mcnc.surveyrespondentservice.common.exception.custom.RespondentException;
-import api.mcnc.surveyrespondentservice.domain.AuthenticatedUser;
+import api.mcnc.surveyrespondentservice.domain.AuthenticatedRespondent;
 import api.mcnc.surveyrespondentservice.domain.Respondent;
 import api.mcnc.surveyrespondentservice.domain.Token;
 import api.mcnc.surveyrespondentservice.repository.RespondentRepository;
@@ -27,7 +27,7 @@ public class RespondentService implements RegisterUseCase,  ValidateUseCase{
   private final TokenService tokenService;
 
   @Override
-  public Token registerRespondent(AuthenticatedUser authenticatedUser, String surveyId) {
+  public Token registerRespondent(AuthenticatedRespondent authenticatedUser, String surveyId) {
 //   존재하는 설문인지
     this.validateSurvey(surveyId);
 //   응답 한 적 있는지

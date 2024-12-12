@@ -42,6 +42,6 @@ KakaoUserInfo(
 
   @Override
   public String phoneNumber() {
-    return kakaoAcount.phoneNumber();
+    return kakaoAcount.phoneNumber().replace("+82 ", "0");
   }
 }
