@@ -2,7 +2,7 @@ package api.mcnc.surveyrespondentservice.service.auth;
 
 import api.mcnc.surveyrespondentservice.client.oauth.SocialService;
 import api.mcnc.surveyrespondentservice.authentication.auth.UserInfo;
-import api.mcnc.surveyrespondentservice.domain.AuthenticatedUser;
+import api.mcnc.surveyrespondentservice.domain.AuthenticatedRespondent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +18,13 @@ public class AuthService implements OAuthUseCase, EmailAuthUserUseCase {
   private final SocialService socialService;
 
   @Override
-  public AuthenticatedUser getAuthenticatedSocialUser(String provider, String code) {
+  public AuthenticatedRespondent getAuthenticatedSocialUser(String provider, String code) {
     UserInfo socialUserInfo = socialService.getAuthenticatedSocialUserInfo(provider, code);
-    return AuthenticatedUser.of(socialUserInfo, provider);
+    return AuthenticatedRespondent.of(socialUserInfo, provider);
   }
 
   @Override
-  public AuthenticatedUser authenticateEmailUser(String provider, String code) {
+  public AuthenticatedRespondent authenticateEmailUser(String provider, String code) {
     return null;
   }
 

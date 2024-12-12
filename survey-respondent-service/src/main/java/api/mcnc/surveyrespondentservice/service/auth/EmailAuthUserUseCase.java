@@ -1,6 +1,6 @@
 package api.mcnc.surveyrespondentservice.service.auth;
 
-import api.mcnc.surveyrespondentservice.domain.AuthenticatedUser;
+import api.mcnc.surveyrespondentservice.domain.AuthenticatedRespondent;
 
 /**
  * please explain class!
@@ -9,5 +9,5 @@ import api.mcnc.surveyrespondentservice.domain.AuthenticatedUser;
  * @since :2024-11-22 오후 4:48
  */
 public interface EmailAuthUserUseCase {
-  AuthenticatedUser authenticateEmailUser(String provider, String code);
+  AuthenticatedRespondent authenticateEmailUser(String provider, String code);
 }

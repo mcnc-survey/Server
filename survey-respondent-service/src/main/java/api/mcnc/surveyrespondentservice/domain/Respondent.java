@@ -17,7 +17,7 @@ public record Respondent(
   String provider,
   String surveyId
 ) {
-  public static Respondent of(AuthenticatedUser user, String surveyId) {
+  public static Respondent of(AuthenticatedRespondent user, String surveyId) {
     return Respondent.builder()
       .name(user.name())
       .email(user.email())
