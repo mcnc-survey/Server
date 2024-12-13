@@ -22,7 +22,7 @@ public class Vault {
 
   @Autowired
   public Vault(VaultTemplate vaultTemplate) {
-    VaultKeyValueOperations ops = vaultTemplate.opsForKeyValue("kv-v1/encrypt/data", VaultKeyValueOperationsSupport.KeyValueBackend.KV_2);
+    VaultKeyValueOperations ops = vaultTemplate.opsForKeyValue("kv-v1/data/encrypt", VaultKeyValueOperationsSupport.KeyValueBackend.KV_2);
     String key;
     try {
       Map<String, Object> dbkey = ops.get("dbkey").getRequiredData();

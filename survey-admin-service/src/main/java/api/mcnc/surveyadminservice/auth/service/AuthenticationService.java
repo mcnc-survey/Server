@@ -6,7 +6,7 @@ import api.mcnc.surveyadminservice.common.exception.AdminException;
 import api.mcnc.surveyadminservice.common.exception.AuthException;
 import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.entity.admin.AdminEntity;
-import api.mcnc.surveyadminservice.repository.admin.AdminRepository;
+import api.mcnc.surveyadminservice.repository.admin.AdminJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthenticationService {
 
-    private final AdminRepository memberRepository;
+    private final AdminJpaRepository memberRepository;
 
     public Admin getMemberOrThrow(String adminId) {
         return memberRepository.findById(adminId)
