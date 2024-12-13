@@ -1,5 +1,5 @@
 rootProject.name = 'survey'
-include("email-service")
+include("survey-email-service")
 include("survey-admin-service")
 include("survey-response-service")
 include("survey-gateway")

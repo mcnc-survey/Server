@@ -5,6 +5,7 @@ import api.mcnc.email_service.dto.HtmlEmailRequest;
 import api.mcnc.email_service.service.EmailService;
 import api.mcnc.email_service.service.VerificationCode;
 import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,15 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/emails")
+@RequiredArgsConstructor
 public class VerificationController {
 
     @Autowired
     private EmailService emailService;
 
-    // 인증 코드 요청 API
-    @GetMapping("/request-verification-code")
+    // 인증 코드 요청 API 이거 안쓰는걸 추천
+    @GetMapping("/request-code")
     public String requestVerificationCode(@RequestParam String email) throws MessagingException, IOException {
         String verificationCode = emailService.generateVerificationCode();
         emailService.sendSingleVerificationEmail(email, verificationCode);
@@ -33,8 +36,8 @@ public class VerificationController {
 
 
 
-
-    @PostMapping("/multi-test")
+    // 인증 코드 요청 API
+    @PostMapping("/multi-request")
     public ResponseEntity<String> requestVerificationCode(@RequestBody List<String> emails) {
         try {
             // 이메일 목록이 비어 있으면 오류 반환
@@ -64,28 +67,49 @@ public class VerificationController {
 
 
 
+//    // 인증 코드 검증 API
+//    @PostMapping("/verify-code")
+//    public String verifyCode(@RequestParam String email, @RequestParam String code) {
+//        VerificationCode storedCode = emailService.getVerificationCode(email);//해당 이메일에서 해당 인증UUID가져오기
+//
+//        if (storedCode == null) {
+//            return "해당 이메일에 대한 인증 요청을 찾을 수 없습니다.";
+//        }
+//
+//        if (!storedCode.getCode().equals(code)) {
+//            return "유효하지 않은 인증 코드입니다.";
+//        }
+//
+//        if (storedCode.getExpirationTime().isBefore(LocalDateTime.now())) {
+//            return "인증 코드가 만료되었습니다.";
+//        }
+//
+//        return "인증 성공!";
+//    }
+
     // 인증 코드 검증 API
-    @PostMapping("/verify-code")
-    public String verifyCode(@RequestParam String email, @RequestParam String code) {
-        VerificationCode storedCode = emailService.getVerificationCode(email);//해당 이메일에서 해당 인증UUID가져오기
+    @PostMapping("/check-code")
+    public boolean verifyCode(@RequestParam String email, @RequestParam String code) {
+        VerificationCode storedCode = emailService.getVerificationCode(email); // 해당 이메일에서 인증 UUID 가져오기
 
         if (storedCode == null) {
-            return "해당 이메일에 대한 인증 요청을 찾을 수 없습니다.";
+            return false; // 인증 요청을 찾을 수 없음
         }
 
         if (!storedCode.getCode().equals(code)) {
-            return "유효하지 않은 인증 코드입니다.";
+            return false; // 유효하지 않은 인증 코드
         }
 
         if (storedCode.getExpirationTime().isBefore(LocalDateTime.now())) {
-            return "인증 코드가 만료되었습니다.";
+            return false; // 인증 코드 만료
         }
 
-        return "인증 성공!";
+        return true; // 인증 성공
     }
 
 
-    @PostMapping("/html-email")
+    // 초대 이메일 발송 API
+    @PostMapping("/invite")
     public ResponseEntity<String> sendHtmlVerificationEmails(@RequestBody Map<String, Object> request) {
         try {
             // Map에서 데이터 추출
