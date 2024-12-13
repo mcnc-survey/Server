@@ -151,7 +151,7 @@ services:
     image: survey-admin-service:latest
     container_name: survey-admin-service
     ports:
-      - "10000:10000"
+      - "9001:9001"
     environment:
       TZ: Asia/Seoul
     networks:
