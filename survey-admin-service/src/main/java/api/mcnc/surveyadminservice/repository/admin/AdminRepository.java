@@ -1,17 +1,49 @@
 package api.mcnc.surveyadminservice.repository.admin;
 
+import api.mcnc.surveyadminservice.common.enums.AdminErrorCode;
+import api.mcnc.surveyadminservice.common.exception.AdminException;
+import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.entity.admin.AdminEntity;
-import org.springframework.data.repository.CrudRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static api.mcnc.surveyadminservice.common.constants.Provider.EMAIL;
 
 /**
  * please explain class!
  *
  * @author :Uheejoon
- * @since :2024-11-26 오후 2:26
+ * @since :2024-12-12 오후 1:47
  */
-public interface AdminRepository extends CrudRepository<AdminEntity, String>{
+@Repository
+@Transactional
+@RequiredArgsConstructor
+public class AdminRepository {
 
-  Optional<AdminEntity> findByEmail(String email);
+  private final AdminJpaRepository adminJpaRepository;
+
+  public Optional<Admin> getByEmailAndProvider(String email, String provider) {
+    return adminJpaRepository.findByEmailAndProvider(email, provider)
+      .map(AdminEntity::toDomain);
+  }
+
+  public Admin registerWithSocial(Admin admin) {
+    return getByEmailAndProvider(admin.email(), admin.provider())
+      .orElseGet(() -> adminJpaRepository.save(AdminEntity.fromDomain(admin)).toDomain());
+  }
+
+  public Admin registerWithEmail(Admin admin) {
+    AdminEntity adminEntity = AdminEntity.fromDomain(admin);
+    AdminEntity saveEntity = adminJpaRepository.save(adminEntity);
+    return saveEntity.toDomain();
+  }
+
+  public Admin getByEmailAdmin(String email) {
+    return adminJpaRepository.findByEmailAndProvider(email, EMAIL)
+      .map(AdminEntity::toDomain)
+      .orElseThrow(() -> new AdminException(AdminErrorCode.NOT_FOUND));
+  }
 }

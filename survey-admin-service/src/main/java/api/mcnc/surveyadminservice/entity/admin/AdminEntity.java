@@ -43,7 +43,7 @@ public class AdminEntity extends MutableBaseEntity {
 
   public static AdminEntity fromDomain(Admin admin) {
     return AdminEntity.builder()
-      .id(admin.id())
+      .id(UUID.randomUUID().toString())
       .name(admin.name())
       .email(admin.email())
       .password(admin.password())
@@ -55,11 +55,11 @@ public class AdminEntity extends MutableBaseEntity {
   public static AdminEntity from(OAuth2UserInfo oAuth2UserInfo) {
     return AdminEntity.builder()
       .id(UUID.randomUUID().toString())
-      .name(oAuth2UserInfo.name())
-      .email(oAuth2UserInfo.email())
+      .name(oAuth2UserInfo.getName())
+      .email(oAuth2UserInfo.getEmail())
       .role(AdminRole.ADMIN)
       .password(new BCryptPasswordEncoder().encode("{admin}password"))
-      .provider(oAuth2UserInfo.provider())
+      .provider(oAuth2UserInfo.getProvider())
       .build();
   }
 

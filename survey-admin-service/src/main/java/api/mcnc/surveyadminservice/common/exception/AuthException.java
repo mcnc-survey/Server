@@ -13,7 +13,7 @@ public class AuthException extends AdminException{
     super(code);
   }
 
-  public AuthException(Code code, String desciption) {
-    super(code, desciption);
+  public AuthException(Code code, String description) {
+    super(code, description);
   }
 }

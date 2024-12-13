@@ -1,4 +1,4 @@
-package api.mcnc.surveyadminservice.auth.contants;
+package api.mcnc.surveyadminservice.common.constants;
 
 /**
  * please explain class!

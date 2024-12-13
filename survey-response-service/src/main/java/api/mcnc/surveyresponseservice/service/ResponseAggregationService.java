@@ -43,6 +43,7 @@ public class ResponseAggregationService {
 
     // snippet
     SurveySummary surveySummary = SurveySummary.of(
+      surveyDetailsResponse.title(),
       totalRespondentCount,
       surveyDetailsResponse.endAt().toString(),
       surveyDetailsResponse.lastModifiedDate()

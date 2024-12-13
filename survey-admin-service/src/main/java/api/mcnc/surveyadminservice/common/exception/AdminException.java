@@ -18,8 +18,8 @@ public class AdminException extends RuntimeException{
     this.code = code;
   }
 
-  public AdminException(Code code, String desciption) {
-    super(desciption);
+  public AdminException(Code code, String description) {
+    super(description);
     this.code = code;
   }
 }

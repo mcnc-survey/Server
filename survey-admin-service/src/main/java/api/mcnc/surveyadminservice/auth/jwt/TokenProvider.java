@@ -3,7 +3,9 @@ package api.mcnc.surveyadminservice.auth.jwt;
 import api.mcnc.surveyadminservice.auth.service.TokenService;
 import api.mcnc.surveyadminservice.common.enums.TokenErrorCode;
 import api.mcnc.surveyadminservice.common.exception.TokenException;
+import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.domain.Token;
+import api.mcnc.surveyadminservice.entity.admin.AdminRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,19 +15,13 @@ import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -45,25 +41,27 @@ public class TokenProvider {
         secretKey = Keys.hmacShaKeyFor(key.getBytes());
     }
 
-    public String generateAccessToken(Authentication authentication) {
+    public String generateAccessToken(Admin authentication) {
         return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
-    public void generateRefreshToken(Authentication authentication) {
+    public void generateRefreshToken(Admin authentication) {
         String refreshToken = generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);
-        tokenService.saveOrUpdate(authentication.getName(), refreshToken);
+        tokenService.saveOrUpdate(authentication.name(), refreshToken);
     }
 
-    private String generateToken(Authentication authentication, long expireTime) {
+//    private String generateAccessToken(String refreshToken) {
+//        return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
+//    }
+
+    private String generateToken(Admin authentication, long expireTime) {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expireTime);
 
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining());
+        AdminRole authorities = authentication.role();
 
         return Jwts.builder()
-                .subject(authentication.getName())
+                .subject(authentication.id())
                 .claim(KEY_ROLE, authorities)
                 .issuedAt(now)
                 .expiration(expiredDate)
@@ -71,32 +69,19 @@ public class TokenProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = parseClaims(token);
-        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
-
-        User principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-    }
-
-    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
-        return Collections.singletonList(new SimpleGrantedAuthority(
-                claims.get(KEY_ROLE).toString()));
-    }
-
-    public String reissueAccessToken(String accessToken) {
-        if (StringUtils.hasText(accessToken)) {
-            Token token = tokenService.findByRefreshTokenOrThrow(accessToken);
-            String refreshToken = token.refreshToken();
-
-            if (validateToken(refreshToken)) {
-                String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
-                tokenService.updateToken(reissueAccessToken, token);
-                return reissueAccessToken;
-            }
-        }
-        return null;
-    }
+//    public String reissueAccessToken(String accessToken) {
+//        if (StringUtils.hasText(accessToken)) {
+//            Token token = tokenService.findByRefreshTokenOrThrow(accessToken);
+//            String refreshToken = token.refreshToken();
+//
+//            if (validateToken(refreshToken)) {
+//                String reissueAccessToken = generateAccessToken(refreshToken);
+//                tokenService.updateToken(reissueAccessToken, token);
+//                return reissueAccessToken;
+//            }
+//        }
+//        return null;
+//    }
 
     public boolean validateToken(String token) {
         if (!StringUtils.hasText(token)) {

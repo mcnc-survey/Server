@@ -1,12 +1,14 @@
 package api.mcnc.surveyadminservice.domain;
 
 import api.mcnc.surveyadminservice.auth.dto.OAuth2UserInfo;
-import api.mcnc.surveyadminservice.entity.admin.AdminEntity;
+import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
+import api.mcnc.surveyadminservice.controller.response.AdminSignUpResponse;
 import api.mcnc.surveyadminservice.entity.admin.AdminRole;
 import lombok.Builder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.UUID;
+import static api.mcnc.surveyadminservice.common.constants.Provider.EMAIL;
+import static api.mcnc.surveyadminservice.entity.admin.AdminRole.ADMIN;
 
 /**
  * please explain class!
@@ -23,13 +25,32 @@ public record Admin(
   AdminRole role,
   String provider
 ) {
+
   public static Admin from(OAuth2UserInfo oAuth2UserInfo) {
     return Admin.builder()
-      .name(oAuth2UserInfo.name())
-      .email(oAuth2UserInfo.email())
-      .role(AdminRole.ADMIN)
+      .name(oAuth2UserInfo.getName())
+      .email(oAuth2UserInfo.getEmail())
+      .role(ADMIN)
       .password(new BCryptPasswordEncoder().encode("{admin}password"))
-      .provider(oAuth2UserInfo.provider())
+      .provider(oAuth2UserInfo.getProvider())
+      .build();
+  }
+
+  public static Admin from(AdminSignUpRequest request) {
+    return Admin.builder()
+      .name(request.getFullName())
+      .email(request.getEmail())
+      .role(ADMIN)
+      .password(request.getPassword())
+      .provider(EMAIL)
+      .build();
+  }
+
+  public AdminSignUpResponse toSignUpResponse() {
+    return AdminSignUpResponse.builder()
+      .id(this.id)
+      .name(this.name)
+      .email(this.email)
       .build();
   }
 }
