@@ -38,7 +38,7 @@ public record Admin(
 
   public static Admin from(AdminSignUpRequest request) {
     return Admin.builder()
-      .name(request.getFullName())
+      .name(request.getUserName())
       .email(request.getEmail())
       .role(ADMIN)
       .password(request.getPassword())
