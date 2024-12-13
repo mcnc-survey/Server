@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Builder
@@ -60,18 +59,6 @@ public class NotificationEntity {
         this.status = status;
     }
 
-
-
-//    public static NotificationEntity from(SurveyEntity survey) {
-//        return NotificationEntity.builder()
-//                .id(UUID.randomUUID().toString())
-//                .surveyId(survey.getId())
-//                .adminId(survey.getAdminId())
-//                .type(Type.endline)
-//                .createdAt(LocalDateTime.now())
-//                .status(Status.UNREAD)
-//                .build();
-//    }
 
 }
 
