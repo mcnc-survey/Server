@@ -1,17 +1,17 @@
-spring:
-  application:
-    name: survey-admin-service
-  config:
-    import: optional:configserver:http://survey-config-server:8888
-    activate:
-      on-profile: local
-
----
-
-spring:
-  application:
-    name: survey-admin-service
-  config:
-    import: optional:configserver:http://${CONFIG_SERVER_HOST}:8080
-    activate:
-      on-profile: dev
+#spring:
+#  application:
+#    name: survey-admin-service
+#  config:
+#    import: optional:configserver:http://survey-config-server:8888
+#    activate:
+#      on-profile: local
+#
+#---
+#
+#spring:
+#  application:
+#    name: survey-admin-service
+#  config:
+#    import: optional:configserver:http://${CONFIG_SERVER_HOST}:8080
+#    activate:
+#      on-profile: dev

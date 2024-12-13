@@ -521,21 +521,6 @@ Host: localhost:8080
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response"><a class="link" href="#_response">Response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 54
-
-{
-  "resultCode" : "201",
-  "message" : "CREATED"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
 <h4 id="_body"><a class="link" href="#_body">body</a></h4>
 <div class="listingblock">
 <div class="content">
@@ -590,6 +575,22 @@ Content-Length: 54
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_response"><a class="link" href="#_response">Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 75
+
+{
+  "success" : true,
+  "resultCode" : "201",
+  "message" : "CREATED"
+}</code></pre>
+</div>
+</div>
 <hr>
 </div>
 </div>
@@ -650,30 +651,13 @@ Host: localhost:8080</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response_2"><a class="link" href="#_response_2">Response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 152
-
-{
-  "resultCode" : "200",
-  "message" : "OK",
-  "body" : [ {
-    "id" : "uuid-32",
-    "orderNumber" : 1,
-    "response" : "test result"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_body_2"><a class="link" href="#_body_2">body</a></h4>
+<h4 id="_response_2"><a class="link" href="#_response_2">response</a></h4>
+<div class="sect4">
+<h5 id="_body_2"><a class="link" href="#_body_2">body</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "success" : true,
   "resultCode" : "200",
   "message" : "OK",
   "body" : [ {
@@ -684,6 +668,9 @@ Content-Length: 152
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_fields"><a class="link" href="#_fields">fields</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -698,6 +685,11 @@ Content-Length: 152
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>success</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>resultCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -731,6 +723,7 @@ Content-Length: 152
 </tbody>
 </table>
 <hr>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -800,21 +793,8 @@ Host: localhost:8080
 </div>
 <div class="sect3">
 <h4 id="_response_3"><a class="link" href="#_response_3">Response</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 54
-
-{
-  "resultCode" : "200",
-  "message" : "UPDATED"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_body_3"><a class="link" href="#_body_3">body</a></h4>
+<div class="sect4">
+<h5 id="_body_3"><a class="link" href="#_body_3">body</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
@@ -826,6 +806,9 @@ Content-Length: 54
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect4">
+<h5 id="_fields_2"><a class="link" href="#_fields_2">fields</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -864,24 +847,15 @@ Content-Length: 54
 </table>
 </div>
 </div>
+</div>
 <div class="sect2">
 <h3 id="_설문에_대한_사용자의_응답_집계"><a class="link" href="#_설문에_대한_사용자의_응답_집계">설문에 대한 사용자의 응답 집계</a></h3>
 <div class="sect3">
 <h4 id="_request_4"><a class="link" href="#_request_4">Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ curl 'http://localhost:8080/responses-aggregation/%7BsurveyId%7D' -i -X GET</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /responses-aggregation/%7BsurveyId%7D HTTP/1.1
 Host: localhost:8080</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ http GET 'http://localhost:8080/responses-aggregation/%7BsurveyId%7D'</code></pre>
 </div>
 </div>
 </div>
@@ -913,29 +887,51 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 522
+Content-Length: 1363
 
 {
+  "success" : true,
   "resultCode" : "200",
   "message" : "OK",
   "body" : {
-    "totalResponseCount" : 4,
-    "groupByOrderNumber" : {
-      "4" : {
-        "5" : 3,
-        "4" : 3,
-        "3" : 3,
-        "2" : 3,
-        "1" : 3
+    "surveySummary" : {
+      "respondentCount" : 2,
+      "endDate" : "2024-12-26T13:56",
+      "lastModifiedDate" : "2024-12-09"
+    },
+    "surveyResults" : {
+      "3" : {
+        "questionId" : "e4a10b03-955b-4705-8422-2045aadba5e6",
+        "questionTitle" : "하고싶은 말을 적어주세요",
+        "questionType" : "SHORT_ANSWER",
+        "totalResponseCount" : 2,
+        "responses" : [ "집에 가고 싶다네요", "집집집" ]
       },
-      "3" : [ "전반적으로 만족스러웠습니다.", "전반적으로 만족스러웠습니다.", "전반적으로 만족스러웠습니다." ],
       "2" : {
-        "4" : 3,
-        "3" : 3,
-        "1" : 3
+        "questionId" : "ede654e3-0f1b-47bd-a930-89548b8cbfac",
+        "questionTitle" : "좋아하는 메뉴를 골라주세요",
+        "questionType" : "MULTIPLE_CHOICE",
+        "totalResponseCount" : 2,
+        "responses" : [ {
+          "text" : "피자",
+          "count" : 1
+        }, {
+          "text" : "치킨",
+          "count" : 2
+        } ]
       },
       "1" : {
-        "3" : 3
+        "questionId" : "86cddc4d-6ae3-451f-8d65-95d43de48ddf",
+        "questionTitle" : "서비스에 만족하셨습니까?",
+        "questionType" : "SINGLE_CHOICE",
+        "totalResponseCount" : 2,
+        "responses" : [ {
+          "text" : "만족",
+          "count" : 1
+        }, {
+          "text" : "매우 만족",
+          "count" : 2
+        } ]
       }
     }
   }
@@ -957,6 +953,11 @@ Content-Length: 522
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>success</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>resultCode</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 코드</p></td>
@@ -967,84 +968,144 @@ Content-Length: 522
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 메시지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.totalResponseCount</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">전체 응답자 수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문항 순서별 응답 집계 결과</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메시지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySummary</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1번 문항 응답 집계 (단일 선택)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 요약</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.1.3</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySummary.respondentCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1번 문항의 3번 선택지 선택 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">총 응답자 수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySummary.endDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySummary.lastModifiedDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마지막 수정일</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2번 문항 응답 집계 (다중 선택)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">결과 메시지</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.2.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1번 질문</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1.questionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1.questionTitle</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1.questionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 유형</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1.totalResponseCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2번 문항의 1번 선택지 선택 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문에 대한 총 응답자 수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.2.3</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2번 문항의 3번 선택지 선택 횟수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.2.4</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2번 문항의 4번 선택지 선택 횟수</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.3</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1.responses</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3번 문항 응답 목록 (주관식)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문에 대한 응답</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.3[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3번 문항의 개별 주관식 응답</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1.responses[].text</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 텍스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.1.responses[].count</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4번 문항 응답 집계 (표 선택)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2번 질문</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.4.1</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4번 문항의 1번 항목 선택 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2.questionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.4.2</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4번 문항의 2번 항목 선택 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2.questionTitle</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.4.3</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4번 문항의 3번 항목 선택 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2.questionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 유형</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.4.4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2.totalResponseCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4번 문항의 4번 항목 선택 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문에 대한 총 응답자 수</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.groupByOrderNumber.4.5</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2.responses</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문에 대한 응답 배열</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2.responses[].text</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 텍스트</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.2.responses[].count</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">4번 문항의 5번 항목 선택 횟수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.3</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3번 질문</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.3.questionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.3.questionTitle</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.3.questionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 유형</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.3.totalResponseCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문에 대한 총 응답자 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyResults.3.responses</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문에 대한 응답 배열 (자유 응답 텍스트)</p></td>
 </tr>
 </tbody>
 </table>
@@ -1054,7 +1115,7 @@ Content-Length: 522
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-11-27 11:20:02 +0900
+Last updated 2024-12-02 21:26:25 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

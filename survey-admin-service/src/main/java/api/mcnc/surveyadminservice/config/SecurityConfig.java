@@ -1,5 +1,7 @@
 package api.mcnc.surveyadminservice.config;
 
+import api.mcnc.surveyadminservice.auth.handler.OAuth2SuccessHandler;
+import api.mcnc.surveyadminservice.auth.service.CustomOAuth2UserService;
 import api.mcnc.surveyadminservice.filter.UserHistoryLoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
@@ -30,7 +33,17 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  private final OAuth2SuccessHandler oAuth2SuccessHandler;
   private final UserHistoryLoggingFilter userHistoryLoggingFilter;
+  private final CustomOAuth2UserService userService;
+
+  public final String[] ALLOW_LIST = {
+    "/login/oauth2/code/**",
+    "/admin",
+    "/sign-in",
+    "/sign-up"
+  };
+
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,19 +52,14 @@ public class SecurityConfig {
       .formLogin(AbstractHttpConfigurer::disable)
       .csrf(AbstractHttpConfigurer::disable)
       .logout(AbstractHttpConfigurer::disable)
-      .sessionManagement(AbstractHttpConfigurer::disable)
-      .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-      .authorizeHttpRequests(request ->
-        request
-          .requestMatchers("/api/sign-in", "/api/sign-up").permitAll()
-          .anyRequest().authenticated()
-      )
+      .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+      .authorizeHttpRequests(request -> request.requestMatchers(ALLOW_LIST).permitAll().anyRequest().authenticated())
       .oauth2Login(oauth2 -> {
+        oauth2.userInfoEndpoint(c -> c.userService(userService));
         oauth2.failureUrl("/login?error=true");
-//        oauth2
+        oauth2.successHandler(oAuth2SuccessHandler);
       })
 
-//      .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
       .addFilterAfter(userHistoryLoggingFilter, UsernamePasswordAuthenticationFilter.class)
     ;
     return http.build();
@@ -60,17 +68,6 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
-  }
-
-  public CorsConfigurationSource corsConfigurationSource() {
-    return request -> {
-      CorsConfiguration cors = new CorsConfiguration();
-      cors.setAllowedMethods(Collections.singletonList("*"));
-      cors.setAllowedHeaders(Collections.singletonList("*"));
-      cors.setAllowedOriginPatterns(Collections.singletonList("*"));
-      cors.setAllowCredentials(true);
-      return cors;
-    };
   }
 
 }

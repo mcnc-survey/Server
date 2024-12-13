@@ -1,6 +1,7 @@
 package api.mcnc.surveyadminservice.entity.admin;
 
 import api.mcnc.surveyadminservice.domain.AdminHistory;
+import api.mcnc.surveyadminservice.entity.audit.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AdminHistoryEntity {
+public class AdminHistoryEntity extends BaseEntity {
   @Id
   @Column(name = "ID", nullable = false)
   private String id;

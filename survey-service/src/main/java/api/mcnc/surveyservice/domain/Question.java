@@ -35,6 +35,7 @@ public record Question(
       .build();
   }
   public QuestionDetailsResponse toDetailsResponse() {
+    // TODO 2024-12-11 yhj : columns |`|로 쪼개서 줘야할듯
     return QuestionDetailsResponse.builder()
       .id(this.id)
       .title(this.title)

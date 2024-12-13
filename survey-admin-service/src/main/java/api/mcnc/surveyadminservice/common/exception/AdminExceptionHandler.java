@@ -45,6 +45,12 @@ public class AdminExceptionHandler {
     return ResponseEntity.ok(response);
   }
 
+  @ExceptionHandler(VaultException.class)
+  public ResponseEntity<Api<String>> handleVaultException(VaultException e) {
+    Api<String> response = Api.fail(e.getCode(), e.getMessage());
+    return ResponseEntity.ok(response);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Api<Object>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
     List<ErrorField> errorList = e.getBindingResult()

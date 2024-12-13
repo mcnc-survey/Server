@@ -13,7 +13,7 @@ public class TokenException extends AdminException{
     super(code);
   }
 
-  public TokenException(Code code, String desciption) {
-    super(code, desciption);
+  public TokenException(Code code, String description) {
+    super(code, description);
   }
 }

@@ -10,12 +10,14 @@ import lombok.Builder;
  */
 @Builder
 public record SurveySummary(
+  String title,
   Integer respondentCount,
   String endDate,
   String lastModifiedDate
 ) {
-  public static SurveySummary of(Integer respondentCount, String endDate, String lastModifiedDate) {
+  public static SurveySummary of(String title, Integer respondentCount, String endDate, String lastModifiedDate) {
     return SurveySummary.builder()
+      .title(title)
       .respondentCount(respondentCount)
       .endDate(endDate)
       .lastModifiedDate(lastModifiedDate)
