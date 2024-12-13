@@ -147,6 +147,19 @@ services:
       survey-config-server:
         condition: service_healthy
 
+  survey-admin-service:
+    image: survey-admin-service:latest
+    container_name: survey-admin-service
+    ports:
+      - "9001:9001"
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - survey-network
+    depends_on:
+      survey-config-server:
+        condition: service_healthy
+
 volumes:
   redis-data:
   postgres-data:
