@@ -27,9 +27,9 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/sign-up")
-  public Api<AdminSignUpResponse> signUpAdmin(@RequestBody @Valid AdminSignUpRequest request) {
+  public Api<Void> signUpAdmin(@RequestBody @Valid AdminSignUpRequest request) {
     AdminSignUpResponse adminSignUpResponse = authService.signUp(request);
-    return Api.ok(SuccessCode.RESPONSE_CREATE_SUCCESS, adminSignUpResponse);
+    return Api.ok(SuccessCode.RESPONSE_CREATE_SUCCESS, null);
   }
 
   @PostMapping("/sign-in")
