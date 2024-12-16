@@ -120,6 +120,8 @@ class SurveyControllerTest {
         .title("고객 만족도 조사")
         .status(SurveyStatus.ON)
         .lastModifiedAt("2024-11-20T13:56:00")
+        .startAt("2024-11-20T13:56:00")
+        .endAt("2024-12-20T13:56:00")
         .surveyLink("http://설문 응답할 프론트 페이지 주소?t=YzNhOWFlNGMtMDBhNi00MTY5LTlhYzEtNGNiYmMzZmJjMzdi")
         .isLike(true)
         .build()
@@ -139,7 +141,9 @@ class SurveyControllerTest {
             fieldWithPath("body[].id").type(STRING).description("설문 ID"),
             fieldWithPath("body[].title").type(STRING).description("설문 제목"),
             fieldWithPath("body[].status").type(STRING).description("설문 상태 (ON, WAIT, DELETE, EDIT, END)"),
-            fieldWithPath("body[].lastModifiedAt").type(STRING).description("설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
+            fieldWithPath("body[].startAt").type(STRING).description("설문 시작일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
+            fieldWithPath("body[].endAt").type(STRING).description("설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
+            fieldWithPath("body[].lastModifiedAt").type(STRING).description("설문 마지막 수정일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
             fieldWithPath("body[].surveyLink").type(STRING).description("설문 링크"),
             fieldWithPath("body[].isLike").type(BOOLEAN).description("좋아요 선택 여부")
           )
@@ -318,6 +322,7 @@ class SurveyControllerTest {
       )
       .andDo(print());
   }
+
   @Test
   void 논리적_설문_삭제_복구() throws Exception {
 
@@ -351,9 +356,9 @@ class SurveyControllerTest {
     SurveyDeleteOrRestoreRequest request = new SurveyDeleteOrRestoreRequest(List.of("c3a9ae4c-00a6-4169-9ac1-4cbbc3fbc37b"));
     doNothing().when(surveyService).deleteSurveyList(request.surveyIds());
     mockMvc.perform(
-      delete("/surveys")
-        .contentType(APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(request))
+        delete("/surveys")
+          .contentType(APPLICATION_JSON)
+          .content(objectMapper.writeValueAsString(request))
       )
       .andExpect(status().isOk())
       .andDo(
@@ -379,6 +384,8 @@ class SurveyControllerTest {
         .id("258f2844-a2d9-44af-a058-02b199615656")
         .title("고객 만족도 조사")
         .status(SurveyStatus.DELETE)
+        .startAt("2024-11-25T15:36:00")
+        .endAt("2024-12-25T15:36:00")
         .lastModifiedAt("2024-11-25T15:36:00")
         .surveyLink("http://설문 응답할 프론트 페이지 주소?t=YzNhOWFlNGMtMDBhNi00MTY5LTlhYzEtNGNiYmMzZmJjMzdi")
         .isLike(false)
@@ -398,7 +405,9 @@ class SurveyControllerTest {
             fieldWithPath("body[].id").type(STRING).description("설문 ID"),
             fieldWithPath("body[].title").type(STRING).description("설문 제목"),
             fieldWithPath("body[].status").type(STRING).description("설문 상태 (ON, WAIT, DELETE, EDIT, END)"),
-            fieldWithPath("body[].lastModifiedAt").type(STRING).description("설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
+            fieldWithPath("body[].startAt").type(STRING).description("설문 시작일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
+            fieldWithPath("body[].endAt").type(STRING).description("설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
+            fieldWithPath("body[].lastModifiedAt").type(STRING).description("설문 마지막 수정일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)"),
             fieldWithPath("body[].surveyLink").type(STRING).description("설문 링크"),
             fieldWithPath("body[].isLike").type(BOOLEAN).description("좋아요 선택 여부")
           )
