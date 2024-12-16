@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class TokenController {
 
-  private static final String COOKIE_HEADER_NAME = "Set-Cookie";
   private final TokenProvider tokenProvider;
 
   @PostMapping("/token/reissue")
@@ -41,8 +40,7 @@ public class TokenController {
     String reIssueAccessToken = token.accessToken();
     String reIssueRefreshToken = token.refreshToken();
 
-    String cookie = CookieUtils.setRefreshTokenCookie(reIssueRefreshToken);
-    response.addHeader(COOKIE_HEADER_NAME, cookie);
+    CookieUtils.setCookie(reIssueRefreshToken, response);
 
     return Api.ok(SuccessCode.SUCCESS, new TokenResponse(reIssueAccessToken));
   }

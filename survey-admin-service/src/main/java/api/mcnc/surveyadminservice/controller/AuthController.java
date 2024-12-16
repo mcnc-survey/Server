@@ -27,10 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-  private static final String COOKIE_HEADER_NAME = "Set-Cookie";
-
   private final AuthService authService;
-
 
   @PostMapping("/auth/email-duplicate-check")
   public Api<EmailDuplicateCheckResponse> checkEmailDuplicate(@RequestBody @Valid EmailDuplicateCheckRequest request) {
@@ -50,8 +47,7 @@ public class AuthController {
     Token token = authService.signIn(request);
     TokenResponse tokenResponse = token.toResponse();
 
-    String cookie = CookieUtils.setRefreshTokenCookie(token.refreshToken());
-    response.addHeader(COOKIE_HEADER_NAME, cookie);
+    CookieUtils.setCookie(token.refreshToken(), response);
 
     return Api.ok(SuccessCode.SUCCESS, tokenResponse);
   }
