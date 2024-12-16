@@ -4,6 +4,7 @@ import api.mcnc.surveyadminservice.common.annotation.EmailEncryption;
 import api.mcnc.surveyadminservice.common.annotation.PasswordEncryption;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 /**
@@ -20,7 +21,6 @@ public class AdminSignInRequest {
   @Email @Setter
   @EmailEncryption
   private String email;
-  @NotBlank
-  @PasswordEncryption
+  @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "비밀번호 형식이 일치하지 않습니다.")
   private String password;
 }

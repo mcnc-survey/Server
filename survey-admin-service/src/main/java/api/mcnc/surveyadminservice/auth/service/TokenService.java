@@ -2,8 +2,8 @@ package api.mcnc.surveyadminservice.auth.service;
 
 import api.mcnc.surveyadminservice.common.exception.TokenException;
 import api.mcnc.surveyadminservice.domain.Token;
-import api.mcnc.surveyadminservice.entity.TokenEntity;
-import api.mcnc.surveyadminservice.repository.token.TokenRepository;
+import api.mcnc.surveyadminservice.redis.TokenEntity;
+import api.mcnc.surveyadminservice.redis.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,25 +22,26 @@ public class TokenService {
     tokenRepository.deleteById(adminId);
   }
 
-  public void saveOrUpdate(String adminId, String refreshToken) {
-    TokenEntity token = tokenRepository.findByRefreshToken(refreshToken)
+  public Token saveOrUpdate(String adminId, String refreshToken, String accessToken) {
+    TokenEntity token = tokenRepository.findByAccessToken(accessToken)
       .map(o -> o.updateRefreshToken(refreshToken))
-      .orElseGet(() -> TokenEntity.of(adminId, refreshToken));
-
-    tokenRepository.save(token);
+      .orElseGet(() -> TokenEntity.of(adminId, refreshToken, accessToken));
+    TokenEntity save = tokenRepository.save(token);
+    return save.toToken();
   }
 
   @Transactional(readOnly = true)
-  public Token findByRefreshTokenOrThrow(String accessToken) {
-    return tokenRepository.findByRefreshToken(accessToken)
+  public Token findByAccessTokenOrThrow(String accessToken) {
+    return tokenRepository.findByAccessToken(accessToken)
       .map(TokenEntity::toToken)
       .orElseThrow(() -> new TokenException(TOKEN_EXPIRED));
   }
 
-  public void updateToken(String accessToken, Token token) {
+  public Token updateToken(String accessToken, String refreshToken, Token token) {
     TokenEntity tokenEntity = TokenEntity.fromDomain(token);
-    tokenEntity.updateRefreshToken(accessToken);
-    tokenRepository.save(tokenEntity);
+    tokenEntity.updateAccessToken(accessToken);
+    tokenEntity.updateRefreshToken(refreshToken);
+    return tokenRepository.save(tokenEntity).toToken();
   }
 
 }
