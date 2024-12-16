@@ -1,0 +1,53 @@
+
+=== 이메일 중복 검사
+==== request
+include::{snippets}/checkEmailDuplicate/http-request.adoc[]
+include::{snippets}/checkEmailDuplicate/request-fields.adoc[]
+
+==== response
+include::{snippets}/checkEmailDuplicate/response-body.adoc[]
+include::{snippets}/checkEmailDuplicate/response-fields.adoc[]
+
+'''
+
+=== 회원 가입
+==== request
+include::{snippets}/signUp/http-request.adoc[]
+include::{snippets}/signUp/request-fields.adoc[]
+
+==== response
+include::{snippets}/signUp/response-body.adoc[]
+include::{snippets}/signUp/response-fields.adoc[]
+
+'''
+
+=== 로그인
+==== request
+include::{snippets}/signIn/http-request.adoc[]
+include::{snippets}/signIn/request-fields.adoc[]
+
+==== response
+===== `※ Cookie에 Refresh Token 값 담겨서 반환함`
+
+include::{snippets}/signIn/http-response.adoc[]
+===== 헤더
+include::{snippets}/signIn/response-headers.adoc[]
+===== 필드
+include::{snippets}/signIn/response-fields.adoc[]
+
+'''
+=== 토큰 재 발급
+==== request
+===== `※ Cookie에 Refresh Token 값 담아서 요청함`
+include::{snippets}/token-reissue/http-request.adoc[]
+===== 필드
+include::{snippets}/token-reissue/request-fields.adoc[]
+
+==== response
+include::{snippets}/token-reissue/http-response.adoc[]
+===== 헤더
+include::{snippets}/token-reissue/response-headers.adoc[]
+===== 필드
+include::{snippets}/token-reissue/response-fields.adoc[]
+
+
