@@ -5,9 +5,11 @@ import api.mcnc.surveyadminservice.common.exception.AdminException;
 import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
 import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
+import api.mcnc.surveyadminservice.controller.response.TokenResponse;
 import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.repository.admin.AdminRepository;
+import api.mcnc.surveyadminservice.service.response.SignInResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,7 +64,7 @@ public class AuthService {
    * @param request {@link AdminSignInRequest}
    * @return {@link Token}
    */
-  public Token signIn(AdminSignInRequest request) {
+  public SignInResponse signIn(AdminSignInRequest request) {
     String email = request.getEmail();
     String password = request.getPassword();
 
@@ -75,7 +77,8 @@ public class AuthService {
 
     // 일치하면 토큰 생성
     if (matches) {
-      return tokenProvider.issue(admin);
+      Token token = tokenProvider.issue(admin);
+      return SignInResponse.of(admin.name(), token);
     }
     // 불 일치 에러 반환
     throw new AdminException(MISS_MATCH_ADMIN_ACCOUNT);

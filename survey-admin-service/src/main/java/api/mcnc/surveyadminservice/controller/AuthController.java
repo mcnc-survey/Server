@@ -10,6 +10,7 @@ import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckRespon
 import api.mcnc.surveyadminservice.controller.response.TokenResponse;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.service.AuthService;
+import api.mcnc.surveyadminservice.service.response.SignInResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,12 +45,9 @@ public class AuthController {
 
   @PostMapping("/auth/sign-in")
   public Api<TokenResponse> signInAdmin(@RequestBody @Valid AdminSignInRequest request, HttpServletResponse response) {
-    Token token = authService.signIn(request);
-    TokenResponse tokenResponse = token.toResponse();
-
-    CookieUtils.setCookie(token.refreshToken(), response);
-
-    return Api.ok(SuccessCode.SUCCESS, tokenResponse);
+    SignInResponse signInResponse = authService.signIn(request);
+    CookieUtils.setCookie(signInResponse.refreshToken(), response);
+    return Api.ok(SuccessCode.SUCCESS, TokenResponse.of(signInResponse.userName(), signInResponse.accessToken()));
   }
 
 }
