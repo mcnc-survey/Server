@@ -32,6 +32,7 @@ public class AuthService {
 
   /**
    * 이메일 중복 검사
+   *
    * @param email String
    * @return {@link EmailDuplicateCheckResponse}
    */
@@ -43,7 +44,8 @@ public class AuthService {
 
   /**
    * 회원가입
-   * @param  request {@link AdminSignUpRequest}
+   *
+   * @param request {@link AdminSignUpRequest}
    */
   public void signUp(AdminSignUpRequest request) {
     adminRepository.getByEmailAdmin(request.getEmail())
@@ -56,6 +58,7 @@ public class AuthService {
 
   /**
    * 로그인
+   *
    * @param request {@link AdminSignInRequest}
    * @return {@link Token}
    */

@@ -3,8 +3,8 @@ package api.mcnc.surveyadminservice.controller;
 import api.mcnc.surveyadminservice.common.enums.SuccessCode;
 import api.mcnc.surveyadminservice.common.result.Api;
 import api.mcnc.surveyadminservice.common.utils.CookieUtils;
-import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
 import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
+import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
 import api.mcnc.surveyadminservice.controller.request.EmailDuplicateCheckRequest;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
 import api.mcnc.surveyadminservice.controller.response.TokenResponse;
@@ -30,6 +30,7 @@ public class AuthController {
   private static final String COOKIE_HEADER_NAME = "Set-Cookie";
 
   private final AuthService authService;
+
 
   @PostMapping("/auth/email-duplicate-check")
   public Api<EmailDuplicateCheckResponse> checkEmailDuplicate(@RequestBody @Valid EmailDuplicateCheckRequest request) {

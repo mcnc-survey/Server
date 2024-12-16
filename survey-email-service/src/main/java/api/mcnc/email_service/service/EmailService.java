@@ -68,15 +68,21 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    
+    //찾았다 저장 뛰발럼
     public void saveVerificationCode(String email, String code) {
         LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5);
         verificationCodes.put(email, new VerificationCode(code, expirationTime));
     }
 
+    
+    //뭐더라
     public VerificationCode getVerificationCode(String email) {
         return verificationCodes.get(email);
     }
 
+    
+    //뭐더라
     public void sendHtmlVerificationEmails(List<String> toEmails, String userName, String projectName, String dynamicLink) throws MessagingException, IOException {
         // ClassPathResource를 사용해 resources 디렉토리의 파일 읽기
         ClassPathResource resource = new ClassPathResource("templates/Email.html");

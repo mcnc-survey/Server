@@ -16,13 +16,11 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     // 알림 상태를 변경하는 메소드 예시
     @Transactional
     @Modifying
-    @Query("UPDATE NotificationEntity n SET n.status = :status WHERE n.id = :id")
-    void updateStatusById(String id, NotificationEntity.Status status);
+    @Query("UPDATE NotificationEntity n SET n.status = 'READ' WHERE n.id = :id")
+    void updateStatusToReadById(String id);
+
 
     List<NotificationEntity> findByAdminId(String adminId);
-
-    void deleteBySurveyId(String surveyId);
-
 
     // 설문 ID와 알림 타입을 기준으로 중복 알림이 있는지 확인
     boolean existsBySurveyIdAndType(String surveyId, NotificationEntity.Type type);
