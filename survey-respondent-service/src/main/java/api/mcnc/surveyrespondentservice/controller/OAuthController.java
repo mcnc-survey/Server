@@ -50,6 +50,7 @@ public class OAuthController {
     if("naver".equals(provider)) {
       extractId = surveyId;
     }
+    extractId = decodeSurveyId(extractId);
     AuthenticatedRespondent authenticatedSocialUser = oauthUseCase.getAuthenticatedSocialUser(provider, code);
     Token token = registerUseCase.registerRespondent(authenticatedSocialUser, extractId);
 
