@@ -19,7 +19,6 @@ import lombok.AccessLevel;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AdminSignUpRequest {
-  @NotBlank
   @Pattern(regexp = "^[가-힣a-zA-Z]{2,20}$", message = "이름 형식이 올바르지 않습니다.")
   private String userName;
   @Pattern(regexp = "^(\\d{2,3})(\\d{3,4})(\\d{4})$", message = "전화번호 형식이 올바르지 않습니다.")
