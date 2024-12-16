@@ -14,7 +14,8 @@ public record SurveyResponse(
   String id,
   String title,
   SurveyStatus status,
-  String lastModifiedAt,
+  String startAt,
+  String endAt,
   String surveyLink,
   Boolean isLike
 ) {

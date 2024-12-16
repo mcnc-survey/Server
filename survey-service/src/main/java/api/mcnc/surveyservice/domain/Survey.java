@@ -47,7 +47,8 @@ public record Survey(
       .id(this.id)
       .title(this.title)
       .status(this.status)
-      .lastModifiedAt(this.modifiedAt.toString())
+      .startAt(this.startAt.toString())
+      .endAt(this.endAt.toString())
       .surveyLink(surveyLink)
       .isLike(SurveyLike.LIKE.equals(this.like))
       .build();
