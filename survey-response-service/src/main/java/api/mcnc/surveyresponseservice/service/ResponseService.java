@@ -44,15 +44,13 @@ public class ResponseService {
     Survey survey = validService.validateAndGetSurvey(surveyId);
     SurveySnippet snippet = survey.toSnippet();
 
-    Map<Integer, List<ResponseResult>> result = responseRepository.getRespondentResponseList(surveyId, respondentId)
+    Map<Integer, ResponseResult> result = responseRepository.getRespondentResponseList(surveyId, respondentId)
       .stream()
       .collect(
-        Collectors.groupingBy(
+        Collectors.toMap(
           Response::orderNumber,
-          Collectors.mapping(
-            Response::toResponseResult,
-            Collectors.toList()
-          )
+          Response::toResponseResult,
+          (existing, replacement) -> existing
         ));
 
     return SurveyResponsesResponse.of(snippet, result);

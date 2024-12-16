@@ -1,6 +1,5 @@
 package api.mcnc.surveyresponseservice.controller.response;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,9 +10,9 @@ import java.util.Map;
  */
 public record SurveyResponsesResponse(
   SurveySnippet surveySnippet,
-  Map<Integer, List<ResponseResult>> responseResult
+  Map<Integer, ResponseResult> responseResult
 ) {
-  public static SurveyResponsesResponse of(SurveySnippet snippet, Map<Integer, List<ResponseResult>> result) {
+  public static SurveyResponsesResponse of(SurveySnippet snippet, Map<Integer, ResponseResult> result) {
     return new SurveyResponsesResponse(snippet, result);
   }
 }
