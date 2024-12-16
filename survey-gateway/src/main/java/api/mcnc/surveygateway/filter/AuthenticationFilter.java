@@ -1,5 +1,6 @@
 package api.mcnc.surveygateway.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -11,19 +12,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.Map;
-
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 
     @LoadBalanced
     private final WebClient webClient;
 
+    public final static String URI ="/token-validation";
+
     public AuthenticationFilter(ReactorLoadBalancerExchangeFilterFunction lbFunction) {
         super(Config.class);
         this.webClient = WebClient.builder()
                 .filter(lbFunction)
-                .baseUrl("http://survey-user-service")
+                .baseUrl("http://survey-admin-service")
                 .build();
     }
 
@@ -34,14 +35,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 String token = authHeader.substring(7);
                 return validateToken(token)
-                        .flatMap(userId -> proceedWithUserId(userId, exchange, chain))
+                        .flatMap(response -> proceedWithUserId(response.adminId(), exchange, chain))
                         .switchIfEmpty(chain.filter(exchange)) // If token is invalid, continue without setting userId
                         .onErrorResume(e -> handleAuthenticationError(exchange, e)); // Handle errors
             }
 
             if (authHeader == null) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
+                return handleAuthenticationError(exchange, new RuntimeException("Authorization header is missing"));
             }
 
             return chain.filter(exchange);
@@ -53,18 +53,18 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return exchange.getResponse().setComplete();
     }
 
-    private Mono<Long> validateToken(String token) {
+    private Mono<TokenValidateResponse> validateToken(String token) {
+        ObjectMapper objectMapper = new ObjectMapper();
         return webClient.post()
-                .uri("/auth/validate")
-                .bodyValue("{\"token\":\"" + token + "\"}")
-                .header("Content-Type", "application/json")
-                .retrieve()
-                .bodyToMono(Map.class)
-                .map(response -> Long.valueOf(response.get("id").toString()) );
+          .uri(URI)
+          .bodyValue("{\"accessToken\":\"" + token + "\"}")
+          .header("Content-Type", "application/json")
+          .retrieve()
+          .bodyToMono(TokenValidateResponse.class);
     }
 
-    private Mono<Void> proceedWithUserId(Long userId, ServerWebExchange exchange, GatewayFilterChain chain) {
-        exchange.getRequest().mutate().header("X-USER-ID", String.valueOf(userId));
+    private Mono<Void> proceedWithUserId(String adminId, ServerWebExchange exchange, GatewayFilterChain chain) {
+        exchange.getRequest().mutate().header("requested-by", adminId);
         return chain.filter(exchange);
     }
 
