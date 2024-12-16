@@ -31,6 +31,7 @@ public class AuthController {
 
   private final AuthService authService;
 
+
   @PostMapping("/auth/email-duplicate-check")
   public Api<EmailDuplicateCheckResponse> checkEmailDuplicate(@RequestBody @Valid EmailDuplicateCheckRequest request) {
     EmailDuplicateCheckResponse result = authService.checkEmailDuplicate(request.getEmail());

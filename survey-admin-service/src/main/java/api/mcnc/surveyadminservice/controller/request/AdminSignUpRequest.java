@@ -3,10 +3,8 @@ package api.mcnc.surveyadminservice.controller.request;
 import api.mcnc.surveyadminservice.common.annotation.EmailEncryption;
 import api.mcnc.surveyadminservice.common.annotation.PasswordEncryption;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-import lombok.AccessLevel;
 
 /**
  * please explain class!
