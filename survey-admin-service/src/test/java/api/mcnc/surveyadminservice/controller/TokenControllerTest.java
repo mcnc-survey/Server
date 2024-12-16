@@ -2,9 +2,7 @@ package api.mcnc.surveyadminservice.controller;
 
 import api.mcnc.surveyadminservice.RestDocsConfig;
 import api.mcnc.surveyadminservice.auth.jwt.TokenProvider;
-import api.mcnc.surveyadminservice.controller.request.TokenReissueRequest;
 import api.mcnc.surveyadminservice.domain.Token;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
@@ -25,7 +22,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,9 +41,6 @@ class TokenControllerTest {
   @Autowired
   private MockMvc mockMvc;
 
-  @Autowired
-  private ObjectMapper objectMapper;
-
   @MockBean
   private TokenProvider tokenProvider;
 
@@ -57,14 +52,12 @@ class TokenControllerTest {
     String newAccessToken = "newAccessToken";
     String newRefreshToken = "newRefreshToken";
 
-    TokenReissueRequest tokenReissueRequest = new TokenReissueRequest(oldAccessToken);
-
     Token token = new Token("id", newAccessToken, newRefreshToken);
     given(tokenProvider.reissueAccessToken(eq(oldAccessToken), eq(oldRefreshToken))).willReturn(token);
 
     MockHttpServletRequestBuilder requestBuilder = post("/token/reissue")
       .contentType(APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(tokenReissueRequest))
+      .header("Authorization", "Bearer " + oldAccessToken)
       .cookie(new Cookie("refreshToken", oldRefreshToken)); // 쿠키에 oldRefreshToken 포함
 
     // When & Then
@@ -76,8 +69,8 @@ class TokenControllerTest {
       .andExpect(jsonPath("$.body.accessToken").value(newAccessToken))
       .andExpect(header().string("Set-Cookie", containsString("refreshToken=" + newRefreshToken)))
       .andDo(document("token-reissue",
-        requestFields(
-          fieldWithPath("accessToken").type(STRING).description("기존 accessToken")
+        requestHeaders(
+          headerWithName("Authorization").description("기존 accessToken")
         ),
         responseFields(
           fieldWithPath("success").type(BOOLEAN).description("결과 코드"),

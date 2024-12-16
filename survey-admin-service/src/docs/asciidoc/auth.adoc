@@ -40,8 +40,8 @@ include::{snippets}/signIn/response-fields.adoc[]
 ==== request
 ===== `※ Cookie에 Refresh Token 값 담아서 요청함`
 include::{snippets}/token-reissue/http-request.adoc[]
-===== 필드
-include::{snippets}/token-reissue/request-fields.adoc[]
+===== 헤더
+include::{snippets}/token-reissue/request-headers.adoc[]
 
 ==== response
 include::{snippets}/token-reissue/http-response.adoc[]
