@@ -50,4 +50,12 @@ include::{snippets}/token-reissue/response-headers.adoc[]
 ===== 필드
 include::{snippets}/token-reissue/response-fields.adoc[]
 
+'''
+=== 소셜 로그인
+==== request
+include::{snippets}/oauth2/http-request.adoc[]
+include::{snippets}/oauth2/path-parameters.adoc[]
 
+==== response
+===== `redirection oauth2 페이지로 됨`
+include::{snippets}/oauth2/http-response.adoc[]
