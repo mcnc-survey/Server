@@ -1,6 +1,5 @@
 package api.mcnc.surveyadminservice.domain;
 
-import api.mcnc.surveyadminservice.controller.response.TokenResponse;
 import lombok.Builder;
 
 /**
@@ -15,8 +14,5 @@ public record Token(
   String accessToken,
   String refreshToken
 ) {
-  public TokenResponse toResponse() {
-    return new TokenResponse(accessToken);
-  }
 }
 

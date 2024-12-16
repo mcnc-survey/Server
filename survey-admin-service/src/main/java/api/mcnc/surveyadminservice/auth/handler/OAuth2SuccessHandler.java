@@ -22,8 +22,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
   @Value("${oauth2.success-redirect}")
   private String uri;
-  private static final String QUERY_PARAM_NAME = "accessToken";
-  private static final String COOKIE_HEADER_NAME = "Set-Cookie";
+  private static final String ACCESS_TOKEN = "accessToken";
+  private static final String USER_NAME = "userName";
   private final TokenProvider tokenProvider;
 
   @Override
@@ -38,12 +38,13 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     CookieUtils.setCookie(refreshToken, response);
 
-    response.sendRedirect(makeRedirectUrl(accessToken));
+    response.sendRedirect(makeRedirectUrl(accessToken, admin.name()));
   }
 
-  public String makeRedirectUrl(String accessToken) {
+  public String makeRedirectUrl(String accessToken, String userName) {
     return UriComponentsBuilder.fromUriString(uri)
-      .queryParam(QUERY_PARAM_NAME, accessToken)
+      .queryParam(ACCESS_TOKEN, accessToken)
+      .queryParam(USER_NAME, userName)
       .build().toUriString();
   }
 }

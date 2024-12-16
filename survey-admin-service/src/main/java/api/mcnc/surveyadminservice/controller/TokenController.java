@@ -38,7 +38,7 @@ public class TokenController {
 
     CookieUtils.setCookie(reIssueRefreshToken, response);
 
-    return Api.ok(SuccessCode.SUCCESS, new TokenResponse(reIssueAccessToken));
+    return Api.ok(SuccessCode.SUCCESS, TokenResponse.of(reIssueAccessToken));
   }
 
   private String extractAccessTokenInHeader(HttpServletRequest request) {
