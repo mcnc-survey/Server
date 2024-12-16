@@ -450,6 +450,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_회원_가입">회원 가입</a></li>
 <li><a href="#_로그인">로그인</a></li>
 <li><a href="#_토큰_재_발급">토큰 재 발급</a></li>
+<li><a href="#_소셜_로그인">소셜 로그인</a></li>
 </ul>
 </div>
 </div>
@@ -942,6 +943,59 @@ Content-Length: 128
 </tr>
 </tbody>
 </table>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_소셜_로그인"><a class="link" href="#_소셜_로그인">소셜 로그인</a></h3>
+<div class="sect3">
+<h4 id="_request_5"><a class="link" href="#_request_5">request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /oauth2/authorization/kakao HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /oauth2/authorization/{social}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>social</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">소셜 로그인 타입 - kakao, google, naver</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_response_5"><a class="link" href="#_response_5">response</a></h4>
+<div class="sect4">
+<h5 id="_redirection_oauth2_페이지로_됨"><a class="link" href="#_redirection_oauth2_페이지로_됨"><code>redirection oauth2 페이지로 됨</code></a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 302 Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Location: https://kauth.kakao.com/oauth/authorize?response_type=code&amp;client_id=782d9312ce0844ea690da2cb13bcff2d&amp;scope=account_email%20name%20phone_number&amp;state=XJ3XzKNAtuylK5x7d3VpvQfwGWv2XanzTjYUjFmiATs%3D&amp;redirect_uri=http://localhost:8080/login/oauth2/code/kakao</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -949,7 +1003,7 @@ Content-Length: 128
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-12-16 09:59:49 +0900
+Last updated 2024-12-16 10:42:09 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
