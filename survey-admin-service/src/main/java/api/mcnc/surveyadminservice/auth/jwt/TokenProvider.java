@@ -89,12 +89,20 @@ public class TokenProvider {
         return tokenService.updateToken(reissueAccessToken, reissueRefreshToken, token);
     }
 
-    public TokenValidateResponse validateToken(String token) {
-        if (!StringUtils.hasText(token)) {
+    /**
+     * 토큰 검증
+     * @param accessToken 요청 토큰
+     * @return {@link TokenValidateResponse}
+     */
+    public TokenValidateResponse validateToken(String accessToken) {
+        if (!StringUtils.hasText(accessToken)) {
             return TokenValidateResponse.invalidResponse();
         }
 
-        Claims claims = parseClaims(token);
+        // 인증된 유저에대한 토큰인지 확인
+        tokenService.findByAccessTokenOrThrow(accessToken);
+
+        Claims claims = parseClaims(accessToken);
         boolean isValid = claims.getExpiration().after(new Date());
 
         if(isValid){
@@ -102,6 +110,15 @@ public class TokenProvider {
         } else {
             return TokenValidateResponse.invalidResponse();
         }
+    }
+
+    /**
+     * 토큰 만료
+     * @param accessToken 요청 토큰
+     */
+    public void expireToken(String accessToken) {
+        Claims claims = parseClaims(accessToken);
+        tokenService.deleteRefreshToken(claims.getSubject());
     }
 
     private String generateAccessToken(Admin authentication) {

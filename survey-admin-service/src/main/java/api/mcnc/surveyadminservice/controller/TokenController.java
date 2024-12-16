@@ -31,7 +31,7 @@ public class TokenController {
   @PostMapping("/token/reissue")
   public Api<TokenResponse> reissue(HttpServletRequest request, HttpServletResponse response) {
     String accessToken = extractAccessTokenInHeader(request);
-    String refreshToken = extractRefreshTokenInCookies(request);
+    String refreshToken = CookieUtils.extractRefreshTokenInCookies(request);
     Token token = tokenProvider.reissueAccessToken(accessToken, refreshToken);
     String reIssueAccessToken = token.accessToken();
     String reIssueRefreshToken = token.refreshToken();
@@ -51,18 +51,5 @@ public class TokenController {
     return authorization.substring(AUTHORIZATION_PREFIX.length());
   }
 
-  /**
-   * 쿠키에서 refreshToken 추출
-   * @param request {@link HttpServletRequest}
-   * @return refreshToken
-   */
-  private String extractRefreshTokenInCookies(HttpServletRequest request) {
-    Cookie[] cookies = request.getCookies();
-    for (Cookie cookie : cookies) {
-      if (cookie.getName().equals("refreshToken")) {
-        return cookie.getValue();
-      }
-    }
-    throw new AdminException(AdminErrorCode.INVALID_REQUEST, "refreshToken 값이 null일 수 없습니다.");
-  }
+
 }
