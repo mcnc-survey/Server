@@ -2,7 +2,6 @@ package api.mcnc.surveyadminservice.domain;
 
 import api.mcnc.surveyadminservice.auth.dto.OAuth2UserInfo;
 import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
-import api.mcnc.surveyadminservice.controller.response.AdminSignUpResponse;
 import api.mcnc.surveyadminservice.entity.admin.AdminRole;
 import lombok.Builder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,7 +37,7 @@ public record Admin(
 
   public static Admin from(AdminSignUpRequest request) {
     return Admin.builder()
-      .name(request.getFullName())
+      .name(request.getUserName())
       .email(request.getEmail())
       .role(ADMIN)
       .password(request.getPassword())
@@ -46,11 +45,4 @@ public record Admin(
       .build();
   }
 
-  public AdminSignUpResponse toSignUpResponse() {
-    return AdminSignUpResponse.builder()
-      .id(this.id)
-      .name(this.name)
-      .email(this.email)
-      .build();
-  }
 }

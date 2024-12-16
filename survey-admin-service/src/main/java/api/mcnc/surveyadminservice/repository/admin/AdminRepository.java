@@ -41,9 +41,7 @@ public class AdminRepository {
     return saveEntity.toDomain();
   }
 
-  public Admin getByEmailAdmin(String email) {
-    return adminJpaRepository.findByEmailAndProvider(email, EMAIL)
-      .map(AdminEntity::toDomain)
-      .orElseThrow(() -> new AdminException(AdminErrorCode.NOT_FOUND));
+  public Optional<Admin> getByEmailAdmin(String email) {
+    return this.getByEmailAndProvider(email, EMAIL);
   }
 }

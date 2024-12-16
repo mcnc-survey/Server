@@ -1,6 +1,7 @@
 package api.mcnc.surveyadminservice.common.aspect;
 
 import api.mcnc.surveyadminservice.auth.vault.Vault;
+import api.mcnc.surveyadminservice.common.annotation.EmailEncryption;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.aspectj.lang.JoinPoint;
@@ -35,7 +36,7 @@ public class EmailAESEncryptAspect {
     if (ObjectUtils.isEmpty(arg)) return;
     FieldUtils.getAllFieldsList(arg.getClass())
       .stream()
-      .filter(field -> field.isAnnotationPresent(api.mcnc.surveyadminservice.common.annotation.EmailEncryption.class))
+      .filter(field -> field.isAnnotationPresent(EmailEncryption.class))
       .forEach(field -> {
         try {
           Object encryptionField = FieldUtils.readField(field, arg, true);
