@@ -1,11 +1,10 @@
 package api.mcnc.surveyadminservice.service;
 
 import api.mcnc.surveyadminservice.auth.jwt.TokenProvider;
-import api.mcnc.surveyadminservice.common.enums.AdminErrorCode;
 import api.mcnc.surveyadminservice.common.exception.AdminException;
 import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
 import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
-import api.mcnc.surveyadminservice.controller.response.AdminSignUpResponse;
+import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
 import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.repository.admin.AdminRepository;
@@ -14,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static api.mcnc.surveyadminservice.common.enums.AdminErrorCode.*;
 
 /**
  * please explain class!
@@ -29,33 +30,56 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final TokenProvider tokenProvider;
 
-  public AdminSignUpResponse signUp(AdminSignUpRequest request) {
-    Admin admin = Admin.from(request);
-    Optional<Admin> isExist = adminRepository.getByEmailAndProvider(admin.email(), admin.provider());
-
-    // email 중복 회원 가입 허용 안함
-    if(isExist.isPresent()) {
-      throw new AdminException(AdminErrorCode.ALREADY_EXIST);
-    }
-
-    Admin registered = adminRepository.registerWithEmail(admin);
-    return registered.toSignUpResponse();
+  /**
+   * 이메일 중복 검사
+   *
+   * @param email String
+   * @return {@link EmailDuplicateCheckResponse}
+   */
+  public EmailDuplicateCheckResponse checkEmailDuplicate(String email) {
+    Optional<Admin> isExist = adminRepository.getByEmailAdmin(email);
+    boolean present = isExist.isPresent();
+    return EmailDuplicateCheckResponse.isDuplicated(email, present);
   }
 
+  /**
+   * 회원가입
+   *
+   * @param request {@link AdminSignUpRequest}
+   */
+  public void signUp(AdminSignUpRequest request) {
+    adminRepository.getByEmailAdmin(request.getEmail())
+      .ifPresent(admin -> {
+        throw new AdminException(ALREADY_EXIST);
+      });
+    Admin admin = Admin.from(request);
+    Admin registered = adminRepository.registerWithEmail(admin);
+  }
+
+  /**
+   * 로그인
+   *
+   * @param request {@link AdminSignInRequest}
+   * @return {@link Token}
+   */
   public Token signIn(AdminSignInRequest request) {
     String email = request.getEmail();
     String password = request.getPassword();
 
-    Admin admin = adminRepository.getByEmailAdmin(email);
+    // 해당 email로 회원 가입 여부 확인
+    Admin admin = adminRepository.getByEmailAdmin(email)
+      .orElseThrow(() -> new AdminException(NOT_FOUND));
 
-    boolean matches = passwordEncoder.matches(admin.password(), password);
+    // 비밀번호 검증
+    boolean matches = passwordEncoder.matches(password, admin.password());
 
+    // 일치하면 토큰 생성
     if (matches) {
-//      return tokenProvider.generateAccessToken(admin);
+      return tokenProvider.issue(admin);
     }
-    return new Token("asdf", "sdf");
+    // 불 일치 에러 반환
+    throw new AdminException(MISS_MATCH_ADMIN_ACCOUNT);
   }
-
 
 
 }

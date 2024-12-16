@@ -1,0 +1,12 @@
+// index.adoc
+
+= 관리자 Auth API 문서
+:doctype: book
+:source-highlighter: highlightjs
+:sectlinks:
+:toc: left
+:toclevels: 2
+
+
+''''
+include::auth.adoc[]

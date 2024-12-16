@@ -15,7 +15,7 @@ public enum TokenErrorCode implements Code{
 
 
   TOKEN_EXPIRED("T000", "만료된 토큰 입니다."),
-  INVALID_TOKEN("T001", "인증 불가능한 토큰입니다."),
+  INVALID_TOKEN("T001", "유효하지 않은 토큰입니다."),
 
   ;
 

@@ -1,6 +1,5 @@
-package api.mcnc.surveyadminservice.repository.token;
+package api.mcnc.surveyadminservice.redis;
 
-import api.mcnc.surveyadminservice.entity.TokenEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
@@ -12,5 +11,5 @@ import java.util.Optional;
  * @since :2024-11-26 오후 12:57
  */
 public interface TokenRepository extends CrudRepository<TokenEntity, String>{
-  Optional<TokenEntity> findByRefreshToken(String refreshToken);
+  Optional<TokenEntity> findByAccessToken(String accessToken);
 }
