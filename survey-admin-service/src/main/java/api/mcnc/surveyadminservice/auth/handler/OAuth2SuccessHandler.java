@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.yaml.snakeyaml.util.UriEncoder;
 
 import java.io.IOException;
 
@@ -45,6 +46,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     return UriComponentsBuilder.fromUriString(uri)
       .queryParam(ACCESS_TOKEN, accessToken)
       .queryParam(USER_NAME, userName)
-      .build().toUriString();
+      .build(true).toUriString();
   }
 }

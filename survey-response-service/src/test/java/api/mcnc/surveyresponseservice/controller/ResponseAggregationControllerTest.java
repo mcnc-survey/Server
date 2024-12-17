@@ -51,7 +51,7 @@ class ResponseAggregationControllerTest {
   private ResponseAggregationService responseService;
 
   private ResponseAggregationResponse getResponseAggregationResponse() {
-    SurveySummary surveySummary = SurveySummary.of(2, "2024-12-26T13:56", "2024-12-09");
+    SurveySummary surveySummary = SurveySummary.of("우당탕탕 설문 조사", 2, "2024-12-26T13:56", "2024-12-09");
     List<Object> responses = List.of(
       ResponseSnippet.of("만족", 1),
       ResponseSnippet.of("매우 만족", 2)
@@ -98,6 +98,7 @@ class ResponseAggregationControllerTest {
             fieldWithPath("message").type(STRING).description("결과 메시지"),
             fieldWithPath("body").type(OBJECT).description("결과 메시지"),
             fieldWithPath("body.surveySummary").type(OBJECT).description("결과 요약"),
+            fieldWithPath("body.surveySummary.title").type(STRING).description("설문 이름"),
             fieldWithPath("body.surveySummary.respondentCount").type(NUMBER).description("총 응답자 수"),
             fieldWithPath("body.surveySummary.endDate").type(STRING).description("설문 종료 날짜"),
             fieldWithPath("body.surveySummary.lastModifiedDate").type(STRING).description("마지막 수정일"),
