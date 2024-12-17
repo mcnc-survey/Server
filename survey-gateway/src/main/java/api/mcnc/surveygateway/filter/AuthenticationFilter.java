@@ -54,7 +54,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     }
 
     private Mono<TokenValidateResponse> validateToken(String token) {
-        ObjectMapper objectMapper = new ObjectMapper();
         return webClient.post()
           .uri(URI)
           .bodyValue("{\"accessToken\":\"" + token + "\"}")

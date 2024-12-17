@@ -2,6 +2,7 @@ package api.mcnc.surveyadminservice.common.exception;
 
 import api.mcnc.surveyadminservice.common.enums.AdminErrorCode;
 import api.mcnc.surveyadminservice.common.result.Api;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 import java.util.Objects;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /**
  * please explain class!
@@ -24,31 +28,31 @@ public class AdminExceptionHandler {
   public ResponseEntity<Api<String>> handleRuntimeException(RuntimeException e) {
     Api<String> response = Api.fail(AdminErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
     e.printStackTrace();
-    return ResponseEntity.ok(response);
+    return ResponseEntity.internalServerError().body(response);
   }
 
   @ExceptionHandler(AdminException.class)
   public ResponseEntity<Api<String>> handleResponseException(AdminException e) {
     Api<String> response = Api.fail(e.getCode(), e.getMessage());
-    return ResponseEntity.ok(response);
+    return ResponseEntity.badRequest().body(response);
   }
 
   @ExceptionHandler(TokenException.class)
   public ResponseEntity<Api<String>> handleTokenException(TokenException e) {
     Api<String> response = Api.fail(e.getCode(), e.getMessage());
-    return ResponseEntity.ok(response);
+    return ResponseEntity.badRequest().body(response);
   }
 
   @ExceptionHandler(AuthException.class)
   public ResponseEntity<Api<String>> handleAuthException(AuthException e) {
     Api<String> response = Api.fail(e.getCode(), e.getMessage());
-    return ResponseEntity.ok(response);
+    return ResponseEntity.badRequest().body(response);
   }
 
   @ExceptionHandler(VaultException.class)
   public ResponseEntity<Api<String>> handleVaultException(VaultException e) {
     Api<String> response = Api.fail(e.getCode(), e.getMessage());
-    return ResponseEntity.ok(response);
+    return ResponseEntity.internalServerError().body(response);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -59,7 +63,7 @@ public class AdminExceptionHandler {
       .map(ErrorField::toErrorField)
       .toList();
     Api<Object> response = Api.fail(AdminErrorCode.INVALID_REQUEST, errorList);
-    return ResponseEntity.ok(response);
+    return ResponseEntity.badRequest().body(response);
   }
 
 
