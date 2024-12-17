@@ -85,4 +85,7 @@ public class AuthService {
   }
 
 
+  public void signOut(String accessToken) {
+    tokenProvider.expireToken(accessToken);
+  }
 }
