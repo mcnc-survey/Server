@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 
@@ -32,6 +34,9 @@ public class VerificationController {
 
     @Autowired
     private EmailService emailService;
+
+    private final Map<String, VerificationCode> verificationCodes = new ConcurrentHashMap<>();
+
 
     // 인증 코드 요청 API 이거 안쓰는걸 추천
     @GetMapping("/request-code")
@@ -158,6 +163,13 @@ public class VerificationController {
         return true; // 인증 성공
     }
 
+    // 저장된 인증코드들 확인용
+    @GetMapping("/verification-codes")
+    public ResponseEntity<Map<String, VerificationCode>> getAllVerificationCodes() {
+        return ResponseEntity.ok(emailService.getAllVerificationCodes());
+    }
+
+
 
     // 초대 이메일 발송 API
 //    @PostMapping("/invite")
@@ -199,6 +211,24 @@ public class VerificationController {
             emailService.sendInviteEmails(emails, userName, projectName, dynamicLink);
 
             return ResponseEntity.ok("HTML 이메일 전송 완료.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/PW")
+    public ResponseEntity<String> sendPWEmails(@RequestBody Map<String, Object> request) {
+        try {
+            // Map에서 데이터 추출
+            List<String> emails = (List<String>) request.get("emails");
+            String userName = (String) request.get("userName");
+            String dynamicLink = (String) request.get("dynamicLink");
+
+            // 이메일을 병렬로 처리
+            emailService.sendPWEmails(emails, userName, dynamicLink);
+
+            return ResponseEntity.ok("PW 이메일 전송 완료.");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패: " + e.getMessage());
