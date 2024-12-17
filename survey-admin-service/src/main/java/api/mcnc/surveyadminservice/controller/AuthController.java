@@ -10,7 +10,6 @@ import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
 import api.mcnc.surveyadminservice.controller.request.EmailDuplicateCheckRequest;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
 import api.mcnc.surveyadminservice.controller.response.TokenResponse;
-import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.service.AuthService;
 import api.mcnc.surveyadminservice.service.response.SignInResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,8 +56,8 @@ public class AuthController {
   @DeleteMapping("/auth/sign-out")
   public Api<Void> signOutAdmin(HttpServletRequest request, HttpServletResponse response) {
     String accessToken = extractAccessTokenInHeader(request);
-    CookieUtils.deleteCookie(response);
     authService.signOut(accessToken);
+    CookieUtils.deleteCookie(response);
     return Api.ok(SuccessCode.SUCCESS, null);
   }
 
