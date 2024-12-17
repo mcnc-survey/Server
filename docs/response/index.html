@@ -447,7 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel2">
 <li><a href="#_설문에_대한_사용자의_응답">설문에 대한 사용자의 응답</a></li>
-<li><a href="#_사용자가_작성한_응답_전체_조회">사용자가 작성한 응답 전체 조회</a></li>
+<li><a href="#_사용자가_작성한_응답_조회">사용자가 작성한 응답 조회</a></li>
 <li><a href="#_응답_수정">응답 수정</a></li>
 <li><a href="#_설문에_대한_사용자의_응답_집계">설문에 대한 사용자의 응답 집계</a></li>
 </ul>
@@ -595,7 +595,7 @@ Content-Length: 75
 </div>
 </div>
 <div class="sect2">
-<h3 id="_사용자가_작성한_응답_전체_조회"><a class="link" href="#_사용자가_작성한_응답_전체_조회">사용자가 작성한 응답 전체 조회</a></h3>
+<h3 id="_사용자가_작성한_응답_조회"><a class="link" href="#_사용자가_작성한_응답_조회">사용자가 작성한 응답 조회</a></h3>
 <div class="sect3">
 <h4 id="_request_2"><a class="link" href="#_request_2">Request</a></h4>
 <div class="listingblock">
@@ -624,7 +624,7 @@ Host: localhost:8080</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>surveyId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답자 ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 ID</p></td>
 </tr>
 </tbody>
 </table>
@@ -660,11 +660,30 @@ Host: localhost:8080</code></pre>
   "success" : true,
   "resultCode" : "200",
   "message" : "OK",
-  "body" : [ {
-    "id" : "uuid-32",
-    "orderNumber" : 1,
-    "response" : "test result"
-  } ]
+  "body" : {
+    "surveySnippet" : {
+      "id" : "42cec33e-4473-4241-b311-1a533106e8fb",
+      "title" : "고객 만족도 조사5",
+      "description" : "서비스에 대한 피드백을 받고자 설문을 진행합니다.",
+      "question" : [ {
+        "id" : "3af1fbc5-4c4f-4fd1-bf48-15788c0eadfb",
+        "title" : "서비스에 만족하셨습니까?",
+        "questionType" : "SINGLE_CHOICE",
+        "order" : 1,
+        "columns" : [ "매우 불만족", "불만족", "보통", "만족", "매우 만족" ],
+        "required" : true,
+        "etc" : false
+      } ],
+      "startDateTime" : "2024-12-09 17:51",
+      "endDateTime" : "2024-12-09 17:51"
+    },
+    "responseResult" : {
+      "1" : {
+        "id" : "3af1fbc5-4c4f-4fd1-bf48-15788c0eadfb",
+        "response" : "만족"
+      }
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -702,23 +721,98 @@ Host: localhost:8080</code></pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">응답 데이터</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].id</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 정보</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].orderNumber</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 설명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문의 질문 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question[].questionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 유형</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question[].order</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">응답 순번</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 순서</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].response</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question[].columns</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 선택 컬럼 명들</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question[].required</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">필수 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.question[].etc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">기타 항목 선택 가능 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.startDateTime</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">답변</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 시작 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySnippet.endDateTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.responseResult</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문에 대한 나의 응답 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.responseResult.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1번 항목에 대한 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.responseResult.1.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1번 질문의 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.responseResult.1.response</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1번 질문의 나의 응답</p></td>
 </tr>
 </tbody>
 </table>
@@ -887,7 +981,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 1363
+Content-Length: 1410
 
 {
   "success" : true,
@@ -895,18 +989,12 @@ Content-Length: 1363
   "message" : "OK",
   "body" : {
     "surveySummary" : {
+      "title" : "우당탕탕 설문 조사",
       "respondentCount" : 2,
       "endDate" : "2024-12-26T13:56",
       "lastModifiedDate" : "2024-12-09"
     },
     "surveyResults" : {
-      "3" : {
-        "questionId" : "e4a10b03-955b-4705-8422-2045aadba5e6",
-        "questionTitle" : "하고싶은 말을 적어주세요",
-        "questionType" : "SHORT_ANSWER",
-        "totalResponseCount" : 2,
-        "responses" : [ "집에 가고 싶다네요", "집집집" ]
-      },
       "2" : {
         "questionId" : "ede654e3-0f1b-47bd-a930-89548b8cbfac",
         "questionTitle" : "좋아하는 메뉴를 골라주세요",
@@ -932,6 +1020,13 @@ Content-Length: 1363
           "text" : "매우 만족",
           "count" : 2
         } ]
+      },
+      "3" : {
+        "questionId" : "e4a10b03-955b-4705-8422-2045aadba5e6",
+        "questionTitle" : "하고싶은 말을 적어주세요",
+        "questionType" : "SHORT_ANSWER",
+        "totalResponseCount" : 2,
+        "responses" : [ "집에 가고 싶다네요", "집집집" ]
       }
     }
   }
@@ -976,6 +1071,11 @@ Content-Length: 1363
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySummary</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">결과 요약</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySummary.title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveySummary.respondentCount</code></p></td>

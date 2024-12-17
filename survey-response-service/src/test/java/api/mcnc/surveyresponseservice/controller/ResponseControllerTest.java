@@ -1,9 +1,12 @@
 package api.mcnc.surveyresponseservice.controller;
 
 import api.mcnc.surveyresponseservice.RestDocsConfig;
+import api.mcnc.surveyresponseservice.client.survey.response.Question;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponseUpdate;
 import api.mcnc.surveyresponseservice.controller.request.ResponseUpdateRequest;
 import api.mcnc.surveyresponseservice.controller.response.ResponseResult;
+import api.mcnc.surveyresponseservice.controller.response.SurveyResponsesResponse;
+import api.mcnc.surveyresponseservice.controller.response.SurveySnippet;
 import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import api.mcnc.surveyresponseservice.service.ResponseService;
 import org.junit.jupiter.api.Test;
@@ -19,7 +22,9 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Map;
 
+import static api.mcnc.surveyresponseservice.entity.response.QuestionType.SINGLE_CHOICE;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -27,7 +32,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.JsonFieldType.BOOLEAN;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -54,9 +59,29 @@ class ResponseControllerTest {
   @Test
   void 사용자_응답_조회() throws Exception {
     // given
-    ResponseResult response = ResponseResult.builder().id("uuid-32").orderNumber(1).response("test result").build();
+    SurveySnippet snippet = SurveySnippet.builder()
+      .id("42cec33e-4473-4241-b311-1a533106e8fb")
+      .title("고객 만족도 조사5")
+      .description("서비스에 대한 피드백을 받고자 설문을 진행합니다.")
+      .question(
+        List.of(Question.builder()
+            .id("3af1fbc5-4c4f-4fd1-bf48-15788c0eadfb")
+              .title("서비스에 만족하셨습니까?")
+            .questionType(SINGLE_CHOICE)
+            .order(1)
+            .columns("매우 불만족|`|불만족|`|보통|`|만족|`|매우 만족")
+            .required(true)
+            .etc(false)
+          .build())
+      )
+      .startDateTime("2024-12-09 17:51")
+      .endDateTime("2024-12-09 17:51")
+      .build();
+
+    Map<Integer, ResponseResult> response = Map.of(1, ResponseResult.builder().id("3af1fbc5-4c4f-4fd1-bf48-15788c0eadfb").response("만족").build());
+    SurveyResponsesResponse surveyResponsesResponse = SurveyResponsesResponse.of(snippet, response);
     given(responseService.getAllMyResponseResults(anyString()))
-      .willReturn(List.of(response));
+      .willReturn(surveyResponsesResponse);
 
     mockMvc.perform(
         RestDocumentationRequestBuilders.get("/responses/{surveyId}", "{surveyId}")
@@ -71,15 +96,31 @@ class ResponseControllerTest {
           ),
           responseFields(
             fieldWithPath("success").type(BOOLEAN).description("결과 코드"),
-            fieldWithPath("resultCode").type(JsonFieldType.STRING).description("응답 코드"),
-            fieldWithPath("message").type(JsonFieldType.STRING).description("응답 메시지"),
-            fieldWithPath("body").type(JsonFieldType.ARRAY).description("응답 데이터"),
-            fieldWithPath("body[].id").type(JsonFieldType.STRING).description("아이디"),
-            fieldWithPath("body[].orderNumber").type(JsonFieldType.NUMBER).description("응답 순번"),
-            fieldWithPath("body[].response").type(JsonFieldType.STRING).description("답변")
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지"),
+            fieldWithPath("body").type(OBJECT).description("응답 데이터"),
+            fieldWithPath("body.surveySnippet").type(OBJECT).description("설문 정보"),
+            fieldWithPath("body.surveySnippet.id").type(STRING).description("설문 아이디"),
+            fieldWithPath("body.surveySnippet.title").type(STRING).description("설문 제목"),
+            fieldWithPath("body.surveySnippet.description").type(STRING).description("설문 설명"),
+            fieldWithPath("body.surveySnippet.question").type(ARRAY).description("설문의 질문 정보"),
+            fieldWithPath("body.surveySnippet.question[].id").type(STRING).description("질문 아이디"),
+            fieldWithPath("body.surveySnippet.question[].title").type(STRING).description("질문 제목"),
+            fieldWithPath("body.surveySnippet.question[].questionType").type(STRING).description("질문 유형"),
+            fieldWithPath("body.surveySnippet.question[].order").type(NUMBER).description("질문 순서"),
+            fieldWithPath("body.surveySnippet.question[].columns").type(ARRAY).description("질문 선택 컬럼 명들"),
+            fieldWithPath("body.surveySnippet.question[].required").type(BOOLEAN).description("필수 여부"),
+            fieldWithPath("body.surveySnippet.question[].etc").type(BOOLEAN).description("기타 항목 선택 가능 여부"),
+            fieldWithPath("body.surveySnippet.startDateTime").type(STRING).description("설문 시작 날짜"),
+            fieldWithPath("body.surveySnippet.endDateTime").type(STRING).description("설문 종료 날짜"),
+            fieldWithPath("body.responseResult").type(OBJECT).description("설문에 대한 나의 응답 정보"),
+            fieldWithPath("body.responseResult.1").type(OBJECT).description("1번 항목에 대한 정보"),
+            fieldWithPath("body.responseResult.1.id").type(STRING).description("1번 질문의 아이디"),
+            fieldWithPath("body.responseResult.1.response").type(STRING).description("1번 질문의 나의 응답")
+
           ),
           pathParameters(
-            parameterWithName("surveyId").description("응답자 ID")
+            parameterWithName("surveyId").description("설문 ID")
           )
         )
       )
@@ -112,11 +153,11 @@ class ResponseControllerTest {
             headerWithName("Authorization").description("응답자 jwt 토큰")
           ),
           requestFields(
-            fieldWithPath("responses").type(JsonFieldType.ARRAY).description("응답 목록"),
-            fieldWithPath("responses[].questionId").type(JsonFieldType.STRING).description("질문 ID"),
-            fieldWithPath("responses[].questionType").type(JsonFieldType.STRING).description("질문 유형"),
-            fieldWithPath("responses[].orderNumber").type(JsonFieldType.NUMBER).description("질문 순서"),
-            fieldWithPath("responses[].response").type(JsonFieldType.STRING).description("답변")
+            fieldWithPath("responses").type(ARRAY).description("응답 목록"),
+            fieldWithPath("responses[].questionId").type(STRING).description("질문 ID"),
+            fieldWithPath("responses[].questionType").type(STRING).description("질문 유형"),
+            fieldWithPath("responses[].orderNumber").type(NUMBER).description("질문 순서"),
+            fieldWithPath("responses[].response").type(STRING).description("답변")
           ),
           pathParameters(
             parameterWithName("surveyId").description("설문지 ID")
@@ -133,7 +174,7 @@ class ResponseControllerTest {
   void 사용자_응답_수정() throws Exception {
     // given: Mock된 서비스와 데이터 설정
     ResponseUpdateRequest updateRequest = new ResponseUpdateRequest(
-      List.of(new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", QuestionType.SINGLE_CHOICE, "4"))
+      List.of(new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", SINGLE_CHOICE, "4"))
     );
     doNothing().when(responseService).updateResponse(anyString(), anyList());
 
@@ -153,10 +194,10 @@ class ResponseControllerTest {
             headerWithName("Authorization").description("응답자 jwt 토큰")
           ),
           requestFields(
-            fieldWithPath("responses").type(JsonFieldType.ARRAY).description("응답 수정 목록"),
-            fieldWithPath("responses[].id").type(JsonFieldType.STRING).description("응답 ID"),
-            fieldWithPath("responses[].questionType").type(JsonFieldType.STRING).description("질문 유형"),
-            fieldWithPath("responses[].response").type(JsonFieldType.STRING).description("수정된 답변")
+            fieldWithPath("responses").type(ARRAY).description("응답 수정 목록"),
+            fieldWithPath("responses[].id").type(STRING).description("응답 ID"),
+            fieldWithPath("responses[].questionType").type(STRING).description("질문 유형"),
+            fieldWithPath("responses[].response").type(STRING).description("수정된 답변")
           ),
           pathParameters(
             parameterWithName("surveyId").description("설문지 ID")
