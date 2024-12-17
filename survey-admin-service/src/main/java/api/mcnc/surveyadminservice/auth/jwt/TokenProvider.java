@@ -3,6 +3,7 @@ package api.mcnc.surveyadminservice.auth.jwt;
 import api.mcnc.surveyadminservice.auth.service.TokenService;
 import api.mcnc.surveyadminservice.common.enums.TokenErrorCode;
 import api.mcnc.surveyadminservice.common.exception.TokenException;
+import api.mcnc.surveyadminservice.controller.response.TokenValidateResponse;
 import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.entity.admin.AdminRole;
@@ -20,6 +21,8 @@ import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+
+import static api.mcnc.surveyadminservice.common.enums.TokenErrorCode.TOKEN_EXPIRED;
 
 
 @RequiredArgsConstructor
@@ -69,7 +72,7 @@ public class TokenProvider {
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
         // 리프레시 토큰이 유효하지 않으면
-        if (!validateToken(refreshToken)) {
+        if (!validateToken(refreshToken).isValid()) {
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
         Admin authentication = getAuthentication(refreshToken);
@@ -88,13 +91,36 @@ public class TokenProvider {
         return tokenService.updateToken(reissueAccessToken, reissueRefreshToken, token);
     }
 
-    public boolean validateToken(String token) {
-        if (!StringUtils.hasText(token)) {
-            return false;
+    /**
+     * 토큰 검증
+     * @param accessToken 요청 토큰
+     * @return {@link TokenValidateResponse}
+     */
+    public TokenValidateResponse validateToken(String accessToken) {
+        if (!StringUtils.hasText(accessToken)) {
+            return TokenValidateResponse.invalidResponse();
         }
 
-        Claims claims = parseClaims(token);
-        return claims.getExpiration().after(new Date());
+        // 인증된 유저에대한 토큰인지 확인
+        tokenService.findByAccessTokenOrThrow(accessToken);
+
+        Claims claims = parseClaims(accessToken);
+        boolean isValid = claims.getExpiration().after(new Date());
+
+        if(isValid){
+            return TokenValidateResponse.validResponse(claims.getSubject());
+        } else {
+            return TokenValidateResponse.invalidResponse();
+        }
+    }
+
+    /**
+     * 토큰 만료
+     * @param accessToken 요청 토큰
+     */
+    public void expireToken(String accessToken) {
+        Claims claims = parseClaims(accessToken);
+        tokenService.deleteRefreshToken(claims.getSubject());
     }
 
     private String generateAccessToken(Admin authentication) {
