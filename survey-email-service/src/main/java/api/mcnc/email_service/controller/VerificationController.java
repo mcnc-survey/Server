@@ -1,21 +1,30 @@
 package api.mcnc.email_service.controller;
 
 
+import api.mcnc.email_service.dto.EmailVerificationResult;
 import api.mcnc.email_service.dto.HtmlEmailRequest;
+import api.mcnc.email_service.dto.MultipleVerificationResponse;
 import api.mcnc.email_service.service.EmailService;
 import api.mcnc.email_service.service.VerificationCode;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
+
+@Slf4j
 @RestController
 @RequestMapping("/emails")
 @RequiredArgsConstructor
@@ -37,32 +46,74 @@ public class VerificationController {
 
 
     // 인증 코드 요청 API
+//    @PostMapping("/multi-request")
+//    public ResponseEntity<String> requestVerificationCode(@RequestBody List<String> emails) {
+//        try {
+//            // 이메일 목록이 비어 있으면 오류 반환
+//            if (emails == null || emails.isEmpty()) {
+//                return ResponseEntity.badRequest().body("이메일 목록이 비어 있습니다.");
+//            }
+//
+//            // 각 이메일에 대해 고유한 인증 코드를 생성하고 HTML 이메일 발송
+//            for (int i = 0; i < emails.size(); i++) {
+//                String email = emails.get(i);
+//                String verificationCode = emailService.generateMultiVerificationCode(i + 1); // +1, +2, +3으로 고유 코드 생성
+//
+//                // HTML 이메일 발송 및 저장
+//                emailService.sendSingleVerificationEmail(email, verificationCode);
+//                emailService.saveVerificationCode(email, verificationCode);
+//            }
+//
+//            return ResponseEntity.ok("모든 이메일로 인증 코드가 발송되었습니다.");
+//        } catch (Exception e) { // 일반적인 Exception 처리
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패: " + e.getMessage());
+//        }
+//    }
+
     @PostMapping("/multi-request")
-    public ResponseEntity<String> requestVerificationCode(@RequestBody List<String> emails) {
+    public ResponseEntity<MultipleVerificationResponse> requestVerificationCode(@RequestBody List<String> emails) {
+        // 이메일 목록이 비어 있으면 오류 반환
+        if (CollectionUtils.isEmpty(emails)) {
+            return ResponseEntity.badRequest().body(
+                    new MultipleVerificationResponse(false, "이메일 목록이 비어 있습니다.", null)
+            );
+        }
+
         try {
-            // 이메일 목록이 비어 있으면 오류 반환
-            if (emails == null || emails.isEmpty()) {
-                return ResponseEntity.badRequest().body("이메일 목록이 비어 있습니다.");
-            }
+            // 병렬 스트림을 사용해 이메일 처리 성능 개선
+            List<EmailVerificationResult> results = emails.parallelStream()
+                    .map(email -> {
+                        try {
+                            // 인덱스 기반 고유 인증 코드 생성
+                            int index = emails.indexOf(email) + 1;
+                            String verificationCode = emailService.generateMultiVerificationCode(index);
 
-            // 각 이메일에 대해 고유한 인증 코드를 생성하고 HTML 이메일 발송
-            for (int i = 0; i < emails.size(); i++) {
-                String email = emails.get(i);
-                String verificationCode = emailService.generateMultiVerificationCode(i + 1); // +1, +2, +3으로 고유 코드 생성
+                            // 이메일 발송 및 코드 저장
+                            emailService.sendSingleVerificationEmail(email, verificationCode);
+                            emailService.saveVerificationCode(email, verificationCode);
 
-                // HTML 이메일 발송 및 저장
-                emailService.sendSingleVerificationEmail(email, verificationCode);
-                emailService.saveVerificationCode(email, verificationCode);
-            }
+                            return new EmailVerificationResult(email, true, "인증 코드 발송 성공");
+                        } catch (Exception e) {
+                            log.error("이메일 처리 중 오류: {}", email, e);
+                            return new EmailVerificationResult(email, false, e.getMessage());
+                        }
+                    })
+                    .collect(Collectors.toList());
 
-            return ResponseEntity.ok("모든 이메일로 인증 코드가 발송되었습니다.");
-        } catch (Exception e) { // 일반적인 Exception 처리
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패: " + e.getMessage());
+            // 전체 성공 여부 판단
+            boolean overallSuccess = results.stream().allMatch(EmailVerificationResult::isSuccess);
+
+            return ResponseEntity.ok(
+                    new MultipleVerificationResponse(overallSuccess, "모든 이메일로 인증 코드 발송", results)
+            );
+        } catch (Exception e) {
+            log.error("다중 이메일 검증 중 예상치 못한 오류", e);
+            return ResponseEntity.internalServerError().body(
+                    new MultipleVerificationResponse(false, "예상치 못한 오류 발생", null)
+            );
         }
     }
-
-
 
 
 
@@ -109,6 +160,32 @@ public class VerificationController {
 
 
     // 초대 이메일 발송 API
+//    @PostMapping("/invite")
+//    public ResponseEntity<String> sendHtmlVerificationEmails(@RequestBody Map<String, Object> request) {
+//        try {
+//            // Map에서 데이터 추출
+//            List<String> emails = (List<String>) request.get("emails");
+//            String userName = (String) request.get("userName");
+//            String projectName = (String) request.get("projectName");
+//            String dynamicLink = (String) request.get("dynamicLink");
+//
+//            // 이메일 서비스 메서드 호출
+//            emailService.sendInviteEmails(emails, userName, projectName, dynamicLink);
+//
+//            return ResponseEntity.ok ("HTML 이메일 전송 완료.");
+//        } catch (MessagingException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패: " + e.getMessage());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("템플릿 파일 읽기 실패: " + e.getMessage());
+//        } catch (ClassCastException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("요청 데이터 형식이 올바르지 않습니다.");
+//        }
+//    }
+
+
     @PostMapping("/invite")
     public ResponseEntity<String> sendHtmlVerificationEmails(@RequestBody Map<String, Object> request) {
         try {
@@ -118,19 +195,13 @@ public class VerificationController {
             String projectName = (String) request.get("projectName");
             String dynamicLink = (String) request.get("dynamicLink");
 
-            // 이메일 서비스 메서드 호출
-            emailService.sendHtmlVerificationEmails(emails, userName, projectName, dynamicLink);
+            // 이메일을 병렬로 처리
+            emailService.sendInviteEmails(emails, userName, projectName, dynamicLink);
 
             return ResponseEntity.ok("HTML 이메일 전송 완료.");
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이메일 전송 실패: " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("템플릿 파일 읽기 실패: " + e.getMessage());
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("요청 데이터 형식이 올바르지 않습니다.");
         }
     }
 
