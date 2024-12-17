@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import org.springframework.util.StreamUtils;
@@ -30,6 +31,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private String verificationEmailTemplate;
     private String inviteEmailTemplate;
+    private String PWEmailTemplate;
     private final Map<String, VerificationCode> verificationCodes = new ConcurrentHashMap<>();
 
 
@@ -42,6 +44,10 @@ public class EmailService {
         // 프로젝트 초대 이메일 템플릿 로드
         ClassPathResource inviteResource = new ClassPathResource("templates/Email.html");
         inviteEmailTemplate = StreamUtils.copyToString(inviteResource.getInputStream(), StandardCharsets.UTF_8);
+
+        // 비밀번호 재설정 이메일 템플릿 로드
+        ClassPathResource PWResource = new ClassPathResource("templates/PW.html");
+        PWEmailTemplate = StreamUtils.copyToString(PWResource.getInputStream(), StandardCharsets.UTF_8);
 
     }
 
@@ -116,10 +122,38 @@ public class EmailService {
     
     //찾았다 저장 뛰발럼
     public void saveVerificationCode(String email, String code) {
-        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5);
+        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(3);
         verificationCodes.put(email, new VerificationCode(code, expirationTime));
     }
 
+    // 만료된 인증 코드 삭제를 위한 스케줄러
+    @Scheduled(fixedRate = 60000) // 1분마다 실행 (60000밀리초)
+    public void removeExpiredVerificationCodes() {
+        LocalDateTime now = LocalDateTime.now();
+
+        // 만료된 인증 코드 삭제
+        Iterator<Map.Entry<String, VerificationCode>> iterator = verificationCodes.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, VerificationCode> entry = iterator.next();
+            VerificationCode verificationCode = entry.getValue();
+
+            // expirationTime이 LocalDateTime 형식으로 제대로 설정되었는지 확인
+            LocalDateTime expirationTime = verificationCode.getExpirationTime();
+
+            // 만약 expirationTime이 현재 시간보다 이전이면 삭제
+            if (expirationTime != null && expirationTime.isBefore(now)) {
+                iterator.remove();
+            }
+        }
+
+        System.out.println("나 실행중이야");
+    }
+
+
+    //저장된 인증 코드들
+    public Map<String, VerificationCode> getAllVerificationCodes() {
+        return verificationCodes;
+    }
     
     //뭐더라
     public VerificationCode getVerificationCode(String email) {
@@ -187,5 +221,35 @@ public class EmailService {
         });
     }
 
+    //재설정 뭐시기
+    public void sendPWEmail(String toEmail, String userName, String dynamicLink) {
+        try {
+            // 동적 데이터 삽입
+            String htmlContent = PWEmailTemplate
+                    .replace("{{userName}}", userName)
+                    .replace("{{dynamicLink}}", dynamicLink);
+
+            // MimeMessage 생성 및 설정
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(toEmail); // 수신자
+            helper.setSubject("비밀번호 재설정"); // 제목
+            helper.setText(htmlContent, true); // HTML 형식 본문 설정
+
+            mailSender.send(message); // 이메일 전송
+            log.info("PW email sent to {}", toEmail);
+        } catch (MessagingException e) {
+            log.error("Failed to send PW email to {}: {}", toEmail, e.getMessage());
+        }
+    }
+
+    // 여러 비밀번호 재설정 이메일을 비동기적으로 전송하는 메서드
+    @Async
+    public void sendPWEmails(List<String> toEmails, String userName, String dynamicLink) {
+        toEmails.parallelStream().forEach(toEmail -> {
+            sendPWEmail(toEmail, userName, dynamicLink);
+        });
+    }
 
 }
