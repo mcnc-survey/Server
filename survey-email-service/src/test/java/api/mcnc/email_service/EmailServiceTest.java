@@ -40,7 +40,7 @@ public class EmailServiceTest {
     void requestVerificationCodeForMultipleEmails() throws Exception {
         String emailsJson = "[\"test1@example.com\", \"test2@example.com\", \"test3@example.com\"]";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/multi-test")
+        mockMvc.perform(MockMvcRequestBuilders.post("/multi-request")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(emailsJson))
                 .andExpect(MockMvcResultMatchers.status().isOk())

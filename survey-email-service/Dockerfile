@@ -17,10 +17,10 @@ RUN chmod +x ./gradlew  # 실행 권한 부여
 RUN ./gradlew build -x test --stacktrace --no-daemon || return 0
 
 # 프로젝트 소스 복사
-COPY survey-service/ survey-service/
+COPY survey-email-service/ survey-email-service/
 
 # 필요한 모듈 빌드
-RUN ./gradlew :survey-service:build -x test --stacktrace --no-daemon
+RUN ./gradlew :survey-email-service:build -x test --stacktrace --no-daemon
 
 # 2단계: 실행 단계
 FROM openjdk:17-jdk-slim
@@ -29,7 +29,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # 빌드 결과물 복사
-COPY --from=build /app/survey-service/build/libs/*.jar app.jar
+COPY --from=build /app/survey-email-service/build/libs/*.jar app.jar
 ARG CONFIG_SERVER_HOST
 ENV CONFIG_SERVER_HOST=$CONFIG_SERVER_HOST
 # 컨테이너 실행 시 애플리케이션 실행
