@@ -43,7 +43,15 @@ services:
     volumes:
       - vault-data:/vault/data
       - ./vault/config.hcl:/vault/config/config.hcl # 설정 파일 마운트
-    command: vault server -config=/vault/config/config.hcl # 설정 파일로 서버 실행
+    command: >
+      sh -c "
+       echo 'Listing files in /vault/data:' &&
+       ls -l /vault/data &&
+       chmod 755 /vault/data &&
+       echo 'Permissions updated for /vault/data:' &&
+       ls -ld /vault/data &&
+       vault server -config=/vault/config/config.hcl
+      "
     environment:
       - VAULT_ADDR=http://0.0.0.0:8200
 

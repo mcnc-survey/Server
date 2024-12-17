@@ -23,4 +23,4 @@ log_format = "standard"
 pid_file = "/vault/data/vault.pid"
 
 # 메모리 잠금 비활성화 (필요에 따라 조정)
-disable_mlock = false
+disable_mlock = true
