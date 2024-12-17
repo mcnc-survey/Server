@@ -475,14 +475,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /surveys HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 1167
+Content-Length: 1169
 Host: localhost:8080
 
 {
   "title" : "고객 만족도 조사",
   "description" : "서비스에 대한 피드백을 받고자 설문을 진행합니다.",
-  "startAt" : "2024-12-07T14:03:00.107417",
-  "endAt" : "2024-12-10T14:03:00.107417",
+  "startAt" : "2024-12-17T15:23:25.9476376",
+  "endAt" : "2024-12-20T15:23:25.9476376",
   "questions" : [ {
     "title" : "서비스에 만족하셨습니까?",
     "questionType" : "SINGLE_CHOICE",
@@ -682,7 +682,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 403
+Content-Length: 481
 
 {
   "success" : true,
@@ -692,6 +692,8 @@ Content-Length: 403
     "id" : "7a762f88-0aa9-48b0-8a12-fc680523cd67",
     "title" : "고객 만족도 조사",
     "status" : "ON",
+    "startAt" : "2024-11-20T13:56:00",
+    "endAt" : "2024-12-20T13:56:00",
     "lastModifiedAt" : "2024-11-20T13:56:00",
     "surveyLink" : "http://설문 응답할 프론트 페이지 주소?t=YzNhOWFlNGMtMDBhNi00MTY5LTlhYzEtNGNiYmMzZmJjMzdi",
     "isLike" : true
@@ -751,9 +753,19 @@ Content-Length: 403
 <td class="tableblock halign-left valign-top"><p class="tableblock">설문 상태 (ON, WAIT, DELETE, EDIT, END)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].lastModifiedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].startAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 시작일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].endAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].lastModifiedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 마지막 수정일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].surveyLink</code></p></td>
@@ -1290,7 +1302,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 408
+Content-Length: 486
 
 {
   "success" : true,
@@ -1300,6 +1312,8 @@ Content-Length: 408
     "id" : "258f2844-a2d9-44af-a058-02b199615656",
     "title" : "고객 만족도 조사",
     "status" : "DELETE",
+    "startAt" : "2024-11-25T15:36:00",
+    "endAt" : "2024-12-25T15:36:00",
     "lastModifiedAt" : "2024-11-25T15:36:00",
     "surveyLink" : "http://설문 응답할 프론트 페이지 주소?t=YzNhOWFlNGMtMDBhNi00MTY5LTlhYzEtNGNiYmMzZmJjMzdi",
     "isLike" : false
@@ -1359,9 +1373,19 @@ Content-Length: 408
 <td class="tableblock halign-left valign-top"><p class="tableblock">설문 상태 (ON, WAIT, DELETE, EDIT, END)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].lastModifiedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].startAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 시작일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].endAt</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">설문 종료일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].lastModifiedAt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">설문 마지막 수정일 (ISO-8601 형식, 예: 2024-11-20T13:56:00)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>body[].surveyLink</code></p></td>
@@ -1580,8 +1604,8 @@ Host: localhost:8080
 {
   "title" : "Customer Satisfaction Survey",
   "description" : "This survey aims to collect feedback on customer satisfaction.",
-  "startAt" : "2024-12-07T14:03:00.2212056",
-  "endAt" : "2024-12-10T14:03:00.2212056",
+  "startAt" : "2024-12-17T15:23:26.0438339",
+  "endAt" : "2024-12-20T15:23:26.0438339",
   "updateQuestionList" : [ {
     "id" : null,
     "title" : "만족도",

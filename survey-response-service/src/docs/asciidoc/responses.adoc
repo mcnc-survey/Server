@@ -19,7 +19,7 @@ include::{snippets}/saveResponse/http-response.adoc[]
 
 '''
 
-=== 사용자가 작성한 응답 전체 조회
+=== 사용자가 작성한 응답 조회
 
 ==== Request
 
