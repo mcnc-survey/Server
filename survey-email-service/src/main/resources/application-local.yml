@@ -1,0 +1,9 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://survey-discovery:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
