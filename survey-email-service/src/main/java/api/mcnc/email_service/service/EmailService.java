@@ -193,12 +193,11 @@ public class EmailService {
 //    }
 
     // 프로젝트 초대 이메일을 비동기적으로 보내는 메서드
-    public void sendInviteEmail(String toEmail, String userName, String projectName, String dynamicLink) {
+    public void sendInviteEmail(String toEmail, String projectName, String dynamicLink) {
         try {
             // 동적 데이터 삽입
             String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 a hh:mm"));
             String htmlContent = inviteEmailTemplate
-                    .replace("{{userName}}", userName)
                     .replace("{{projectName}}", projectName)
                     .replace("{{date}}", currentDate)
                     .replace("{{dynamicLink}}", dynamicLink);
@@ -220,9 +219,9 @@ public class EmailService {
 
     // 여러 초대 이메일을 비동기적으로 전송하는 메서드
     @Async
-    public void sendInviteEmails(List<String> toEmails, String userName, String projectName, String dynamicLink) {
+    public void sendInviteEmails(List<String> toEmails, String projectName, String dynamicLink) {
         toEmails.parallelStream().forEach(toEmail -> {
-            sendInviteEmail(toEmail, userName, projectName, dynamicLink);
+            sendInviteEmail(toEmail, projectName, dynamicLink);
         });
     }
 

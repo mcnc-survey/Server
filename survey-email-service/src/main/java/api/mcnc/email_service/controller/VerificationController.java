@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.sql.Struct;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -73,18 +74,16 @@ public class VerificationController {
 //    }
 
     @PostMapping("/multi-request")
-    public ResponseEntity<MultipleVerificationResponse> requestVerificationCode(@RequestBody List<String> emails) {
+    public ResponseEntity<String> requestVerificationCode(@RequestBody List<String> emails) {
         // 이메일 목록이 비어 있으면 오류 반환
         if (CollectionUtils.isEmpty(emails)) {
-            return ResponseEntity.badRequest().body(
-                    new MultipleVerificationResponse(false, "이메일 목록이 비어 있습니다.", null)
-            );
+            return ResponseEntity.badRequest().body("이메일 목록이 비어 있습니다.");
         }
 
         try {
             // 병렬 스트림을 사용해 이메일 처리 성능 개선
-            List<EmailVerificationResult> results = emails.parallelStream()
-                    .map(email -> {
+            emails.parallelStream()
+                    .forEach(email -> {
                         try {
                             // 인덱스 기반 고유 인증 코드 생성
                             int index = emails.indexOf(email) + 1;
@@ -94,25 +93,16 @@ public class VerificationController {
                             emailService.sendSingleVerificationEmail(email, verificationCode);
                             emailService.saveVerificationCode(email, verificationCode);
 
-                            return new EmailVerificationResult(email, true, "인증 코드 발송 성공");
                         } catch (Exception e) {
                             log.error("이메일 처리 중 오류: {}", email, e);
-                            return new EmailVerificationResult(email, false, e.getMessage());
                         }
-                    })
-                    .collect(Collectors.toList());
+                    });
 
-            // 전체 성공 여부 판단
-            boolean overallSuccess = results.stream().allMatch(EmailVerificationResult::isSuccess);
 
-            return ResponseEntity.ok(
-                    new MultipleVerificationResponse(overallSuccess, "모든 이메일로 인증 코드 발송", results)
-            );
+            return ResponseEntity.ok("모든 이메일로 인증 코드 발송");
         } catch (Exception e) {
             log.error("다중 이메일 검증 중 예상치 못한 오류", e);
-            return ResponseEntity.internalServerError().body(
-                    new MultipleVerificationResponse(false, "예상치 못한 오류 발생", null)
-            );
+            return ResponseEntity.internalServerError().body("예상치 못한 오류 발생");
         }
     }
 
@@ -160,6 +150,7 @@ public class VerificationController {
         return true; // 인증 성공
     }
 
+    // 인증 검증이 됐는지 검증
     @PostMapping("/check-valid")
     public String isValidDeleteCodes(@RequestParam String email) {
         VerificationCode storedValid = emailService.getVerificationCode(email);
@@ -218,12 +209,11 @@ public class VerificationController {
         try {
             // Map에서 데이터 추출
             List<String> emails = (List<String>) request.get("emails");
-            String userName = (String) request.get("userName");
             String projectName = (String) request.get("projectName");
             String dynamicLink = (String) request.get("dynamicLink");
 
             // 이메일을 병렬로 처리
-            emailService.sendInviteEmails(emails, userName, projectName, dynamicLink);
+            emailService.sendInviteEmails(emails, projectName, dynamicLink);
 
             return ResponseEntity.ok("HTML 이메일 전송 완료.");
         } catch (Exception e) {
