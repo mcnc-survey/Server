@@ -48,9 +48,11 @@ public class JwtProvider {
       .compact();
   }
 
-  public String extractSubject(String token) {
+  public TokenExtractResponse extractSubject(String token) {
     Claims claims = parseClaims(token);
-    return claims.getSubject();
+    String respondentId = claims.getSubject();
+    String surveyId = claims.get("surveyId", String.class);
+    return TokenExtractResponse.of(respondentId, surveyId);
   }
 
   private Claims parseClaims(String token) {
