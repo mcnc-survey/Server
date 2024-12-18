@@ -19,7 +19,7 @@ public class EmailClientService {
 
   private static final String URI = "https://mcnc-survey-client.vercel.app/help/reset";
   private static final String KEY_URL = "dynamicLink";
-  private static final String KEY_EMAIL = "emails";
+  private static final String KEY_EMAIL = "email";
   private static final String KEY_USER_NAME = "userName";
   private static final String KEY_TOKEN = "token";
   private final EmailClient emailClient;
