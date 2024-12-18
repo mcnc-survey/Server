@@ -2,7 +2,6 @@ package api.mcnc.email_service.controller;
 
 
 import api.mcnc.email_service.dto.EmailVerificationResult;
-import api.mcnc.email_service.dto.HtmlEmailRequest;
 import api.mcnc.email_service.dto.MultipleVerificationResponse;
 import api.mcnc.email_service.service.EmailService;
 import api.mcnc.email_service.service.VerificationCode;
@@ -17,11 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -160,8 +156,27 @@ public class VerificationController {
             return false; // 인증 코드 만료
         }
 
+        storedCode.setVerified(true);
         return true; // 인증 성공
     }
+
+    @PostMapping("/check-valid")
+    public String isValidDeleteCodes(@RequestParam String email) {
+        VerificationCode storedValid = emailService.getVerificationCode(email);
+
+        if (storedValid == null) {
+            return "존재하지 않는 인증 코드입니다.";  // 예외 처리를 추가할 수 있음
+        }
+
+        if (!storedValid.isVerified()) {
+            return "인증이 완료되지 않았습니다."; // 인증이 완료되지 않았을 경우
+        }
+
+        // 인증이 완료되었을 경우
+        emailService.removeVerificationCode(email);
+        return "인증 완료. 삭제 가능."; // 더 명확한 메시지
+    }
+
 
     // 저장된 인증코드들 확인용
     @GetMapping("/verification-codes")
@@ -221,12 +236,13 @@ public class VerificationController {
     public ResponseEntity<String> sendPWEmails(@RequestBody Map<String, Object> request) {
         try {
             // Map에서 데이터 추출
-            List<String> emails = (List<String>) request.get("emails");
+            String emails = request.get("email").toString();
             String userName = (String) request.get("userName");
             String dynamicLink = (String) request.get("dynamicLink");
+            String token = (String) request.get("token");
 
             // 이메일을 병렬로 처리
-            emailService.sendPWEmails(emails, userName, dynamicLink);
+            emailService.sendPWEmail(emails, userName, dynamicLink, token);
 
             return ResponseEntity.ok("PW 이메일 전송 완료.");
         } catch (Exception e) {
