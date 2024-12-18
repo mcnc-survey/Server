@@ -108,13 +108,9 @@ public class AuthService {
     String newPassword = request.getNewPassword();
     String token = request.getToken();
 
-    TokenValidateResponse tokenValidateResponse = tokenProvider.validateToken(token);
+    String adminId = tokenProvider.validateTokenAndExtractAdminId(token)
+      .orElseThrow(() -> new AdminException(TokenErrorCode.INVALID_TOKEN));
 
-    if(!tokenValidateResponse.isValid()) {
-      throw new AdminException(TokenErrorCode.INVALID_TOKEN);
-    }
-
-    String adminId = tokenValidateResponse.adminId();
     adminRepository.changePassword(adminId, newPassword);
   }
 
