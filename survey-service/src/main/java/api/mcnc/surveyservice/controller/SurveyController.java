@@ -4,6 +4,7 @@ import api.mcnc.surveyservice.common.enums.SuccessCode;
 import api.mcnc.surveyservice.common.result.Api;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyDeleteOrRestoreRequest;
+import api.mcnc.surveyservice.controller.request.SurveyInviteRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
@@ -97,6 +98,12 @@ public class SurveyController {
   @GetMapping("/surveys/survey-id/{surveyId}/like")
   public Api<SurveyDetailsResponse> onSurveyBookmark(@PathVariable("surveyId") String surveyId) {
     surveyService.like(surveyId);
+    return Api.ok(SuccessCode.SUCCESS, null);
+  }
+
+  @PostMapping("/surveys/survey-id/{surveyId}/invite")
+  public Api<Void> inviteSurvey(@PathVariable("surveyId") String surveyId, @RequestBody @Valid SurveyInviteRequest request) {
+    surveyService.invite(surveyId, request.emails());
     return Api.ok(SuccessCode.SUCCESS, null);
   }
 

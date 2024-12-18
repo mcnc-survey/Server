@@ -41,8 +41,11 @@ public record Survey(
       .build();
   }
 
+  public String surveyLink() {
+    return SURVEY_LINK + Base64.encodeBase64String(this.id.getBytes());
+  }
+
   public SurveyResponse toResponse() {
-    String surveyLink = SURVEY_LINK + Base64.encodeBase64String(this.id.getBytes());
     return SurveyResponse.builder()
       .id(this.id)
       .title(this.title)
@@ -50,7 +53,7 @@ public record Survey(
       .lastModifiedAt(this.modifiedAt.toString())
       .startAt(this.startAt.toString())
       .endAt(this.endAt.toString())
-      .surveyLink(surveyLink)
+      .surveyLink(this.surveyLink())
       .isLike(SurveyLike.LIKE.equals(this.like))
       .build();
   }
