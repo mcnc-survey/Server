@@ -1,6 +1,7 @@
 package api.mcnc.surveyservice.service.survey;
 
 import api.mcnc.surveyservice.client.AdminServiceClientService;
+import api.mcnc.surveyservice.client.EmailClientService;
 import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
@@ -45,6 +46,7 @@ public class SurveyService {
   private final UpdateSurveyStatusRepository updateSurveyStatusRepository;
 
   private final AdminServiceClientService adminServiceClientService;
+  private final EmailClientService emailClientService;
 
   private final SurveyValidator surveyValidator;
 
@@ -167,6 +169,11 @@ public class SurveyService {
     getAdminId();
     updateSurveyRepository.updateLike(surveyId);
 
+  }
+
+  public void invite(String surveyId, List<String> emails) {
+    Survey survey = getSurvey(surveyId);
+    emailClientService.sendHtmlVerificationEmails(survey.title(), emails);
   }
 
   // ==============================
