@@ -15,3 +15,6 @@ include::survey_fetch.adoc[]
 
 '''
 include::survey_update.adoc[]
+
+'''
+include::survey_invite.adoc[]
