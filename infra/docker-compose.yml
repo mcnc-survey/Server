@@ -168,6 +168,19 @@ services:
       survey-config-server:
         condition: service_healthy
 
+  survey-email-service:
+    image: survey-email-service:latest
+    container_name: survey-email-service
+    ports:
+      - "9002:9002"
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - survey-network
+    depends_on:
+      survey-config-server:
+        condition: service_healthy
+
 volumes:
   redis-data:
   postgres-data:
