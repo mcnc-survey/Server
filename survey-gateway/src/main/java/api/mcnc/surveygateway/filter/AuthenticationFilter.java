@@ -35,7 +35,12 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 String token = authHeader.substring(7);
                 return validateToken(token)
-                        .flatMap(response -> proceedWithUserId(response.adminId(), exchange, chain))
+                        .flatMap(response -> {
+                            if (!response.isValid()) {
+                                return handleAuthenticationError(exchange, new RuntimeException("만료된 토큰 입니다."));
+                            }
+                            return proceedWithUserId(response.adminId(), exchange, chain);
+                        })
                         .switchIfEmpty(chain.filter(exchange)) // If token is invalid, continue without setting userId
                         .onErrorResume(e -> handleAuthenticationError(exchange, e)); // Handle errors
             }

@@ -2,10 +2,7 @@ package api.mcnc.surveyservice.controller;
 
 import api.mcnc.surveyservice.RestDocsConfig;
 import api.mcnc.surveyservice.common.audit.interceptor.RequestedByInterceptor;
-import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
-import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
-import api.mcnc.surveyservice.controller.request.SurveyDeleteOrRestoreRequest;
-import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
+import api.mcnc.surveyservice.controller.request.*;
 import api.mcnc.surveyservice.controller.response.*;
 import api.mcnc.surveyservice.entity.question.QuestionType;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
@@ -21,10 +18,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -490,6 +487,38 @@ class SurveyControllerTest {
             fieldWithPath("body[]").type(ARRAY).description("설문 목록"),
             fieldWithPath("body[].id").type(STRING).description("설문 ID"),
             fieldWithPath("body[].title").type(STRING).description("설문 제목")
+          )
+        )
+      )
+      .andDo(print());
+  }
+
+  @Test
+  void 설문_초대_메일_보내기() throws Exception {
+    String surveyId = "000fcb52-c77a-4b1d-b8ea-c4fea4af544f";
+    List<String> emails = Collections.singletonList("example@example.com");
+    SurveyInviteRequest request = new SurveyInviteRequest(emails);
+    String body = objectMapper.writeValueAsString(request);
+    doNothing().when(surveyService).invite(anyString(), anyList());
+
+    mockMvc.perform(
+      post("/surveys/survey-id/{surveyId}/invite", surveyId)
+        .contentType(APPLICATION_JSON)
+        .content(body)
+      )
+      .andExpect(status().isOk())
+      .andDo(
+        document("surveyInvite", // RestDocs 문서화 작업
+          pathParameters(
+            parameterWithName("surveyId").description("설문 ID")
+          ),
+          requestFields(
+            fieldWithPath("emails").type(ARRAY).description("초대할 이메일 목록")
+          ),
+          responseFields(
+            fieldWithPath("success").type(BOOLEAN).description("성공 여부"),
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지")
           )
         )
       )

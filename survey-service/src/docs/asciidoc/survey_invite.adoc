@@ -1,0 +1,16 @@
+=== 설문 초대
+==== request
+include::{snippets}/surveyInvite/http-request.adoc[]
+
+===== path parameters
+include::{snippets}/surveyInvite/path-parameters.adoc[]
+
+===== fields
+include::{snippets}/surveyInvite/request-fields.adoc[]
+
+==== response
+include::{snippets}/surveyInvite/response-body.adoc[]
+
+===== fields
+include::{snippets}/surveyInvite/response-fields.adoc[]
+
