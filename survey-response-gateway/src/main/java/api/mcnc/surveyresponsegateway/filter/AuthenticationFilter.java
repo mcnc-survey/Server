@@ -6,6 +6,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
@@ -38,7 +39,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         String token = authHeader.substring(7);
 
         return validateToken(token)
-          .flatMap(userId -> proceedWithUserId(userId, exchange, chain))
+          // TODO 2024-12-18 yhj : 필터에서 userId, respondentId
+          .flatMap(tokenExtract -> {
+            if (exchange.getRequest().getPath().toString().equals("/responses")) {
+              return proceedWithUserIdAndRewritePath(tokenExtract, exchange, chain);
+            }
+            return proceedWithUserId(tokenExtract.respondentId(), exchange, chain);
+          })
           .switchIfEmpty(chain.filter(exchange)) // If token is invalid, continue without setting userId
           .onErrorResume(e -> handleAuthenticationError(exchange)); // Handle errors
       }
@@ -53,17 +60,35 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     return exchange.getResponse().setComplete();
   }
 
-  private Mono<String> validateToken(String token) {
+  private Mono<TokenExtractResponse> validateToken(String token) {
     return webClient.post()
       .uri("/token-validation")
       .bodyValue("{\"accessToken\":\"" + token + "\"}")
       .header("Content-Type", "application/json")
       .retrieve()
-      .bodyToMono(String.class);
+      .bodyToMono(TokenExtractResponse.class);
   }
 
-  private Mono<Void> proceedWithUserId(String userId, ServerWebExchange exchange, GatewayFilterChain chain) {
-    exchange.getRequest().mutate().header("requested-by", userId);
+  private Mono<Void> proceedWithUserIdAndRewritePath(TokenExtractResponse tokenExtract, ServerWebExchange exchange, GatewayFilterChain chain) {
+    String respondentId = tokenExtract.respondentId();
+    String surveyId = tokenExtract.surveyId();
+
+    // 새 경로 생성: /responses/<respondentId>
+    String newPath = "/responses/" + surveyId;
+
+    // 요청의 URI를 변경
+    ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
+      .path(newPath)
+      .build();
+
+    // 새로운 요청으로 교체
+    ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
+    mutatedExchange.getRequest().mutate().header("requested-by", respondentId);
+    return chain.filter(mutatedExchange);
+  }
+
+  private Mono<Void> proceedWithUserId(String respondentId, ServerWebExchange exchange, GatewayFilterChain chain) {
+    exchange.getRequest().mutate().header("requested-by", respondentId);
     return chain.filter(exchange);
   }
 

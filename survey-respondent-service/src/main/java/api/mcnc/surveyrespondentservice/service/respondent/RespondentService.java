@@ -1,5 +1,6 @@
 package api.mcnc.surveyrespondentservice.service.respondent;
 
+import api.mcnc.surveyrespondentservice.authentication.jwt.TokenExtractResponse;
 import api.mcnc.surveyrespondentservice.client.survey.SurveyValidationService;
 import api.mcnc.surveyrespondentservice.common.enums.RespondentErrorCode;
 import api.mcnc.surveyrespondentservice.common.exception.custom.RespondentException;
@@ -49,7 +50,7 @@ public class RespondentService implements RegisterUseCase,  ValidateUseCase{
   }
 
   @Override
-  public String extractSubject(String token) {
+  public TokenExtractResponse extractSubject(String token) {
     return tokenService.extractSubject(token);
   }
 

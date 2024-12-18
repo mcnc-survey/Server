@@ -1,12 +1,12 @@
 spring:
   application:
-  name: email-service
+    name: survey-email-service
 
   config:
     import: email-info.yml
 
 server:
-  port: 9090
+  port: 9002
 
 
 

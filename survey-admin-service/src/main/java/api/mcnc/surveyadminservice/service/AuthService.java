@@ -1,11 +1,15 @@
 package api.mcnc.surveyadminservice.service;
 
 import api.mcnc.surveyadminservice.auth.jwt.TokenProvider;
+import api.mcnc.surveyadminservice.auth.vault.Vault;
+import api.mcnc.surveyadminservice.client.EmailClientService;
+import api.mcnc.surveyadminservice.common.enums.TokenErrorCode;
 import api.mcnc.surveyadminservice.common.exception.AdminException;
 import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
 import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
+import api.mcnc.surveyadminservice.controller.request.PasswordChangeRequest;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
-import api.mcnc.surveyadminservice.controller.response.TokenResponse;
+import api.mcnc.surveyadminservice.controller.response.TokenValidateResponse;
 import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.repository.admin.AdminRepository;
@@ -31,6 +35,8 @@ public class AuthService {
   private final AdminRepository adminRepository;
   private final PasswordEncoder passwordEncoder;
   private final TokenProvider tokenProvider;
+  private final EmailClientService emailClientService;
+  private final Vault vaultProvider;
 
   /**
    * 이메일 중복 검사
@@ -84,8 +90,40 @@ public class AuthService {
     throw new AdminException(MISS_MATCH_ADMIN_ACCOUNT);
   }
 
-
+  /**
+   * 로그아웃 <br/>
+   * 토큰 받아서 제거
+   * @param accessToken String
+   */
   public void signOut(String accessToken) {
     tokenProvider.expireToken(accessToken);
+  }
+
+  /**
+   * 비밀번호 변경
+   *
+   * @param request {@link PasswordChangeRequest}
+   */
+  public void changePassword(PasswordChangeRequest request) {
+    String newPassword = request.getNewPassword();
+    String token = request.getToken();
+
+    TokenValidateResponse tokenValidateResponse = tokenProvider.validateToken(token);
+
+    if(!tokenValidateResponse.isValid()) {
+      throw new AdminException(TokenErrorCode.INVALID_TOKEN);
+    }
+
+    String adminId = tokenValidateResponse.adminId();
+    adminRepository.changePassword(adminId, newPassword);
+  }
+
+  public String sendPasswordChangeEmail(String email) {
+    String encryptedEmail = vaultProvider.encrypt(email);
+    Admin admin = adminRepository.getByEmailAdmin(encryptedEmail)
+      .orElseThrow(() -> new AdminException(NOT_FOUND, "가입되지 않은 이메일입니다."));
+    final long EXPIRE_TIME = 1000 * 60 * 5;
+    String token = tokenProvider.generateAccessToken(admin, EXPIRE_TIME);
+    return emailClientService.sendPWEmails(email, admin.name(), token);
   }
 }
