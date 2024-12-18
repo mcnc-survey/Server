@@ -16,16 +16,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class EmailClientService {
 
-  private static final String SURVEY_INVITE_URI = "https://mcnc-survey-client.vercel.app/help/reset";
   public static final String KEY_URL = "dynamicLink";
   public static final String KEY_EMAIL_LIST = "emails";
   public static final String KEY_PROJECT_NAME = "projectName";
 
   private final EmailClient emailClient;
 
-  public void sendHtmlVerificationEmails(String title, List<String> emails) {
+  public void sendHtmlVerificationEmails(String title, String inviteUrl, List<String> emails) {
     Map<String, Object> sendData = Map.of(
-      KEY_URL, SURVEY_INVITE_URI,
+      KEY_URL, inviteUrl,
       KEY_EMAIL_LIST, emails,
       KEY_PROJECT_NAME, title
     );

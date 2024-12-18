@@ -173,7 +173,7 @@ public class SurveyService {
 
   public void invite(String surveyId, List<String> emails) {
     Survey survey = getSurvey(surveyId);
-    emailClientService.sendHtmlVerificationEmails(survey.title(), emails);
+    emailClientService.sendHtmlVerificationEmails(survey.title(), survey.surveyLink(),emails);
   }
 
   // ==============================
