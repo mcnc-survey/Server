@@ -1,13 +1,12 @@
 package api.mcnc.surveyadminservice.controller;
 
+import api.mcnc.surveyadminservice.common.annotation.EmailEncryption;
 import api.mcnc.surveyadminservice.common.enums.SuccessCode;
 import api.mcnc.surveyadminservice.common.enums.TokenErrorCode;
 import api.mcnc.surveyadminservice.common.exception.AdminException;
 import api.mcnc.surveyadminservice.common.result.Api;
 import api.mcnc.surveyadminservice.common.utils.CookieUtils;
-import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
-import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
-import api.mcnc.surveyadminservice.controller.request.EmailDuplicateCheckRequest;
+import api.mcnc.surveyadminservice.controller.request.*;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
 import api.mcnc.surveyadminservice.controller.response.TokenResponse;
 import api.mcnc.surveyadminservice.service.AuthService;
@@ -16,10 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * please explain class!
@@ -58,6 +54,18 @@ public class AuthController {
     String accessToken = extractAccessTokenInHeader(request);
     authService.signOut(accessToken);
     CookieUtils.deleteCookie(response);
+    return Api.ok(SuccessCode.SUCCESS, null);
+  }
+
+  @GetMapping("/auth/password-change")
+  public Api<String> sendPasswordChangeEmail(@RequestParam("email") String email) {
+    String resultMessage = authService.sendPasswordChangeEmail(email);
+    return Api.ok(SuccessCode.SUCCESS, resultMessage);
+  }
+
+  @PostMapping("/auth/password-change")
+  public Api<Void> resetPassword(@RequestBody @Valid PasswordChangeRequest request) {
+    authService.changePassword(request);
     return Api.ok(SuccessCode.SUCCESS, null);
   }
 

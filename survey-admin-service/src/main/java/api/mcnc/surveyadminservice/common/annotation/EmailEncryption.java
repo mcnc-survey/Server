@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
  * @since :2024-12-08 오후 8:34
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 public @interface EmailEncryption {
 }

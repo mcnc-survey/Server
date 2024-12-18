@@ -22,8 +22,6 @@ import org.springframework.util.StringUtils;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
-import static api.mcnc.surveyadminservice.common.enums.TokenErrorCode.TOKEN_EXPIRED;
-
 
 @RequiredArgsConstructor
 @Component
@@ -48,7 +46,7 @@ public class TokenProvider {
      * @return {@link Token}
      */
     public Token issue(Admin authentication) {
-        String accessToken = generateAccessToken(authentication);
+        String accessToken = generateAccessToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
         return generateRefreshToken(authentication, accessToken);
     }
 
@@ -123,8 +121,13 @@ public class TokenProvider {
         tokenService.deleteRefreshToken(claims.getSubject());
     }
 
-    private String generateAccessToken(Admin authentication) {
-        return generateToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
+    /**
+     * 토큰 생성
+     * @param authentication {@link Admin }(관리자) 정보
+     * @return 토큰 - String
+     */
+    public String generateAccessToken(Admin authentication, long expireTime) {
+        return generateToken(authentication, expireTime);
     }
 
     private Token generateRefreshToken(Admin authentication, String accessToken) {

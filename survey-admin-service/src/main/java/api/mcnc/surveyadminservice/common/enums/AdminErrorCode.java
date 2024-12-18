@@ -16,7 +16,7 @@ public enum AdminErrorCode implements Code {
   INVALID_REQUEST("A001", "잘못된 요청입니다."),
   NOT_FOUND("A002", "해당 관리자를 찾을 수 없습니다."),
   ALREADY_EXIST("A003", "이미 존재하는 관리자입니다."),
-  MISS_MATCH_ADMIN_ACCOUNT("A004", "관리자 계정이 일치하지 않습니다.")
+  MISS_MATCH_ADMIN_ACCOUNT("A004", "비밀번호 또는 아이디가 일치하지 않습니다.")
 
   ;
 

@@ -75,4 +75,9 @@ public class AdminEntity extends MutableBaseEntity {
       .build();
   }
 
+  public AdminEntity changePassword(String newPassword) {
+    this.password = newPassword;
+    return this;
+  }
+
 }
