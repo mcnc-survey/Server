@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
@@ -26,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class EmailService {
 
     private final JavaMailSender mailSender;
@@ -123,7 +125,7 @@ public class EmailService {
     //찾았다 저장 뛰발럼
     public void saveVerificationCode(String email, String code) {
         LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(3);
-        verificationCodes.put(email, new VerificationCode(code, expirationTime));
+        verificationCodes.put(email, new VerificationCode(code, expirationTime, false));
     }
 
     // 만료된 인증 코드 삭제를 위한 스케줄러
@@ -146,7 +148,6 @@ public class EmailService {
             }
         }
 
-        System.out.println("나 실행중이야");
     }
 
 
@@ -160,6 +161,10 @@ public class EmailService {
         return verificationCodes.get(email);
     }
 
+    // VerificationCode 삭제를 위한 새로운 메서드
+    public void removeVerificationCode(String email) {
+        verificationCodes.remove(email); // 해당 이메일에 대한 인증 코드를 삭제
+    }
     
 //    //뭐더라
 //    public void sendInviteEmails(List<String> toEmails, String userName, String projectName, String dynamicLink) throws MessagingException, IOException {
@@ -222,12 +227,13 @@ public class EmailService {
     }
 
     //재설정 뭐시기
-    public void sendPWEmail(String toEmail, String userName, String dynamicLink) {
+    public void sendPWEmail(String toEmail, String userName, String dynamicLink, String token) {
         try {
             // 동적 데이터 삽입
             String htmlContent = PWEmailTemplate
                     .replace("{{userName}}", userName)
-                    .replace("{{dynamicLink}}", dynamicLink);
+                    .replace("{{dynamicLink}}", dynamicLink)
+                    .replace("{{token}}", token);
 
             // MimeMessage 생성 및 설정
             MimeMessage message = mailSender.createMimeMessage();
@@ -245,11 +251,9 @@ public class EmailService {
     }
 
     // 여러 비밀번호 재설정 이메일을 비동기적으로 전송하는 메서드
-    @Async
-    public void sendPWEmails(List<String> toEmails, String userName, String dynamicLink) {
-        toEmails.parallelStream().forEach(toEmail -> {
-            sendPWEmail(toEmail, userName, dynamicLink);
-        });
-    }
+//    @Async
+//    public void sendPWEmails(String toEmail, String userName, String dynamicLink, String token) {
+//        sendPWEmail(toEmail, userName, dynamicLink, token);
+//    }
 
 }
