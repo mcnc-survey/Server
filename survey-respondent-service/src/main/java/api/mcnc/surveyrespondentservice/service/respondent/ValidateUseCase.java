@@ -1,5 +1,7 @@
 package api.mcnc.surveyrespondentservice.service.respondent;
 
+import api.mcnc.surveyrespondentservice.authentication.jwt.TokenExtractResponse;
+
 /**
  * please explain class!
  *
@@ -8,5 +10,5 @@ package api.mcnc.surveyrespondentservice.service.respondent;
  */
 public interface ValidateUseCase {
   boolean validateRespondent(String respondentId);
-  String extractSubject(String token);
+  TokenExtractResponse extractSubject(String token);
 }

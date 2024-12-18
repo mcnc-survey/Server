@@ -25,6 +25,7 @@ public class AdminRepository {
 
   private final AdminJpaRepository adminJpaRepository;
 
+  @Transactional(readOnly = true)
   public Optional<Admin> getByEmailAndProvider(String email, String provider) {
     return adminJpaRepository.findByEmailAndProvider(email, provider)
       .map(AdminEntity::toDomain);
@@ -41,7 +42,14 @@ public class AdminRepository {
     return saveEntity.toDomain();
   }
 
+  @Transactional(readOnly = true)
   public Optional<Admin> getByEmailAdmin(String email) {
     return this.getByEmailAndProvider(email, EMAIL);
+  }
+
+  public void changePassword(String adminId, String newPassword) {
+    adminJpaRepository.findById(adminId)
+      .map(entity -> entity.changePassword(newPassword))
+      .orElseThrow(() -> new AdminException(AdminErrorCode.NOT_FOUND));
   }
 }

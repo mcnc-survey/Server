@@ -1,5 +1,6 @@
 package api.mcnc.surveyrespondentservice.controller;
 
+import api.mcnc.surveyrespondentservice.authentication.jwt.TokenExtractResponse;
 import api.mcnc.surveyrespondentservice.domain.Token;
 import api.mcnc.surveyrespondentservice.service.respondent.ValidateUseCase;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class ValidationController {
   }
 
   @PostMapping("/token-validation")
-  String extractSubject(@RequestBody Token token){
+  TokenExtractResponse extractSubject(@RequestBody Token token){
     return validateUseCase.extractSubject(token.accessToken());
   }
 

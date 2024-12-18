@@ -1,6 +1,7 @@
 package api.mcnc.surveyrespondentservice.service.token;
 
 import api.mcnc.surveyrespondentservice.authentication.jwt.JwtProvider;
+import api.mcnc.surveyrespondentservice.authentication.jwt.TokenExtractResponse;
 import api.mcnc.surveyrespondentservice.domain.Respondent;
 import api.mcnc.surveyrespondentservice.domain.Token;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class TokenService {
     return Token.of(accessToken);
   }
 
-  public String extractSubject(String token) {
+  public TokenExtractResponse extractSubject(String token) {
     return tokenProvider.extractSubject(token);
   }
 }

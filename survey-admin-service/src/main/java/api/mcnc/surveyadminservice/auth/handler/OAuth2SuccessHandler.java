@@ -46,6 +46,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     return UriComponentsBuilder.fromUriString(uri)
       .queryParam(ACCESS_TOKEN, accessToken)
       .queryParam(USER_NAME, userName)
-      .build(true).toUriString();
+      .encode().toUriString();
   }
 }
