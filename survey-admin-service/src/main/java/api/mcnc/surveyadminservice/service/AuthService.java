@@ -17,6 +17,7 @@ import api.mcnc.surveyadminservice.service.response.AdminSignInResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration;
 
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ public class AuthService {
   private final TokenProvider tokenProvider;
   private final EmailClientService emailClientService;
   private final Vault vaultProvider;
+  private final DelegatingWebMvcConfiguration delegatingWebMvcConfiguration;
 
   /**
    * 이메일 중복 검사
@@ -77,7 +79,8 @@ public class AuthService {
   }
 
   public boolean isValidEmail(String email) {
-    return emailClientService.isValidEmail(email);
+    String decrpytedEmail = vaultProvider.decrypt(email);
+    return emailClientService.isValidEmail(decrpytedEmail);
   }
 
   /**
