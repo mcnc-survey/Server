@@ -1,4 +1,4 @@
-package api.mcnc.surveyservice.client;
+package api.mcnc.surveyservice.client.email;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

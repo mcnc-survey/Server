@@ -1,7 +1,8 @@
 package api.mcnc.surveyservice.service.survey;
 
-import api.mcnc.surveyservice.client.AdminServiceClientService;
-import api.mcnc.surveyservice.client.EmailClientService;
+import api.mcnc.surveyservice.client.admin.AdminServiceClientService;
+import api.mcnc.surveyservice.client.email.EmailClientService;
+import api.mcnc.surveyservice.client.response.ResponseServiceClientService;
 import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
@@ -45,6 +46,7 @@ public class SurveyService {
 
   private final UpdateSurveyStatusRepository updateSurveyStatusRepository;
 
+  private final ResponseServiceClientService responseServiceClientService;
   private final AdminServiceClientService adminServiceClientService;
   private final EmailClientService emailClientService;
 
@@ -87,6 +89,9 @@ public class SurveyService {
 
   public void deleteSurveyList(List<String> surveyIds) {
     String adminId = getAdminId();
+
+    responseServiceClientService.deleteResponse(surveyIds);
+
     deleteSurveyRepository.deleteSurveyList(adminId, surveyIds);
   }
 

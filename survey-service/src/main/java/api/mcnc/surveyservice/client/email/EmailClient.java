@@ -1,4 +1,4 @@
-package api.mcnc.surveyservice.client;
+package api.mcnc.surveyservice.client.email;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

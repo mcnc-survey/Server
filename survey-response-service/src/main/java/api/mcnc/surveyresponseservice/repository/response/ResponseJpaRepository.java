@@ -1,8 +1,10 @@
 package api.mcnc.surveyresponseservice.repository.response;
 
 import api.mcnc.surveyresponseservice.entity.response.ResponseEntity;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,4 +34,9 @@ public interface ResponseJpaRepository extends ListCrudRepository<ResponseEntity
   // 설문에 해당하는 총 응답자 수
   @Query("SELECT COUNT(DISTINCT r.respondentId) FROM ResponseEntity r WHERE r.surveyId = :surveyId")
   Integer countTotalRespondentsBySurveyId(String surveyId);
+
+  @Modifying
+  @Query("DELETE FROM ResponseEntity r WHERE r.surveyId IN :surveyIdList")
+  void deleteIn(@Param("surveyIdList") List<String> surveyIdList);
+
 }
