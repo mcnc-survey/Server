@@ -6,10 +6,7 @@ import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyDeleteOrRestoreRequest;
 import api.mcnc.surveyservice.controller.request.SurveyInviteRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
-import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
-import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
-import api.mcnc.surveyservice.controller.response.SurveyLikeResponse;
-import api.mcnc.surveyservice.controller.response.SurveyResponse;
+import api.mcnc.surveyservice.controller.response.*;
 import api.mcnc.surveyservice.service.survey.SurveyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +27,10 @@ public class SurveyController {
   private final SurveyService surveyService;
 
   @PostMapping("/surveys")
-  public Api<String> createSurvey(@RequestBody @Valid SurveyCreateRequest surveyCreateRequest) {
+  public Api<SurveyCreateResponse> createSurvey(@RequestBody @Valid SurveyCreateRequest surveyCreateRequest) {
     String surveyId = surveyService.setSurveyAndQuestions(surveyCreateRequest);
-    return Api.ok(SuccessCode.SURVEY_CREATE_SUCCESS, surveyId);
+    SurveyCreateResponse surveyCreateResponse = new SurveyCreateResponse(surveyId);
+    return Api.ok(SuccessCode.SURVEY_CREATE_SUCCESS, surveyCreateResponse);
   }
 
   @GetMapping("/surveys")
