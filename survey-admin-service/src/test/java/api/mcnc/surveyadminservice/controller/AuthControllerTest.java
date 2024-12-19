@@ -2,11 +2,9 @@ package api.mcnc.surveyadminservice.controller;
 
 import api.mcnc.surveyadminservice.RestDocsConfig;
 import api.mcnc.surveyadminservice.auth.vault.Vault;
-import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
-import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
-import api.mcnc.surveyadminservice.controller.request.EmailDuplicateCheckRequest;
-import api.mcnc.surveyadminservice.controller.request.PasswordChangeRequest;
+import api.mcnc.surveyadminservice.controller.request.*;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
+import api.mcnc.surveyadminservice.controller.response.EmailVerifyCheckResponse;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.service.AuthService;
 import api.mcnc.surveyadminservice.service.response.AdminSignInResponse;
@@ -26,6 +24,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
@@ -101,6 +100,68 @@ class AuthControllerTest {
   }
 
   @Test
+  void 메일_검증_이메일_송신() throws Exception {
+    EmailVerifyRequest request = new EmailVerifyRequest("example@example.com");
+
+    doNothing().when(authService).checkEmailDuplicateAndSendEmail(request.email());
+
+    mockMvc.perform(
+        post("/auth/email-verify")
+          .contentType(APPLICATION_JSON)
+          .content(objectMapper.writeValueAsString(request))
+      )
+      .andExpect(status().isOk())
+      .andDo(
+        document(
+          "emailSend",
+          requestFields(
+            fieldWithPath("email").type(STRING).description("검증할 이메일")
+          ),
+          responseFields(
+            fieldWithPath("success").type(BOOLEAN).description("성공 여부"),
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지")
+          )
+        )
+      )
+      .andDo(print());
+
+  }
+
+  @Test
+  void 이메일_검증코드_확인() throws Exception {
+    String email = "example@example.com";
+    String code = "sdagrl";
+    EmailVerifyCheckRequest request = new EmailVerifyCheckRequest(email, code);
+
+    EmailVerifyCheckResponse response = new EmailVerifyCheckResponse(true);
+    when(authService.sendEmailVerificationCode(email, code)).thenReturn(response);
+
+    mockMvc.perform(
+        post("/auth/email-verify/check")
+          .contentType(APPLICATION_JSON)
+          .content(objectMapper.writeValueAsString(request))
+      ).andExpect(status().isOk())
+      .andDo(
+        document(
+          "emailVerifyCheck",
+          requestFields(
+            fieldWithPath("email").type(STRING).description("인증 이메일"),
+            fieldWithPath("code").type(STRING).description("인증 코드")
+          ),
+          responseFields(
+            fieldWithPath("success").type(BOOLEAN).description("성공 여부"),
+            fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+            fieldWithPath("message").type(STRING).description("응답 메시지"),
+            fieldWithPath("body").type(OBJECT).description("응답 데이터"),
+            fieldWithPath("body.isValid").type(BOOLEAN).description("검증 성공 여부")
+          )
+        )
+      )
+      .andDo(print());
+  }
+
+  @Test
   void 회원가입() throws Exception {
     String email = "yhj3855@naver.com";
     String encrypt = vault.encrypt(email);
@@ -111,6 +172,8 @@ class AuthControllerTest {
       .phoneNumber("01082003855")
       .password("q1w2e3r4!@")
       .build();
+
+    given(authService.isValidEmail(anyString())).willReturn(true);
 
     willDoNothing().given(authService).signUp(any(AdminSignUpRequest.class));
 
