@@ -152,20 +152,20 @@ public class VerificationController {
 
     // 인증 검증이 됐는지 검증
     @PostMapping("/check-valid")
-    public String isValidDeleteCodes(@RequestParam String email) {
+    public boolean isValidDeleteCodes(@RequestParam String email) {
         VerificationCode storedValid = emailService.getVerificationCode(email);
 
         if (storedValid == null) {
-            return "존재하지 않는 인증 코드입니다.";  // 예외 처리를 추가할 수 있음
+            return false;  // 예외 처리를 추가할 수 있음
         }
 
         if (!storedValid.isVerified()) {
-            return "인증이 완료되지 않았습니다."; // 인증이 완료되지 않았을 경우
+            return false; // 인증이 완료되지 않았을 경우
         }
 
         // 인증이 완료되었을 경우
         emailService.removeVerificationCode(email);
-        return "인증 완료. 삭제 가능."; // 더 명확한 메시지
+        return true; // 더 명확한 메시지
     }
 
 

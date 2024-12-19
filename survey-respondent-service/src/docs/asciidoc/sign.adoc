@@ -1,3 +1,33 @@
+=== 이메일 인증
+
+==== Request
+include::{snippets}/emailSend/http-request.adoc[]
+
+===== fields
+include::{snippets}/emailSend/request-fields.adoc[]
+
+==== Response
+include::{snippets}/emailSend/response-body.adoc[]
+===== fields
+include::{snippets}/emailSend/response-fields.adoc[]
+
+'''
+
+=== 이메일 인증 코드 확인
+
+==== Request
+include::{snippets}/emailVerifyCheck/http-request.adoc[]
+
+===== fields
+include::{snippets}/emailVerifyCheck/request-fields.adoc[]
+
+==== Response
+include::{snippets}/emailVerifyCheck/response-body.adoc[]
+===== fields
+include::{snippets}/emailVerifyCheck/response-fields.adoc[]
+
+'''
+
 === 일반 인증
 
 ==== Request

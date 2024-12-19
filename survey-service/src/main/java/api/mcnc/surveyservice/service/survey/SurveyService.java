@@ -51,7 +51,7 @@ public class SurveyService {
   private final SurveyValidator surveyValidator;
 
   // 설문 저장
-  public void setSurveyAndQuestions(SurveyCreateRequest surveyCreateRequest) {
+  public String setSurveyAndQuestions(SurveyCreateRequest surveyCreateRequest) {
     String adminId = getAdminId();
 
     List<QuestionCreateRequest> questionCreateRequestList = surveyCreateRequest.questions();
@@ -71,7 +71,7 @@ public class SurveyService {
 
     Survey survey = Survey.fromRequest(adminId, title, description, startAt, endAt);
 
-    insertSurveyAndQuestionListRepository.createSurvey(survey, questionList);
+    return insertSurveyAndQuestionListRepository.createSurvey(survey, questionList);
   }
 
   // 작성한 설문 전체 조회
