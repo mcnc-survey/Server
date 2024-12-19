@@ -1,6 +1,5 @@
 package api.mcnc.surveyresponseservice.controller.request;
 
-import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,8 +13,7 @@ public record QuestionResponseUpdate(
   @NotBlank
   String id,
   @NotNull
-  QuestionType questionType,
-  @NotBlank
+  Boolean isRequired,
   String response
 ) {
 }

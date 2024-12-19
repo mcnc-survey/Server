@@ -35,7 +35,7 @@ class ResponseValidatorTest {
     @DisplayName("정상적인 단일 선택 응답은 통과해야 한다")
     void validateSingleChoice_ShouldAcceptValidFormat() {
       // given
-      QuestionResponse response = new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, "1");
+      QuestionResponse response = new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, true, "1");
 
       // when & then
       assertDoesNotThrow(() ->
@@ -49,27 +49,27 @@ class ResponseValidatorTest {
       assertAll(
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, "")
+            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, true, "")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, "0")
+            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, true, "0")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, "-1")
+            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, true, "-1")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, "1,2")
+            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, true, "1,2")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, "abc")
+            new QuestionResponse("1", QuestionType.SINGLE_CHOICE, 1, true, "abc")
           ))
         )
       );
@@ -85,17 +85,17 @@ class ResponseValidatorTest {
       assertAll(
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, "1,2,3")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, true, "1,2,3")
           ))
         ),
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, "1")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, true, "1")
           ))
         ),
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, "1, 2, 3")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, true, "1, 2, 3")
           ))
         )
       );
@@ -107,27 +107,27 @@ class ResponseValidatorTest {
       assertAll(
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, "1,3,,4")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, true, "1,3,,4")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, "1,2,")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, true, "1,2,")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, ",1,2")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1,true,  ",1,2")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, "1,0,2")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, true, "1,0,2")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, "1,abc,2")
+            new QuestionResponse("1", QuestionType.MULTIPLE_CHOICE, 1, true, "1,abc,2")
           ))
         )
       );
@@ -143,17 +143,17 @@ class ResponseValidatorTest {
       assertAll(
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, "테스트 응답입니다")
+            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, true, "테스트 응답입니다")
           ))
         ),
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, "123")
+            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, true, "123")
           ))
         ),
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, "!@#$%")
+            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, true, "!@#$%")
           ))
         )
       );
@@ -165,17 +165,17 @@ class ResponseValidatorTest {
       assertAll(
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, "")
+            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, true, "")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, " ")
+            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, true, " ")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, "\t\n")
+            new QuestionResponse("1", QuestionType.SHORT_ANSWER, 1, true, "\t\n")
           ))
         )
       );
@@ -191,17 +191,17 @@ class ResponseValidatorTest {
       assertAll(
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:2,2:3,3:1")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:2,2:3,3:1")
           ))
         ),
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:1")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:1")
           ))
         ),
         () -> assertDoesNotThrow(() ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:2, 2:3, 3:1")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:2, 2:3, 3:1")
           ))
         )
       );
@@ -213,42 +213,42 @@ class ResponseValidatorTest {
       assertAll(
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:2,,2:3")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:2,,2:3")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:2:3")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:2:3")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:,2:3")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:,2:3")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, ":1,2:3")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, ":1,2:3")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:2,")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:2,")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "0:1,2:3")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "0:1,2:3")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "1:0,2:3")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "1:0,2:3")
           ))
         ),
         () -> assertThrows(ResponseException.class, () ->
           validator.validateResponses(List.of(
-            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, "abc:1,2:3")
+            new QuestionResponse("1", QuestionType.TABLE_SELECT, 1, true, "abc:1,2:3")
           ))
         )
       );
@@ -263,10 +263,10 @@ class ResponseValidatorTest {
     void validateResponseUpdate_ShouldFollowSameRules() {
       // given
       QuestionResponseUpdate validUpdate = new QuestionResponseUpdate(
-        "1", QuestionType.MULTIPLE_CHOICE, "1,2,3"
+        "1", true, "1,2,3"
       );
       QuestionResponseUpdate invalidUpdate = new QuestionResponseUpdate(
-        "2", QuestionType.MULTIPLE_CHOICE, "1,,2,3"
+        "2", true,  "1,,2,3"
       );
 
       // when & then

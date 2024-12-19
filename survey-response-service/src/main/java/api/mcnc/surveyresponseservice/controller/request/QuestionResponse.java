@@ -18,6 +18,8 @@ public record QuestionResponse(
   QuestionType questionType,
   @NotNull @Min(1)
   Integer orderNumber,
+  @NotNull
+  Boolean isRequired,
   @NotBlank
   String response
 ) {
