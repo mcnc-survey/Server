@@ -56,7 +56,8 @@ public class AuthService {
    * @param email String
    */
   public void checkEmailDuplicateAndSendEmail(String email) {
-    EmailDuplicateCheckResponse checkDupResult = checkEmailDuplicate(email);
+    String encryptedEmail = vaultProvider.encrypt(email);
+    EmailDuplicateCheckResponse checkDupResult = checkEmailDuplicate(encryptedEmail);
     if (checkDupResult.getIsDuplicated()) {
       throw new AdminException(ALREADY_EXIST);
     }

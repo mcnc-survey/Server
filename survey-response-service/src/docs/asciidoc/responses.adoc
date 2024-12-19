@@ -51,11 +51,12 @@ include::{snippets}/updateResponse/path-parameters.adoc[]
 ==== headers
 include::{snippets}/updateResponse/request-headers.adoc[]
 
-==== Response
 ===== body
 include::{snippets}/updateResponse/request-body.adoc[]
 ===== fields
 include::{snippets}/updateResponse/request-fields.adoc[]
 
+==== Response
+include::{snippets}/updateResponse/response-body.adoc[]
 
 

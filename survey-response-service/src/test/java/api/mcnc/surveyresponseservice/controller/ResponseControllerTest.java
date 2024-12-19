@@ -143,10 +143,10 @@ class ResponseControllerTest {
     // Given: Mock된 Service와 필요 데이터 설정
     doNothing().when(responseService).setResponse(anyString(), anyList());
 
-    QuestionResponse qr1 = new QuestionResponse("uuid-32", SINGLE_CHOICE, 1, "그렇다");
-    QuestionResponse qr2 = new QuestionResponse("uuid-32", MULTIPLE_CHOICE, 2, "피자|`|치킨");
-    QuestionResponse qr3 = new QuestionResponse("uuid-32", SHORT_ANSWER, 3, "집에 가고 싶다");
-    QuestionResponse qr4 = new QuestionResponse("uuid-32", LONG_ANSWER, 4, "집에 가고 싶다 라고 말하면 집에 갈 수 있다는 것에 대해서 말하다 보면 언젠가 집에 가지 않을까 하는 생각");
+    QuestionResponse qr1 = new QuestionResponse("uuid-32", SINGLE_CHOICE, 1, true, "그렇다");
+    QuestionResponse qr2 = new QuestionResponse("uuid-32", MULTIPLE_CHOICE, 2, true, "피자|`|치킨");
+    QuestionResponse qr3 = new QuestionResponse("uuid-32", SHORT_ANSWER, 3, true, "집에 가고 싶다");
+    QuestionResponse qr4 = new QuestionResponse("uuid-32", LONG_ANSWER, 4, true, "집에 가고 싶다 라고 말하면 집에 갈 수 있다는 것에 대해서 말하다 보면 언젠가 집에 가지 않을까 하는 생각");
 
     ResponseSaveRequest request = new ResponseSaveRequest(List.of(qr1, qr2, qr3, qr4));
 
@@ -168,6 +168,7 @@ class ResponseControllerTest {
             fieldWithPath("responses[].questionId").type(STRING).description("질문 ID"),
             fieldWithPath("responses[].questionType").type(STRING).description("질문 유형"),
             fieldWithPath("responses[].orderNumber").type(NUMBER).description("질문 순서"),
+            fieldWithPath("responses[].isRequired").type(BOOLEAN).description("필수 여부"),
             fieldWithPath("responses[].response").type(STRING).description("답변")
           ),
           pathParameters(
@@ -186,8 +187,8 @@ class ResponseControllerTest {
     // given: Mock된 서비스와 데이터 설정
     ResponseUpdateRequest updateRequest = new ResponseUpdateRequest(
       List.of(
-        new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", SINGLE_CHOICE, "아니다"),
-        new QuestionResponseUpdate("87494fba-cc90-5a8f-b48c-7743644c351a", MULTIPLE_CHOICE, "탕수육")
+        new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", true, "아니다"),
+        new QuestionResponseUpdate("87494fba-cc90-5a8f-b48c-7743644c351a", true, "탕수육")
       )
     );
     doNothing().when(responseService).updateResponse(anyString(), anyList());
@@ -210,7 +211,7 @@ class ResponseControllerTest {
           requestFields(
             fieldWithPath("responses").type(ARRAY).description("응답 수정 목록"),
             fieldWithPath("responses[].id").type(STRING).description("응답 ID"),
-            fieldWithPath("responses[].questionType").type(STRING).description("질문 유형"),
+            fieldWithPath("responses[].isRequired").type(BOOLEAN).description("필수 여부"),
             fieldWithPath("responses[].response").type(STRING).description("수정된 답변")
           ),
           pathParameters(
