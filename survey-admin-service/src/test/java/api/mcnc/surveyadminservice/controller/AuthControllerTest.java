@@ -5,10 +5,11 @@ import api.mcnc.surveyadminservice.auth.vault.Vault;
 import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
 import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
 import api.mcnc.surveyadminservice.controller.request.EmailDuplicateCheckRequest;
+import api.mcnc.surveyadminservice.controller.request.PasswordChangeRequest;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
-import api.mcnc.surveyadminservice.controller.response.TokenResponse;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.service.AuthService;
+import api.mcnc.surveyadminservice.service.response.AdminSignInResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,17 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -144,8 +149,8 @@ class AuthControllerTest {
       .build();
 
     Token response = new Token("id","accessToken", "refreshToken");
-    TokenResponse tokenResponse = response.toResponse();
-    given(authService.signIn(any(AdminSignInRequest.class))).willReturn(response);
+    AdminSignInResponse tokenResponse = AdminSignInResponse.of("admin name", response);
+    given(authService.signIn(any(AdminSignInRequest.class))).willReturn(tokenResponse);
 
     mockMvc.perform(
         post("/auth/sign-in")
@@ -164,6 +169,7 @@ class AuthControllerTest {
           fieldWithPath("resultCode").type(STRING).description("응답 코드"),
           fieldWithPath("message").type(STRING).description("응답 메시지"),
           fieldWithPath("body").type(OBJECT).description("응답 데이터"),
+          fieldWithPath("body.userName").type(STRING).description("사용자 이름"),
           fieldWithPath("body.accessToken").type(STRING).description("토큰")
         ),
         responseHeaders(
@@ -174,4 +180,50 @@ class AuthControllerTest {
     ;
 
   }
+
+  @Test
+  void 비밀번호_변경_이메일_발신() throws Exception {
+    String responseMessage = "이메일 전송을 성공하였습니다.";
+    given(authService.sendPasswordChangeEmail(anyString())).willReturn(responseMessage);
+    mockMvc.perform(
+        get("/auth/password-change")
+          .queryParam("email", "example@example.com")
+      )
+      .andExpect(status().isOk())
+
+      .andDo(document("passwordChangeEmail",
+        responseFields(
+          fieldWithPath("success").type(BOOLEAN).description("결과 코드"),
+          fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+          fieldWithPath("message").type(STRING).description("응답 메시지"),
+          fieldWithPath("body").type(STRING).description("응답 데이터")
+        )
+      ))
+      .andDo(print());
+  }
+  
+  @Test
+  void 비밀번호_변경_요청() throws Exception {
+    PasswordChangeRequest request = new PasswordChangeRequest("newPassword12!@", "token...");
+    doNothing().when(authService).changePassword(any(PasswordChangeRequest.class));
+    mockMvc.perform(
+        post("/auth/password-change")
+          .contentType(APPLICATION_JSON)
+          .content(objectMapper.writeValueAsString(request))
+      )
+      .andExpect(status().isOk())
+      .andDo(document("changePassword",
+        requestFields(
+          fieldWithPath("newPassword").type(STRING).description("변경할 비밀번호"),
+          fieldWithPath("token").type(STRING).description("유저 확인을 위한 토큰")
+        ),
+        responseFields(
+          fieldWithPath("success").type(BOOLEAN).description("결과 코드"),
+          fieldWithPath("resultCode").type(STRING).description("응답 코드"),
+          fieldWithPath("message").type(STRING).description("응답 메시지")
+        )
+      ))
+      .andDo(print());
+  }
+
 }

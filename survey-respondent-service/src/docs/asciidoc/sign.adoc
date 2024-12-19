@@ -1,0 +1,28 @@
+=== 일반 인증
+
+==== Request
+include::{snippets}/email sign/http-request.adoc[]
+
+===== query param
+include::{snippets}/email sign/query-parameters.adoc[]
+
+===== body
+include::{snippets}/email sign/request-body.adoc[]
+include::{snippets}/email sign/request-fields.adoc[]
+
+==== Response
+include::{snippets}/email sign/response-body.adoc[]
+===== fields
+include::{snippets}/email sign/response-fields.adoc[]
+
+'''
+
+=== 소셜 인증
+
+==== Request
+include::{snippets}/oauth2/http-request.adoc[]
+===== path parameter
+include::{snippets}/oauth2/path-parameters.adoc[]
+
+===== redirection
+include::{snippets}/oauth2/http-response.adoc[]
