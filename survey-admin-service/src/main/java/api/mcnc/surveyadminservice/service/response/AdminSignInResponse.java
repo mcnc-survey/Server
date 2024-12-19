@@ -11,13 +11,13 @@ import lombok.Builder;
  * @since :2024-12-16 오후 2:58
  */
 @Builder(access = AccessLevel.PRIVATE)
-public record SignInResponse(
+public record AdminSignInResponse(
   String userName,
   String accessToken,
   String refreshToken
 ) {
-  public static SignInResponse of(String userName, Token token) {
-    return SignInResponse.builder()
+  public static AdminSignInResponse of(String userName, Token token) {
+    return AdminSignInResponse.builder()
       .userName(userName)
       .accessToken(token.accessToken())
       .refreshToken(token.refreshToken())
