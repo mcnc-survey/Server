@@ -9,6 +9,7 @@ import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
 import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
 import api.mcnc.surveyadminservice.controller.request.PasswordChangeRequest;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
+import api.mcnc.surveyadminservice.controller.response.EmailVerifyCheckResponse;
 import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.repository.admin.AdminRepository;
@@ -47,6 +48,35 @@ public class AuthService {
     Optional<Admin> isExist = adminRepository.getByEmailAdmin(email);
     boolean present = isExist.isPresent();
     return EmailDuplicateCheckResponse.isDuplicated(email, present);
+  }
+
+  /**
+   * 이메일 중복 검사 후 인증 코드 전송
+   *
+   * @param email String
+   */
+  public void checkEmailDuplicateAndSendEmail(String email) {
+    EmailDuplicateCheckResponse checkDupResult = checkEmailDuplicate(email);
+    if (checkDupResult.getIsDuplicated()) {
+      throw new AdminException(ALREADY_EXIST);
+    }
+    emailClientService.requestVerificationCode(email);
+  }
+
+  /**
+   * 이메일 인증 코드 검증
+   *
+   * @param email String
+   * @param code  String
+   * @return {@link EmailVerifyCheckResponse}
+   */
+  public EmailVerifyCheckResponse sendEmailVerificationCode(String email, String code) {
+    boolean isValid = emailClientService.verifyCode(email, code);
+    return new EmailVerifyCheckResponse(isValid);
+  }
+
+  public boolean isValidEmail(String email) {
+    return emailClientService.isValidEmail(email);
   }
 
   /**
