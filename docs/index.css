@@ -21,7 +21,7 @@ body {
 
 main {
     transition: all 0.5s;
-    -webkit-text-stroke: 4px #d6f4f4;
+    -webkit-text-stroke: 1px #d6f4f4;
     font-variation-settings: "wght" 900, "ital" 1;
     font-size: 4rem;
     text-align: center;

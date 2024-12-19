@@ -1,6 +1,5 @@
 package api.mcnc.surveyadminservice.controller;
 
-import api.mcnc.surveyadminservice.common.annotation.EmailEncryption;
 import api.mcnc.surveyadminservice.common.enums.SuccessCode;
 import api.mcnc.surveyadminservice.common.enums.TokenErrorCode;
 import api.mcnc.surveyadminservice.common.exception.AdminException;
@@ -10,7 +9,7 @@ import api.mcnc.surveyadminservice.controller.request.*;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
 import api.mcnc.surveyadminservice.controller.response.TokenResponse;
 import api.mcnc.surveyadminservice.service.AuthService;
-import api.mcnc.surveyadminservice.service.response.SignInResponse;
+import api.mcnc.surveyadminservice.service.response.AdminSignInResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -44,9 +43,9 @@ public class AuthController {
 
   @PostMapping("/auth/sign-in")
   public Api<TokenResponse> signInAdmin(@RequestBody @Valid AdminSignInRequest request, HttpServletResponse response) {
-    SignInResponse signInResponse = authService.signIn(request);
-    CookieUtils.setCookie(signInResponse.refreshToken(), response);
-    return Api.ok(SuccessCode.SUCCESS, TokenResponse.of(signInResponse.userName(), signInResponse.accessToken()));
+    AdminSignInResponse adminSignInResponse = authService.signIn(request);
+    CookieUtils.setCookie(adminSignInResponse.refreshToken(), response);
+    return Api.ok(SuccessCode.SUCCESS, TokenResponse.of(adminSignInResponse.userName(), adminSignInResponse.accessToken()));
   }
 
   @DeleteMapping("/auth/sign-out")

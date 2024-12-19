@@ -9,11 +9,10 @@ import api.mcnc.surveyadminservice.controller.request.AdminSignInRequest;
 import api.mcnc.surveyadminservice.controller.request.AdminSignUpRequest;
 import api.mcnc.surveyadminservice.controller.request.PasswordChangeRequest;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
-import api.mcnc.surveyadminservice.controller.response.TokenValidateResponse;
 import api.mcnc.surveyadminservice.domain.Admin;
 import api.mcnc.surveyadminservice.domain.Token;
 import api.mcnc.surveyadminservice.repository.admin.AdminRepository;
-import api.mcnc.surveyadminservice.service.response.SignInResponse;
+import api.mcnc.surveyadminservice.service.response.AdminSignInResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -70,7 +69,7 @@ public class AuthService {
    * @param request {@link AdminSignInRequest}
    * @return {@link Token}
    */
-  public SignInResponse signIn(AdminSignInRequest request) {
+  public AdminSignInResponse signIn(AdminSignInRequest request) {
     String email = request.getEmail();
     String password = request.getPassword();
 
@@ -84,7 +83,7 @@ public class AuthService {
     // 일치하면 토큰 생성
     if (matches) {
       Token token = tokenProvider.issue(admin);
-      return SignInResponse.of(admin.name(), token);
+      return AdminSignInResponse.of(admin.name(), token);
     }
     // 불 일치 에러 반환
     throw new AdminException(MISS_MATCH_ADMIN_ACCOUNT);
@@ -108,13 +107,9 @@ public class AuthService {
     String newPassword = request.getNewPassword();
     String token = request.getToken();
 
-    TokenValidateResponse tokenValidateResponse = tokenProvider.validateToken(token);
+    String adminId = tokenProvider.validateTokenAndExtractAdminId(token)
+      .orElseThrow(() -> new AdminException(TokenErrorCode.INVALID_TOKEN));
 
-    if(!tokenValidateResponse.isValid()) {
-      throw new AdminException(TokenErrorCode.INVALID_TOKEN);
-    }
-
-    String adminId = tokenValidateResponse.adminId();
     adminRepository.changePassword(adminId, newPassword);
   }
 
