@@ -35,8 +35,8 @@ public class ResponseValidator {
       throw new ResponseException(ResponseErrorCode.INVALID_REQUEST, "필수 응답은 비어있을 수 없습니다.");
     }
 
-    if (response.contains(SEPARATOR) || response.startsWith(SEPARATOR) || response.endsWith(SEPARATOR)) {
-      throw new ResponseException(ResponseErrorCode.INVALID_REQUEST, "잘모된 요청 유형입니다.");
+    if (response.contains(SEPARATOR + SEPARATOR) || response.startsWith(SEPARATOR) || response.endsWith(SEPARATOR)) {
+      throw new ResponseException(ResponseErrorCode.INVALID_REQUEST, "잘못된 요청 유형입니다.");
     }
 
   }
