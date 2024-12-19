@@ -59,7 +59,9 @@ class SurveyControllerTest {
 
   @Test
   void 설문_생성() throws Exception {
-    doNothing().when(surveyService).setSurveyAndQuestions(any(SurveyCreateRequest.class));
+    String surveyId = "7a762f88-0aa9-48b0-8a12-fc680523cd67";
+    SurveyCreateResponse response = new SurveyCreateResponse(surveyId);
+    given(surveyService.setSurveyAndQuestions(any(SurveyCreateRequest.class))).willReturn(surveyId);
     LocalDateTime now = LocalDateTime.now().plusDays(1);
     SurveyCreateRequest 고객_만족도_조사 =
       new SurveyCreateRequest(
@@ -101,7 +103,9 @@ class SurveyControllerTest {
           responseFields(
             fieldWithPath("success").type(BOOLEAN).description("성공 여부"),
             fieldWithPath("resultCode").type(STRING).description("응답 코드"),
-            fieldWithPath("message").type(STRING).description("응답 메시지")
+            fieldWithPath("message").type(STRING).description("응답 메시지"),
+            fieldWithPath("body").type(OBJECT).description("응답 데이터"),
+            fieldWithPath("body.surveyId").type(STRING).description("생성한 설문 id")
           )
         )
       )

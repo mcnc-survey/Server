@@ -482,8 +482,8 @@ Host: localhost:8080
 {
   "title" : "고객 만족도 조사",
   "description" : "서비스에 대한 피드백을 받고자 설문을 진행합니다.",
-  "startAt" : "2024-12-19T17:24:16.2988302",
-  "endAt" : "2024-12-22T17:24:16.2988302",
+  "startAt" : "2024-12-20T11:20:36.7927089",
+  "endAt" : "2024-12-23T11:20:36.7927089",
   "questions" : [ {
     "title" : "서비스에 만족하셨습니까?",
     "questionType" : "SINGLE_CHOICE",
@@ -620,12 +620,15 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 75
+Content-Length: 152
 
 {
   "success" : true,
   "resultCode" : "201",
-  "message" : "CREATED"
+  "message" : "CREATED",
+  "body" : {
+    "surveyId" : "7a762f88-0aa9-48b0-8a12-fc680523cd67"
+  }
 }</code></pre>
 </div>
 </div>
@@ -659,6 +662,16 @@ Content-Length: 75
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">응답 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 데이터</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>body.surveyId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성한 설문 id</p></td>
 </tr>
 </tbody>
 </table>
@@ -1605,8 +1618,8 @@ Host: localhost:8080
 {
   "title" : "Customer Satisfaction Survey",
   "description" : "This survey aims to collect feedback on customer satisfaction.",
-  "startAt" : "2024-12-19T17:24:16.4175872",
-  "endAt" : "2024-12-22T17:24:16.4175872",
+  "startAt" : "2024-12-19T20:06:21.4370646",
+  "endAt" : "2024-12-22T20:06:21.4370646",
   "updateQuestionList" : [ {
     "id" : null,
     "title" : "만족도",

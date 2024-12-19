@@ -18,7 +18,7 @@ public enum RespondentErrorCode implements Code {
   NOT_FOUND_SURVEY("R003", "설문을 찾을 수 없습니다."),
   EMPTY_RESPONSE("R004", "빈 설문은 제출할 수 없습니다."),
   INVALID_REQUEST("R005", "잘못된 요청입니다."),
-
+  NOT_VERIFIED_EMAIL("R006", "인증되지 않은 이메일입니다."),
 
 
   ;

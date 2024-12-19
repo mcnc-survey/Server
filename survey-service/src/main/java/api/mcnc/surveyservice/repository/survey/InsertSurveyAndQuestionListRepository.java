@@ -31,13 +31,14 @@ public class InsertSurveyAndQuestionListRepository {
     this.writeTransactionOperations = writeTransactionOperations;
   }
 
-  public void createSurvey(Survey survey, List<Question> questionList) {
-    writeTransactionOperations.executeWithoutResult(status -> {
+  public String createSurvey(Survey survey, List<Question> questionList) {
+    return writeTransactionOperations.execute(status -> {
       SurveyEntity surveyEntity = SurveyEntity.fromDomain(survey);
       List<QuestionEntity> questionEntityList = questionList.stream().map(QuestionEntity::fromDomain).toList();
       surveyEntity.addQuestions(questionEntityList);
       entityManager.persist(surveyEntity);
       entityManager.flush();
+      return surveyEntity.getId();
     });
   }
 
