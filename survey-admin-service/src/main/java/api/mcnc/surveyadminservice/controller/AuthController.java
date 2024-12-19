@@ -1,5 +1,6 @@
 package api.mcnc.surveyadminservice.controller;
 
+import api.mcnc.surveyadminservice.common.enums.AdminErrorCode;
 import api.mcnc.surveyadminservice.common.enums.SuccessCode;
 import api.mcnc.surveyadminservice.common.enums.TokenErrorCode;
 import api.mcnc.surveyadminservice.common.exception.AdminException;
@@ -7,6 +8,7 @@ import api.mcnc.surveyadminservice.common.result.Api;
 import api.mcnc.surveyadminservice.common.utils.CookieUtils;
 import api.mcnc.surveyadminservice.controller.request.*;
 import api.mcnc.surveyadminservice.controller.response.EmailDuplicateCheckResponse;
+import api.mcnc.surveyadminservice.controller.response.EmailVerifyCheckResponse;
 import api.mcnc.surveyadminservice.controller.response.TokenResponse;
 import api.mcnc.surveyadminservice.service.AuthService;
 import api.mcnc.surveyadminservice.service.response.AdminSignInResponse;
@@ -34,12 +36,30 @@ public class AuthController {
     return Api.ok(SuccessCode.SUCCESS, result);
   }
 
+  @PostMapping("/auth/email-verify")
+  public Api<Void> emailVerify(@RequestBody @Valid EmailVerifyRequest request) {
+    authService.checkEmailDuplicateAndSendEmail(request.email());
+    return Api.ok(SuccessCode.SUCCESS, null);
+  }
+
+  @PostMapping("/auth/email-verify/check")
+  public Api<EmailVerifyCheckResponse> emailVerifyCheck(@RequestBody @Valid EmailVerifyCheckRequest request) {
+    EmailVerifyCheckResponse response = authService.sendEmailVerificationCode(request.email(), request.code());
+    return Api.ok(SuccessCode.SUCCESS, response);
+  }
+
   @PostMapping("/auth/sign-up")
   public Api<Void> signUpAdmin(@RequestBody @Valid AdminSignUpRequest request) {
+    // 인증된 이메일만 회원가입 허용
+    boolean isValidEmail = authService.isValidEmail(request.getEmail());
+
+    if (!isValidEmail) {
+      throw new AdminException(AdminErrorCode.NOT_VERIFIED_EMAIL);
+    }
+
     authService.signUp(request);
     return Api.ok(SuccessCode.RESPONSE_CREATE_SUCCESS, null);
   }
-
 
   @PostMapping("/auth/sign-in")
   public Api<TokenResponse> signInAdmin(@RequestBody @Valid AdminSignInRequest request, HttpServletResponse response) {
