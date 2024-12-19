@@ -22,6 +22,10 @@ public interface EmailClient {
   @PostMapping("/emails/check-code")
   boolean verifyCode(@RequestParam String email, @RequestParam String code);
 
+  // 인증 검증이 됐는지 검증
+  @PostMapping("/check-valid")
+  boolean isValidDeleteCodes(@RequestParam String email);
+
   // 비밀번호 초기화 메일
   @PostMapping("/emails/PW")
   ResponseEntity<String> sendPWEmails(@RequestBody Map<String, Object> request);

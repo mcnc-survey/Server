@@ -32,6 +32,10 @@ public class EmailClientService {
     return emailClient.verifyCode(email, code);
   }
 
+  public boolean isValidEmail(String email) {
+    return emailClient.isValidDeleteCodes(email);
+  }
+
   public String sendPWEmails(String email, String name, String token) {
     Map<String, Object> sendData = Map.of(
       KEY_URL, URI,

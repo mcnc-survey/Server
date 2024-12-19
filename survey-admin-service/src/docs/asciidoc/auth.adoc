@@ -10,6 +10,28 @@ include::{snippets}/checkEmailDuplicate/response-fields.adoc[]
 
 '''
 
+=== 이메일 인증
+==== request
+include::{snippets}/emailSend/http-request.adoc[]
+include::{snippets}/emailSend/request-fields.adoc[]
+
+==== response
+include::{snippets}/emailSend/response-body.adoc[]
+include::{snippets}/emailSend/response-fields.adoc[]
+
+'''
+
+=== 이메일 인증 코드 검증
+==== request
+include::{snippets}/emailVerifyCheck/http-request.adoc[]
+include::{snippets}/emailVerifyCheck/request-fields.adoc[]
+
+==== response
+include::{snippets}/emailVerifyCheck/response-body.adoc[]
+include::{snippets}/emailVerifyCheck/response-fields.adoc[]
+
+'''
+
 === 회원 가입
 ==== request
 include::{snippets}/signUp/http-request.adoc[]
