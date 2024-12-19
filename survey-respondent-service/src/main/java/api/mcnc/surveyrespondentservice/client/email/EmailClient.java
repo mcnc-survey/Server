@@ -22,6 +22,6 @@ public interface EmailClient {
   boolean verifyCode(@RequestParam String email, @RequestParam String code);
 
   // 인증 검증이 됐는지 검증
-  @PostMapping("/check-valid")
+  @PostMapping("/emails/check-valid")
   boolean isValidDeleteCodes(@RequestParam String email);
 }
