@@ -2,15 +2,19 @@ package api.mcnc.surveyresponseservice.controller;
 
 import api.mcnc.surveyresponseservice.RestDocsConfig;
 import api.mcnc.surveyresponseservice.client.survey.response.Question;
+import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponseUpdate;
+import api.mcnc.surveyresponseservice.controller.request.ResponseSaveRequest;
 import api.mcnc.surveyresponseservice.controller.request.ResponseUpdateRequest;
 import api.mcnc.surveyresponseservice.controller.response.ResponseResult;
 import api.mcnc.surveyresponseservice.controller.response.SurveyResponsesResponse;
 import api.mcnc.surveyresponseservice.controller.response.SurveySnippet;
 import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import api.mcnc.surveyresponseservice.service.ResponseService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jooq.AutoConfigureJooq;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +25,11 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static api.mcnc.surveyresponseservice.entity.response.QuestionType.SINGLE_CHOICE;
+import static api.mcnc.surveyresponseservice.entity.response.QuestionType.*;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -52,6 +57,9 @@ class ResponseControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @MockBean
   private ResponseService responseService;
@@ -135,16 +143,19 @@ class ResponseControllerTest {
     // Given: Mock된 Service와 필요 데이터 설정
     doNothing().when(responseService).setResponse(anyString(), anyList());
 
+    QuestionResponse qr1 = new QuestionResponse("uuid-32", SINGLE_CHOICE, 1, "그렇다");
+    QuestionResponse qr2 = new QuestionResponse("uuid-32", MULTIPLE_CHOICE, 2, "피자|`|치킨");
+    QuestionResponse qr3 = new QuestionResponse("uuid-32", SHORT_ANSWER, 3, "집에 가고 싶다");
+    QuestionResponse qr4 = new QuestionResponse("uuid-32", LONG_ANSWER, 4, "집에 가고 싶다 라고 말하면 집에 갈 수 있다는 것에 대해서 말하다 보면 언젠가 집에 가지 않을까 하는 생각");
+
+    ResponseSaveRequest request = new ResponseSaveRequest(List.of(qr1, qr2, qr3, qr4));
+
     // When: MockMvc를 통한 요청 수행
     mockMvc.perform(
         RestDocumentationRequestBuilders.post("/responses/{surveyId}", "{surveyId}")
           .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNzEwYjgxYi03OTMzLTQwZTMtYjZiMi05MGZmYjhjZmIyYmEiLCJzdXJ2ZXlJZCI6IjI1OGYyODQ0LWEyZDktNDRhZi1hMDU4LTAyYjE5OTYxNTY1NiIsIm5hbWUiOiLsnKDtnazspIAiLCJlbWFpbCI6InloajM4NTVAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNzY4OTE4LCJleHAiOjE3MzI3Njg5MTl9.nZzeYTpMWI0nE7fhQOFlc6BQ9hLZzfDSGBmqMlvX1P19ikpmPN5UFvdlOsaH_JCoJDE1QN7EvN6MILHE9ki7Yg")
-
           .contentType(MediaType.APPLICATION_JSON)
-          .content(
-            "{\"responses\": [" +
-              "{\"questionId\": \"11\", \"questionType\": \"SINGLE_CHOICE\", \"orderNumber\": 1, \"response\": \"1\"}]}"
-          )
+          .content(objectMapper.writeValueAsString(request))
       )
       .andExpect(status().isOk())
       .andDo(
@@ -174,7 +185,10 @@ class ResponseControllerTest {
   void 사용자_응답_수정() throws Exception {
     // given: Mock된 서비스와 데이터 설정
     ResponseUpdateRequest updateRequest = new ResponseUpdateRequest(
-      List.of(new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", SINGLE_CHOICE, "4"))
+      List.of(
+        new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", SINGLE_CHOICE, "아니다"),
+        new QuestionResponseUpdate("87494fba-cc90-5a8f-b48c-7743644c351a", MULTIPLE_CHOICE, "탕수육")
+      )
     );
     doNothing().when(responseService).updateResponse(anyString(), anyList());
 
@@ -184,7 +198,7 @@ class ResponseControllerTest {
           .header("Authorization", "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNzEwYjgxYi03OTMzLTQwZTMtYjZiMi05MGZmYjhjZmIyYmEiLCJzdXJ2ZXlJZCI6IjI1OGYyODQ0LWEyZDktNDRhZi1hMDU4LTAyYjE5OTYxNTY1NiIsIm5hbWUiOiLsnKDtnazspIAiLCJlbWFpbCI6InloajM4NTVAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNzY4OTE4LCJleHAiOjE3MzI3Njg5MTl9.nZzeYTpMWI0nE7fhQOFlc6BQ9hLZzfDSGBmqMlvX1P19ikpmPN5UFvdlOsaH_JCoJDE1QN7EvN6MILHE9ki7Yg")
           .contentType(MediaType.APPLICATION_JSON)
           .content(
-            "{\"responses\": [{\"id\": \"87494fba-cc90-4a8f-a38a-4744664c3bea\", \"questionType\": \"SINGLE_CHOICE\", \"response\": \"4\"}]}"
+            objectMapper.writeValueAsString(updateRequest)
           )
       )
       .andExpect(status().isOk())

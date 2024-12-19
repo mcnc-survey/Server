@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -110,6 +111,21 @@ public class TokenProvider {
         } else {
             return TokenValidateResponse.invalidResponse();
         }
+    }
+
+    public Optional<String> validateTokenAndExtractAdminId(String accessToken) {
+        if (!StringUtils.hasText(accessToken)) {
+            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
+        }
+
+        Claims claims = parseClaims(accessToken);
+        boolean isValid = claims.getExpiration().before(new Date());
+
+        if(isValid){
+            throw new TokenException(TokenErrorCode.TOKEN_EXPIRED);
+        }
+
+        return Optional.ofNullable(claims.getSubject());
     }
 
     /**
