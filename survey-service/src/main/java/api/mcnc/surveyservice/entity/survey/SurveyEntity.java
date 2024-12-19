@@ -23,10 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SurveyEntity extends MutableBaseEntity {
-  @Getter
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
-  List<QuestionEntity> questions;
-  @Id
+  @Id @Getter
   @Column(name = "ID")
   private String id;
   @Column(name = "ADMIN_ID")
@@ -45,6 +42,9 @@ public class SurveyEntity extends MutableBaseEntity {
   @Column(name = "SURVEY_LIKE")
   @Enumerated(EnumType.STRING)
   private SurveyLike like;
+  @Getter
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey", cascade = CascadeType.ALL, orphanRemoval = true)
+  List<QuestionEntity> questions;
 
   public static SurveyEntity fromDomain(Survey survey) {
     return SurveyEntity.builder()

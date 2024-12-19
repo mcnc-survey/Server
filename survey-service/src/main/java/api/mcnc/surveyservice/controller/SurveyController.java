@@ -30,9 +30,9 @@ public class SurveyController {
   private final SurveyService surveyService;
 
   @PostMapping("/surveys")
-  public Api<Void> createSurvey(@RequestBody @Valid SurveyCreateRequest surveyCreateRequest) {
-    surveyService.setSurveyAndQuestions(surveyCreateRequest);
-    return Api.ok(SuccessCode.SURVEY_CREATE_SUCCESS, null);
+  public Api<String> createSurvey(@RequestBody @Valid SurveyCreateRequest surveyCreateRequest) {
+    String surveyId = surveyService.setSurveyAndQuestions(surveyCreateRequest);
+    return Api.ok(SuccessCode.SURVEY_CREATE_SUCCESS, surveyId);
   }
 
   @GetMapping("/surveys")
