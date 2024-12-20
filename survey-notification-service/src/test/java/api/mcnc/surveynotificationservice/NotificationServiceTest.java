@@ -1,11 +1,16 @@
 package api.mcnc.surveynotificationservice;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.restdocs.payload.PayloadDocumentation;
@@ -21,14 +26,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureRestDocs
+@Import(RestDocsConfig.class)
+@DisplayName("알림 테스트")
 @SpringBootTest
-@AutoConfigureMockMvc
 public class NotificationServiceTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
+    @DisplayName("알림 생성")
     public void testCreateNotification() throws Exception {
         // Base64 인코딩된 요청 데이터
         String base64Request = "eyJhZG1pbklkIjoiYWRtaW4tdXVpZC0xIiwic3VydmV5SWQiOiJzdXJ2ZXktdXVpZC0xIiwidHlwZSI6IlNVUlZFWV9FTkQifQ==";
@@ -37,6 +45,19 @@ public class NotificationServiceTest {
         ResultActions result = mockMvc.perform(post("/notifications/create")
                 .content(base64Request)
                 .contentType(MediaType.TEXT_PLAIN));
+
+        mockMvc.perform(
+                    RestDocumentationRequestBuilders.post("/notifications/create")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(base64Request)
+            ).andExpect(status().isOk())
+                .andDo(MockMvcRestDocumentation.document(
+                        "notificationCreate",
+                        PayloadDocumentation.requestFields(
+                                PayloadDocumentation.fieldWithPath("info").type(JsonFieldType.STRING).description("")
+                        )
+                ))
+            .andDo(MockMvcResultHandlers.print());
 
         result.andDo(
                 MockMvcRestDocumentation.document("알림 생성",
