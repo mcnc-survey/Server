@@ -2,12 +2,15 @@ package api.mcnc.surveyservice.service.survey;
 
 import api.mcnc.surveyservice.client.admin.AdminServiceClientService;
 import api.mcnc.surveyservice.client.email.EmailClientService;
+import api.mcnc.surveyservice.client.notification.NotificationClientService;
+import api.mcnc.surveyservice.client.notification.Request;
 import api.mcnc.surveyservice.client.response.ResponseServiceClientService;
 import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyservice.common.enums.SurveyErrorCode;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
+import api.mcnc.surveyservice.controller.request.SurveyDeleteRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.SurveyCalendarResponse;
 import api.mcnc.surveyservice.controller.response.SurveyDetailsResponse;
@@ -27,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static api.mcnc.surveyservice.client.notification.Type.*;
 import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.INVALID_REQUEST;
 import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.START_TIME_MUST_BE_BEFORE_END_TIME;
 
@@ -49,6 +53,7 @@ public class SurveyService {
   private final ResponseServiceClientService responseServiceClientService;
   private final AdminServiceClientService adminServiceClientService;
   private final EmailClientService emailClientService;
+  private final NotificationClientService notificationClientService;
 
   private final SurveyValidator surveyValidator;
 
@@ -73,7 +78,9 @@ public class SurveyService {
 
     Survey survey = Survey.fromRequest(adminId, title, description, startAt, endAt);
 
-    return insertSurveyAndQuestionListRepository.createSurvey(survey, questionList);
+    String surveyId = insertSurveyAndQuestionListRepository.createSurvey(survey, questionList);
+    notificationClientService.publishNotification(Request.of(surveyId, survey.title(), SURVEY_CREATE), adminId);
+    return surveyId;
   }
 
   // 작성한 설문 전체 조회
@@ -87,12 +94,15 @@ public class SurveyService {
     return fetchSurveyRepository.fetchAllByAdminId(adminId).stream().map(Survey::toCalendarResponse).toList();
   }
 
-  public void deleteSurveyList(List<String> surveyIds) {
+  public void deleteSurveyList(List<SurveyDeleteRequest.surveyDeleteInfo> surveyInfos) {
     String adminId = getAdminId();
-
-    responseServiceClientService.deleteResponse(surveyIds);
-
-    deleteSurveyRepository.deleteSurveyList(adminId, surveyIds);
+    List<String> ids = surveyInfos.stream().map(SurveyDeleteRequest.surveyDeleteInfo::surveyId).toList();
+    responseServiceClientService.deleteResponse(ids);
+    deleteSurveyRepository.deleteSurveyList(adminId, ids);
+    // 삭제 후 알림
+    surveyInfos.forEach(surveyInfo -> {
+      notificationClientService.publishNotification(Request.of(surveyInfo.surveyId(), surveyInfo.title(), SURVEY_DELETE), adminId);
+    });
   }
 
   public void restoreSurveyList(List<String> surveyIds) {
@@ -162,6 +172,9 @@ public class SurveyService {
 
     // 수정 완료 하고 상태 변경
     updateSurveyStatusRepository.updateSurveyStatusToEndEdit(surveyId, changedStatus);
+
+    // 수정 완료 알림
+    notificationClientService.publishNotification(Request.of(surveyId, survey.title(), SURVEY_EDIT), survey.adminId());
   }
 
   // 설문 삭제
@@ -180,7 +193,7 @@ public class SurveyService {
     Survey survey = getSurvey(surveyId);
     emailClientService.sendHtmlVerificationEmails(survey.title(), survey.surveyLink(),emails);
   }
-
+// TODO 2024-12-20 yhj : 생성, 수정, 삭제 되면 알림
   // ==============================
   // private method
   // ==============================
@@ -199,7 +212,8 @@ public class SurveyService {
       return SurveyStatus.ON;
     }
   }
-
+// TODO 2024-12-19 yhj : adminId를 자주 조회 하니까 redis로 1시간 정도 캐싱해둬서 캐싱된 데이터 가져다 쓰는게 나을 듯
+//  마찬가지로 responde쪽에도 동일한 로직 적용하는 것도 고려해보자  
   // 설문 아이디와 작성자 아이디로 설문 조회
   private Survey getSurvey(String surveyId) {
     String adminId = getAdminId();
