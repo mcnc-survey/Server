@@ -2,29 +2,27 @@ package api.mcnc.surveynotificationservice.dto;
 
 import api.mcnc.surveynotificationservice.entity.NotificationEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
+
+import static api.mcnc.surveynotificationservice.entity.NotificationEntity.Status.READ;
 
 @Getter
-@AllArgsConstructor
-@ToString
+@Builder(access = lombok.AccessLevel.PRIVATE)
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class NotificationDto {
 
-    private String id;
-    private String surveyId;
-    private String adminId;
-    private String type;
-    private String status;
+    private Long id;
+    private String message;
+    private Boolean isRead;
     private String createdAt;
 
     public static NotificationDto fromEntity(NotificationEntity notificationEntity) {
-        return new NotificationDto(
-                notificationEntity.getId(),
-                notificationEntity.getSurveyId(),
-                notificationEntity.getAdminId(),
-                notificationEntity.getType().name(),
-                notificationEntity.getStatus().name(),
-                notificationEntity.getCreatedAt().toString()
-        );
+        return NotificationDto.builder()
+                .id(notificationEntity.getId())
+                .message(notificationEntity.getMessage())
+                .isRead(READ.equals(notificationEntity.getStatus()))
+                .createdAt(notificationEntity.getCreatedAt().toString())
+                .build();
     }
 }
