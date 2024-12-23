@@ -36,7 +36,7 @@ public class NotificationController {
     }
 
     // 알림 상태를 'READ'로 업데이트
-    @PatchMapping("/{id}")
+    @PatchMapping("/read/{id}")
     public ResponseEntity<Void> markNotificationAsRead(@PathVariable Long id, @RequestHeader(value = "requested-by", required = false) String adminId) {
         URI redirectUri = notificationService.redirectNotificationDetail(id, adminId);
         return ResponseEntity
@@ -53,7 +53,7 @@ public class NotificationController {
     }
 
     // 알림 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteNotification(@PathVariable Long id, @RequestHeader(value = "requested-by", required = false) String adminId) {
         notificationService.deleteNotificationById(id, adminId);
         return ResponseEntity.noContent().build();
