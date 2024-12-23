@@ -20,6 +20,7 @@ public record Admin(
   String id,
   String name,
   String email,
+  String phoneNumber,
   String password,
   AdminRole role,
   String provider
@@ -29,6 +30,7 @@ public record Admin(
     return Admin.builder()
       .name(oAuth2UserInfo.getName())
       .email(oAuth2UserInfo.getEmail())
+      .phoneNumber(oAuth2UserInfo.getPhoneNumber())
       .role(ADMIN)
       .password(new BCryptPasswordEncoder().encode("{admin}password"))
       .provider(oAuth2UserInfo.getProvider())
@@ -39,6 +41,7 @@ public record Admin(
     return Admin.builder()
       .name(request.getUserName())
       .email(request.getEmail())
+      .phoneNumber(request.getPhoneNumber())
       .role(ADMIN)
       .password(request.getPassword())
       .provider(EMAIL)

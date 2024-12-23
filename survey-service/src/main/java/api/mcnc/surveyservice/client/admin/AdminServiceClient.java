@@ -1,4 +1,4 @@
-package api.mcnc.surveyservice.client;
+package api.mcnc.surveyservice.client.admin;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

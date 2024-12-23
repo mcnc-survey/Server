@@ -31,7 +31,7 @@ public class SurveyExceptionHandler {
     e.printStackTrace();
     return ResponseEntity.ok(response);
   }
-
+// TODO 2024-12-19 yhj : 상황에 맞는 status 내려 주는 것이 나을 듯
   @ExceptionHandler(SurveyException.class)
   public ResponseEntity<Api<String>> handleResponseException(SurveyException e) {
     Api<String> response = Api.fail(e.getCode(), e.getMessage());

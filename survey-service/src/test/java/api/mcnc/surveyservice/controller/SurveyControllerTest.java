@@ -327,7 +327,7 @@ class SurveyControllerTest {
   @Test
   void 논리적_설문_삭제_복구() throws Exception {
 
-    SurveyDeleteOrRestoreRequest request = new SurveyDeleteOrRestoreRequest(List.of("c3a9ae4c-00a6-4169-9ac1-4cbbc3fbc37b"));
+    SurveyDeleteRequest request = new SurveyDeleteRequest(List.of("c3a9ae4c-00a6-4169-9ac1-4cbbc3fbc37b"));
     doNothing().when(surveyService).restoreSurveyList(request.surveyIds());
     mockMvc.perform(
         post("/surveys/restore")
@@ -354,7 +354,7 @@ class SurveyControllerTest {
   @Test
   void 물리적_설문_삭제() throws Exception {
 
-    SurveyDeleteOrRestoreRequest request = new SurveyDeleteOrRestoreRequest(List.of("c3a9ae4c-00a6-4169-9ac1-4cbbc3fbc37b"));
+    SurveyDeleteRequest request = new SurveyDeleteRequest(List.of("c3a9ae4c-00a6-4169-9ac1-4cbbc3fbc37b"));
     doNothing().when(surveyService).deleteSurveyList(request.surveyIds());
     mockMvc.perform(
         delete("/surveys")

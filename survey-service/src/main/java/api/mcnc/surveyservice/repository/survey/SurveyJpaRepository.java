@@ -30,12 +30,27 @@ public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String
   Optional<SurveyEntity> findByIdAndAdminId(String id, String adminId);
 
   @Modifying
-  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status != 'DELETE' AND s.status = :currentStatus AND s.startAt <= :now")
-  void updateSurveyStatusToStart(@Param("status") SurveyStatus status, @Param("currentStatus") SurveyStatus currentStatus, @Param("now") LocalDateTime now);
+  @Query(value = "UPDATE surveys s " +
+    "SET status = :status " +
+    "WHERE s.status != 'EDIT' AND" +
+    " s.status != 'DELETE' AND" +
+    " s.status = :currentStatus AND" +
+    " s.start_at <= :now " +
+    "RETURNING *"
+    , nativeQuery = true
+  )
+  List<SurveyEntity> updateSurveyStatusToStart(@Param("status") String status, @Param("currentStatus") String currentStatus, @Param("now") LocalDateTime now);
 
   @Modifying
-  @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.status != 'EDIT' AND s.status != 'DELETE' AND s.status = :currentStatus AND s.endAt <= :now")
-  void updateSurveyStatusToEnd(@Param("status") SurveyStatus status, @Param("currentStatus") SurveyStatus currentStatus, @Param("now") LocalDateTime now);
+  @Query(value = "UPDATE surveys s " +
+    "SET status = :status" +
+    " WHERE s.status != 'EDIT' AND" +
+    " s.status != 'DELETE' AND" +
+    " s.status = :currentStatus AND" +
+    " s.end_at <= :now " +
+    "RETURNING *"
+  ,nativeQuery = true)
+  List<SurveyEntity> updateSurveyStatusToEnd(@Param("status") String status, @Param("currentStatus") String currentStatus, @Param("now") LocalDateTime now);
 
   @Modifying
   @Query("UPDATE SurveyEntity s SET s.status = :status WHERE s.id = :id")

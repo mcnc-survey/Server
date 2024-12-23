@@ -8,9 +8,9 @@ import java.util.List;
  * please explain class!
  *
  * @author :Uheejoon
- * @since :2024-11-29 오후 4:24
+ * @since :2024-12-23 오전 11:00
  */
-public record SurveyDeleteOrRestoreRequest(
-  List<@NotBlank String> surveyIds
+public record SurveyRestoreRequest(
+  List<@NotBlank String> surveyIdList
 ) {
 }
