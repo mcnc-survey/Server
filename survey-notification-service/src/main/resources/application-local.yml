@@ -1,3 +1,35 @@
+spring:
+  application:
+    name: survey-notification-service
+  datasource:
+    url: jdbc:mariadb://mariadb:3306/notifications?characterEncoding=UTF-8&serverTimezone=Asia/Seoul&rewriteBatchedStatements=true
+    username: root
+    password: root
+    driver-class-name: org.mariadb.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_batch_fetch_size: 30
+        jdbc:
+          batch_size: 50
+    open-in-view: false
+
+  data:
+    redis:
+      port: 6379
+      host: redis
+
+sse:
+  timeout: 60000
+
 eureka:
   client:
     service-url:

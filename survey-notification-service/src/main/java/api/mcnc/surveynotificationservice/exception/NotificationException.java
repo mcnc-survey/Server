@@ -1,5 +1,8 @@
 package api.mcnc.surveynotificationservice.exception;
 
+import lombok.Getter;
+
+@Getter
 public class NotificationException extends RuntimeException {
 
     private final String errorCode;
@@ -9,7 +12,4 @@ public class NotificationException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
 }
