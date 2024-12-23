@@ -46,7 +46,7 @@ public class CronSurveyService {
     // 종료 되었습니다 알림
     if (!endEntities.isEmpty()) {
       String adminId = endEntities.get(0).getAdminId();
-      notification(startEntities, SURVEY_END, adminId);
+      notification(endEntities, SURVEY_END, adminId);
     }
 
   }
