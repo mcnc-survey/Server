@@ -6,6 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * please explain class!
  *
@@ -25,7 +27,7 @@ public class DeleteQueueEntity {
   @Column(name = "SURVEY_ID")
   private String surveyId;
   @Column(name = "CREATED_AT")
-  private Long createdAt;
+  private LocalDateTime createdAt;
 
   public static DeleteQueueEntity of(String surveyId) {
     return DeleteQueueEntity.builder()
