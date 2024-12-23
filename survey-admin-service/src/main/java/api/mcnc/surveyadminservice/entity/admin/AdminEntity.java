@@ -33,6 +33,8 @@ public class AdminEntity extends MutableBaseEntity {
   private String name;
   @Column(name = "EMAIL")
   private String email;
+  @Column(name = "PHONE_NUMBER")
+  private String phoneNumber;
   @Column(name = "PASSWORD")
   private String password;
   @Column(name = "ROLE")
@@ -46,6 +48,7 @@ public class AdminEntity extends MutableBaseEntity {
       .id(UUID.randomUUID().toString())
       .name(admin.name())
       .email(admin.email())
+      .phoneNumber(admin.phoneNumber())
       .password(admin.password())
       .role(admin.role())
       .provider(admin.provider())
@@ -57,6 +60,7 @@ public class AdminEntity extends MutableBaseEntity {
       .id(UUID.randomUUID().toString())
       .name(oAuth2UserInfo.getName())
       .email(oAuth2UserInfo.getEmail())
+      .phoneNumber(oAuth2UserInfo.getPhoneNumber())
       .role(AdminRole.ADMIN)
       .password(new BCryptPasswordEncoder().encode("{admin}password"))
       .provider(oAuth2UserInfo.getProvider())
@@ -69,6 +73,7 @@ public class AdminEntity extends MutableBaseEntity {
       .id(id)
       .name(name)
       .email(email)
+      .phoneNumber(phoneNumber)
       .password(password)
       .role(role)
       .provider(provider)

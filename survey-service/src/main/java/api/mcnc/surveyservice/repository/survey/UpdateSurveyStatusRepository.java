@@ -1,6 +1,7 @@
 package api.mcnc.surveyservice.repository.survey;
 
 import api.mcnc.surveyservice.domain.Survey;
+import api.mcnc.surveyservice.entity.survey.SurveyEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -48,16 +49,15 @@ public class UpdateSurveyStatusRepository {
     );
   }
 
-  public void updateSurveyStatusToStart(SurveyStatus status, SurveyStatus currentStatus, LocalDateTime now){
-    writeTransactionOperations.executeWithoutResult(execute ->
-      surveyRepository.updateSurveyStatusToStart(status, currentStatus, now)
+  public List<SurveyEntity> updateSurveyStatusToStart(SurveyStatus status, SurveyStatus currentStatus, LocalDateTime now){
+    return writeTransactionOperations.execute(execute ->
+      surveyRepository.updateSurveyStatusToStart(status.name(), currentStatus.name(), now)
     );
-
   }
 
-  public void updateSurveyStatusToEnd(SurveyStatus status, SurveyStatus currentStatus, LocalDateTime now){
-    writeTransactionOperations.executeWithoutResult(execute ->
-      surveyRepository.updateSurveyStatusToEnd(status, currentStatus, now)
+  public List<SurveyEntity> updateSurveyStatusToEnd(SurveyStatus status, SurveyStatus currentStatus, LocalDateTime now){
+    return writeTransactionOperations.execute(execute ->
+      surveyRepository.updateSurveyStatusToEnd(status.name(), currentStatus.name(), now)
     );
   }
 

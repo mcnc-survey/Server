@@ -79,8 +79,8 @@ public class AuthService {
   }
 
   public boolean isValidEmail(String email) {
-    String decrpytedEmail = vaultProvider.decrypt(email);
-    return emailClientService.isValidEmail(decrpytedEmail);
+    String decryptedEmail = vaultProvider.decrypt(email);
+    return emailClientService.isValidEmail(decryptedEmail);
   }
 
   /**

@@ -26,8 +26,10 @@ public class SurveyEntity extends MutableBaseEntity {
   @Id @Getter
   @Column(name = "ID")
   private String id;
+  @Getter
   @Column(name = "ADMIN_ID")
   private String adminId;
+  @Getter
   @Column(name = "TITLE")
   private String title;
   @Column(name = "DESCRIPTION")
