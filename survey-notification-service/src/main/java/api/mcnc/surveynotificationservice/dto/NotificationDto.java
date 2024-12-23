@@ -16,6 +16,7 @@ public class NotificationDto {
     private String message;
     private Boolean isRead;
     private String createdAt;
+    private NotificationEntity.Type type;
 
     public static NotificationDto fromEntity(NotificationEntity notificationEntity) {
         return NotificationDto.builder()
@@ -23,6 +24,7 @@ public class NotificationDto {
                 .message(notificationEntity.getMessage())
                 .isRead(READ.equals(notificationEntity.getStatus()))
                 .createdAt(notificationEntity.getCreatedAt().toString())
+                .type(notificationEntity.getType())
                 .build();
     }
 }
