@@ -7,6 +7,8 @@ import api.mcnc.surveynotificationservice.event.NotificationEvent;
 import api.mcnc.surveynotificationservice.exception.NotificationException;
 import api.mcnc.surveynotificationservice.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -51,8 +53,9 @@ public class NotificationService {
      * @return 알림 목록
      */
     public List<NotificationDto> getAllNotificationsByAdmin(String adminId) {
+        Pageable pageable = PageRequest.of(0, 30);
         return notificationRepository
-                .findByAdminId(adminId)
+                .findByAdminIdOrderByCreatedAtDesc(adminId, pageable)
                 .stream()
                 .map(NotificationEntity::toDto)
                 .toList();
