@@ -31,8 +31,10 @@ public class TokenProvider {
     @Value("${jwt.secret-key}")
     private String key;
     private SecretKey secretKey;
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30L;
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L * 24 * 14;
+    @Value("${jwt.expire.access-token}")
+    private long accessTokenExpireTime;
+    @Value("${jwt.expire.refresh-token}")
+    private long refreshTokenExpireTime;
     private static final String KEY_ROLE = "role";
     private final TokenService tokenService;
 
@@ -47,7 +49,7 @@ public class TokenProvider {
      * @return {@link Token}
      */
     public Token issue(Admin authentication) {
-        String accessToken = generateAccessToken(authentication, ACCESS_TOKEN_EXPIRE_TIME);
+        String accessToken = generateAccessToken(authentication, accessTokenExpireTime);
         return generateRefreshToken(authentication, accessToken);
     }
 
@@ -147,7 +149,7 @@ public class TokenProvider {
     }
 
     private Token generateRefreshToken(Admin authentication, String accessToken) {
-        String refreshToken = generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);
+        String refreshToken = generateToken(authentication, refreshTokenExpireTime);
         return tokenService.saveOrUpdate(authentication.id(), refreshToken, accessToken);
     }
 
