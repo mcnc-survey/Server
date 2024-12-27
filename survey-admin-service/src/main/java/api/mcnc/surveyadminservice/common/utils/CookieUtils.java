@@ -42,11 +42,11 @@ public class CookieUtils {
 
   public static String generateRefreshTokenCookie(String refreshToken) {
     ResponseCookie cookie = ResponseCookie.from(COOKIE_NAME, refreshToken)
-//      .httpOnly(true)
-//      .secure(false)
-      .maxAge(60 * 60 * 24 * 14)
+      .httpOnly(true)
+      .secure(true)
+      .maxAge(60 * 60 * 24 * 30)
       .path("/")
-      .sameSite("Lax")
+      .sameSite("None")
       .build();
     return cookie.toString();
   }
