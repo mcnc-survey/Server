@@ -27,4 +27,14 @@ public class NotificationDto {
                 .type(notificationEntity.getType())
                 .build();
     }
+
+    public static NotificationDto of(Long id, String message, Boolean isRead, String createdAt, NotificationEntity.Type type) {
+        return NotificationDto.builder()
+                .id(id)
+                .message(message)
+                .isRead(isRead)
+                .createdAt(createdAt)
+                .type(type)
+                .build();
+    }
 }

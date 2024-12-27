@@ -1,0 +1,11 @@
+// index.adoc
+
+= 알림 API 문서
+:doctype: book
+:source-highlighter: highlightjs
+:sectlinks:
+:toc: left
+:toclevels: 2
+
+include::fetch.adoc[]
+
