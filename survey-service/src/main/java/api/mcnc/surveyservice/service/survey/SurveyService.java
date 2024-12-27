@@ -174,7 +174,7 @@ public class SurveyService {
     updateSurveyStatusRepository.updateSurveyStatusToEndEdit(surveyId, changedStatus);
 
     // 수정 완료 알림
-    notificationClientService.publishNotification(Request.of(surveyId, survey.title(), SURVEY_EDIT), survey.adminId());
+    notificationClientService.publishNotification(Request.of(surveyId, updateSurvey.title(), SURVEY_EDIT), survey.adminId());
   }
 
   // 설문 삭제
