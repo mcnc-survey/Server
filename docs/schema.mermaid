@@ -61,9 +61,10 @@ erDiagram
     }
 
     Admin ||--o{ Surveys : "has"
-    Surveys ||--o{ Respondents : "has"
+    Surveys ||--o{ Respondents : ""
+    Respondents ||--o{ Responses : "has"
     Surveys ||--o{ Questions : "has"
     Surveys ||--o{ Responses : "has"
-    Surveys ||--o{ Delete_Queue : "has"
+    Surveys ||--o{ Delete_Queue : ""
     Questions ||--|{ Responses : "has"
     Delete_Queue ||--o| Responses : ""
