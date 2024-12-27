@@ -73,7 +73,7 @@ public class NotificationController {
         }
 
         SseEmitter emitter = notificationService.subscribe(adminId);
-        return ResponseEntity.ok(emitter);
+        return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
     }
 
     // SSE 구독 해제

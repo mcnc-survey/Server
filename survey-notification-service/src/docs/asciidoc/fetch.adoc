@@ -1,0 +1,66 @@
+=== 알림 구독
+
+==== Request
+include::{snippets}//subscribe/http-request.adoc[]
+
+===== header
+include::{snippets}//subscribe/request-headers.adoc[]
+
+==== Response
+include::{snippets}//subscribe/http-response.adoc[]
+
+
+=== 알림 구독 취소
+
+==== Request
+include::{snippets}//unsubscribe/http-request.adoc[]
+
+===== header
+include::{snippets}//unsubscribe/request-headers.adoc[]
+
+==== Response
+include::{snippets}//unsubscribe/http-response.adoc[]
+
+
+=== 전체 조회 (30개)
+==== Request
+include::{snippets}//getAllNotifications/http-request.adoc[]
+===== header
+include::{snippets}//getAllNotifications/request-headers.adoc[]
+
+==== Response
+include::{snippets}//getAllNotifications/response-body.adoc[]
+===== fields
+include::{snippets}//getAllNotifications/response-fields.adoc[]
+
+
+=== 알림 읽음
+
+==== Request
+include::{snippets}//unReadToRead/http-request.adoc[]
+
+===== pathParam
+include::{snippets}//unReadToRead/path-parameters.adoc[]
+
+===== header
+include::{snippets}//unReadToRead/request-headers.adoc[]
+
+==== Response
+
+include::{snippets}//unReadToRead/http-response.adoc[]
+
+
+=== 알림 삭제
+
+==== Request
+include::{snippets}//deleteNotification/http-request.adoc[]
+
+===== pathParam
+include::{snippets}//deleteNotification/path-parameters.adoc[]
+
+===== header
+include::{snippets}//deleteNotification/request-headers.adoc[]
+
+==== Response
+include::{snippets}//deleteNotification/http-response.adoc[]
+
