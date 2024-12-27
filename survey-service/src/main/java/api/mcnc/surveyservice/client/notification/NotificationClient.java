@@ -15,5 +15,5 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "survey-notification-service")
 public interface NotificationClient {
   @PostMapping("/notifications/publish")
-  ResponseEntity<Void> publishNotificationToRedis(@RequestBody Request request, @RequestHeader(value = "requested-by", required = false) String adminId);
+  ResponseEntity<Void> publishNotificationToRedis(@RequestBody Request request, @RequestHeader(value = "requested-by") String adminId);
 }
