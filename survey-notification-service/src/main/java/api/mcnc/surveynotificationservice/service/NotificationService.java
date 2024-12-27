@@ -16,8 +16,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.net.URI;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
@@ -30,6 +31,7 @@ public class NotificationService {
      * @param adminId 관리자의 ID
      * @return 미확인 알림의 개수
      */
+    @Transactional(readOnly = true)
     public long countUnreadNotifications(String adminId) {
         return notificationRepository.countByAdminIdAndStatus(adminId, NotificationEntity.Status.UNREAD);
     }
@@ -39,7 +41,7 @@ public class NotificationService {
      *
      * @param id 알림 ID
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public URI redirectNotificationDetail(Long id, String adminId) {
         NotificationEntity notificationEntity = notificationRepository.findByIdAndAdminId(id, adminId).orElseThrow(()-> new NotificationException("요청정보를 찾을 수 없습니다."));
         notificationEntity.setRead();
@@ -52,6 +54,7 @@ public class NotificationService {
      * @param adminId 관리자의 ID
      * @return 알림 목록
      */
+    @Transactional(readOnly = true)
     public List<NotificationDto> getAllNotificationsByAdmin(String adminId) {
         Pageable pageable = PageRequest.of(0, 30);
         return notificationRepository
