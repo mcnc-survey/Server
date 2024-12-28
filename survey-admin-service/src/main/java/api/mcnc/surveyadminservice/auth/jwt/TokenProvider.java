@@ -72,16 +72,8 @@ public class TokenProvider {
         if (!originRefreshToken.equals(refreshToken)) {
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
         }
-        // 리프레시 토큰이 유효하지 않으면
-        if (!validateToken(refreshToken).isValid()) {
-            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
-        }
-        Admin authentication = getAuthentication(refreshToken);
 
-        // 토큰에 관리자 정보가 존재하지 않으면
-        if (authentication == null) {
-            throw new TokenException(TokenErrorCode.INVALID_TOKEN);
-        }
+        Admin authentication = getAuthentication(refreshToken);
 
         // 리프레시 토큰에서 추출한 관리자 정보로 토큰 재생성
         Token reissueToken = issue(authentication);
