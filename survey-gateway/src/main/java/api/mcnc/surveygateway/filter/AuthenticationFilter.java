@@ -68,8 +68,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     }
 
     private Mono<Void> proceedWithUserId(String adminId, ServerWebExchange exchange, GatewayFilterChain chain) {
-        exchange.getRequest().mutate().header("requested-by", adminId);
-        return chain.filter(exchange);
+        ServerWebExchange mutatedExchange = exchange.mutate()
+          .request(exchange.getRequest().mutate()
+            .header("requested-by", adminId)
+            .build())
+          .build();
+//        exchange.getRequest().mutate().header("requested-by", adminId);
+        return chain.filter(mutatedExchange);
     }
 
     public static class Config {
