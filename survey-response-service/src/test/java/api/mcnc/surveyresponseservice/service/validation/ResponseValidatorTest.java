@@ -263,10 +263,10 @@ class ResponseValidatorTest {
     void validateResponseUpdate_ShouldFollowSameRules() {
       // given
       QuestionResponseUpdate validUpdate = new QuestionResponseUpdate(
-        "1", true, "1,2,3"
+        "1", QuestionType.SINGLE_CHOICE, true, "1,2,3"
       );
       QuestionResponseUpdate invalidUpdate = new QuestionResponseUpdate(
-        "2", true,  "1,,2,3"
+        "2", QuestionType.SINGLE_CHOICE, true,  "1,,2,3"
       );
 
       // when & then

@@ -541,37 +541,6 @@ Host: localhost:8080
 </div>
 <div class="sect3">
 <h4 id="_body"><a class="link" href="#_body">body</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "responses" : [ {
-    "questionId" : "uuid-32",
-    "questionType" : "SINGLE_CHOICE",
-    "orderNumber" : 1,
-    "isRequired" : true,
-    "response" : "그렇다"
-  }, {
-    "questionId" : "uuid-32",
-    "questionType" : "MULTIPLE_CHOICE",
-    "orderNumber" : 2,
-    "isRequired" : true,
-    "response" : "피자|`|치킨"
-  }, {
-    "questionId" : "uuid-32",
-    "questionType" : "SHORT_ANSWER",
-    "orderNumber" : 3,
-    "isRequired" : true,
-    "response" : "집에 가고 싶다"
-  }, {
-    "questionId" : "uuid-32",
-    "questionType" : "LONG_ANSWER",
-    "orderNumber" : 4,
-    "isRequired" : true,
-    "response" : "집에 가고 싶다 라고 말하면 집에 갈 수 있다는 것에 대해서 말하다 보면 언젠가 집에 가지 않을까 하는 생각"
-  } ]
-}</code></pre>
-</div>
-</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -872,16 +841,18 @@ Host: localhost:8080</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /responses/%7BsurveyId%7D HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhNzEwYjgxYi03OTMzLTQwZTMtYjZiMi05MGZmYjhjZmIyYmEiLCJzdXJ2ZXlJZCI6IjI1OGYyODQ0LWEyZDktNDRhZi1hMDU4LTAyYjE5OTYxNTY1NiIsIm5hbWUiOiLsnKDtnazspIAiLCJlbWFpbCI6InloajM4NTVAbmF2ZXIuY29tIiwiaWF0IjoxNzMyNzY4OTE4LCJleHAiOjE3MzI3Njg5MTl9.nZzeYTpMWI0nE7fhQOFlc6BQ9hLZzfDSGBmqMlvX1P19ikpmPN5UFvdlOsaH_JCoJDE1QN7EvN6MILHE9ki7Yg
-Content-Length: 256
+Content-Length: 336
 Host: localhost:8080
 
 {
   "responses" : [ {
     "id" : "87494fba-cc90-4a8f-a38a-4744664c3bea",
+    "questionType" : "SINGLE_CHOICE",
     "isRequired" : true,
     "response" : "아니다"
   }, {
     "id" : "87494fba-cc90-5a8f-b48c-7743644c351a",
+    "questionType" : "MULTIPLE_CHOICE",
     "isRequired" : true,
     "response" : "탕수육"
   } ]
@@ -932,24 +903,6 @@ Host: localhost:8080
 </tbody>
 </table>
 <div class="sect4">
-<h5 id="_body_3"><a class="link" href="#_body_3">body</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "responses" : [ {
-    "id" : "87494fba-cc90-4a8f-a38a-4744664c3bea",
-    "isRequired" : true,
-    "response" : "아니다"
-  }, {
-    "id" : "87494fba-cc90-5a8f-b48c-7743644c351a",
-    "isRequired" : true,
-    "response" : "탕수육"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
 <h5 id="_fields_2"><a class="link" href="#_fields_2">fields</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -974,6 +927,11 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>responses[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">응답 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>responses[].questionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 유형</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>responses[].isRequired</code></p></td>
@@ -1062,19 +1020,6 @@ Content-Length: 1410
         "totalResponseCount" : 2,
         "responses" : [ "집에 가고 싶다네요", "집집집" ]
       },
-      "1" : {
-        "questionId" : "86cddc4d-6ae3-451f-8d65-95d43de48ddf",
-        "questionTitle" : "서비스에 만족하셨습니까?",
-        "questionType" : "SINGLE_CHOICE",
-        "totalResponseCount" : 2,
-        "responses" : [ {
-          "text" : "만족",
-          "count" : 1
-        }, {
-          "text" : "매우 만족",
-          "count" : 2
-        } ]
-      },
       "2" : {
         "questionId" : "ede654e3-0f1b-47bd-a930-89548b8cbfac",
         "questionTitle" : "좋아하는 메뉴를 골라주세요",
@@ -1085,6 +1030,19 @@ Content-Length: 1410
           "count" : 1
         }, {
           "text" : "치킨",
+          "count" : 2
+        } ]
+      },
+      "1" : {
+        "questionId" : "86cddc4d-6ae3-451f-8d65-95d43de48ddf",
+        "questionTitle" : "서비스에 만족하셨습니까?",
+        "questionType" : "SINGLE_CHOICE",
+        "totalResponseCount" : 2,
+        "responses" : [ {
+          "text" : "만족",
+          "count" : 1
+        }, {
+          "text" : "매우 만족",
           "count" : 2
         } ]
       }
