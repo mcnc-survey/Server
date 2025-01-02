@@ -11,7 +11,6 @@ include::{snippets}/saveResponse/path-parameters.adoc[]
 include::{snippets}/saveResponse/request-headers.adoc[]
 
 ==== body
-include::{snippets}/saveResponse/request-body.adoc[]
 include::{snippets}/saveResponse/request-fields.adoc[]
 
 ==== Response
@@ -51,8 +50,6 @@ include::{snippets}/updateResponse/path-parameters.adoc[]
 ==== headers
 include::{snippets}/updateResponse/request-headers.adoc[]
 
-===== body
-include::{snippets}/updateResponse/request-body.adoc[]
 ===== fields
 include::{snippets}/updateResponse/request-fields.adoc[]
 

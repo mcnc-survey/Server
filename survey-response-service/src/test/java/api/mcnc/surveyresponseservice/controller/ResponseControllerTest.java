@@ -187,8 +187,8 @@ class ResponseControllerTest {
     // given: Mock된 서비스와 데이터 설정
     ResponseUpdateRequest updateRequest = new ResponseUpdateRequest(
       List.of(
-        new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", true, "아니다"),
-        new QuestionResponseUpdate("87494fba-cc90-5a8f-b48c-7743644c351a", true, "탕수육")
+        new QuestionResponseUpdate("87494fba-cc90-4a8f-a38a-4744664c3bea", SINGLE_CHOICE, true, "아니다"),
+        new QuestionResponseUpdate("87494fba-cc90-5a8f-b48c-7743644c351a", MULTIPLE_CHOICE, true, "탕수육")
       )
     );
     doNothing().when(responseService).updateResponse(anyString(), anyList());
@@ -211,6 +211,7 @@ class ResponseControllerTest {
           requestFields(
             fieldWithPath("responses").type(ARRAY).description("응답 수정 목록"),
             fieldWithPath("responses[].id").type(STRING).description("응답 ID"),
+            fieldWithPath("responses[].questionType").type(STRING).description("질문 유형"),
             fieldWithPath("responses[].isRequired").type(BOOLEAN).description("필수 여부"),
             fieldWithPath("responses[].response").type(STRING).description("수정된 답변")
           ),
