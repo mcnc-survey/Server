@@ -41,7 +41,6 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                             }
                             return proceedWithUserId(response.adminId(), exchange, chain);
                         })
-                        .switchIfEmpty(chain.filter(exchange)) // If token is invalid, continue without setting userId
                         .onErrorResume(e -> handleAuthenticationError(exchange, e)); // Handle errors
             }
 
