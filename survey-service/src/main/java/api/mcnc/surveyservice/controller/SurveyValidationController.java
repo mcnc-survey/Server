@@ -28,7 +28,7 @@ public class SurveyValidationController {
   // 타 서비스에서 Survey 조회
   @GetMapping("/survey-get/{surveyId}")
   public Survey getValidSurvey(@PathVariable("surveyId") String surveyId) {
-    return surveyValidationService.getSruvey(surveyId);
+    return surveyValidationService.getSurvey(surveyId);
   }
 
 }
