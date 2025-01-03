@@ -13,6 +13,7 @@ import static api.mcnc.surveynotificationservice.entity.NotificationEntity.Statu
 public class NotificationDto {
 
     private Long id;
+    private String surveyId;
     private String message;
     private Boolean isRead;
     private String createdAt;
@@ -21,6 +22,7 @@ public class NotificationDto {
     public static NotificationDto fromEntity(NotificationEntity notificationEntity) {
         return NotificationDto.builder()
                 .id(notificationEntity.getId())
+                .surveyId(notificationEntity.getSurveyId())
                 .message(notificationEntity.getMessage())
                 .isRead(READ.equals(notificationEntity.getStatus()))
                 .createdAt(notificationEntity.getCreatedAt().toString())
@@ -28,9 +30,10 @@ public class NotificationDto {
                 .build();
     }
 
-    public static NotificationDto of(Long id, String message, Boolean isRead, String createdAt, NotificationEntity.Type type) {
+    public static NotificationDto of(Long id, String surveyId, String message, Boolean isRead, String createdAt, NotificationEntity.Type type) {
         return NotificationDto.builder()
                 .id(id)
+                .surveyId(surveyId)
                 .message(message)
                 .isRead(isRead)
                 .createdAt(createdAt)
