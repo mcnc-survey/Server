@@ -185,8 +185,6 @@ class NotificationControllerTest {
                                 )
                         )
                 )
-                .andDo(print())
-        ;
+                .andDo(print());
     }
-
 }
