@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -62,7 +63,10 @@ public class SurveyEntity extends MutableBaseEntity {
   }
 
   public Survey toDomain() {
-    List<Question> questionList = questions.stream().map(QuestionEntity::toDomain).toList();
+    List<Question> questionList = questions.stream()
+      .map(QuestionEntity::toDomain)
+      .sorted(Comparator.comparingInt(Question::order))
+      .toList();
     return Survey.builder()
       .id(id)
       .adminId(adminId)

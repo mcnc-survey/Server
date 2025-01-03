@@ -58,10 +58,10 @@ public class FetchSurveyRepository {
     );
   }
 
-  public Optional<Survey> fetchBySurveyId(String surveyId) {
+  public Optional<Survey> fetchBySurveyId(String adminId, String surveyId) {
     return readTransactionOperations.execute(status ->
       surveyJpaRepository
-        .findById(surveyId)
+        .findByIdAndAdminId(adminId, surveyId)
         .map(SurveyEntity::toDomain)
     );
   }
