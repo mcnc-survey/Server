@@ -38,11 +38,8 @@ public class NotificationController {
     // 알림 상태를 'READ'로 업데이트
     @PatchMapping("/read/{id}")
     public ResponseEntity<Void> markNotificationAsRead(@PathVariable Long id, @RequestHeader(value = "requested-by") String adminId) {
-        URI redirectUri = notificationService.redirectNotificationDetail(id, adminId);
-        return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .location(redirectUri)
-                .build();
+         notificationService.redirectNotificationDetail(id, adminId);
+        return ResponseEntity.noContent().build();
     }
 
     // 관리자의 모든 알림 조회
