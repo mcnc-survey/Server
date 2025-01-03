@@ -7,6 +7,7 @@ import api.mcnc.surveyresponseservice.service.request.UpdateTypeCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,12 +26,12 @@ public class ResponseClientController {
   private final ResponseClientService responseService;
 
   @DeleteMapping("/deletion/responses")
-  public void deleteResponse(List<String> surveyIdList) {
+  public void deleteResponse(@RequestBody List<String> surveyIdList) {
     deleteService.deleteResponse(surveyIdList);
   }
 
   @PutMapping("/update/response")
-  void updateResponse(List<ResponseUpdate> responseUpdateList) {
+  void updateResponse(@RequestBody List<ResponseUpdate> responseUpdateList) {
     String surveyId = responseUpdateList.get(0).surveyId();
     List<UpdateTypeCommand> updateCommandList = responseUpdateList.stream()
       .map(UpdateTypeCommand::of)
