@@ -132,8 +132,8 @@ public class SurveyService {
 
   // 응답을 위한 상세 보기
   public SurveyDetailsResponse getDetail(String surveyId) {
-    // TODO: 현재는 설문 아이디만 있으면 다 조회 가능 - 추 후에 수정 필요
-    Survey survey = fetchSurveyRepository.fetchBySurveyId(surveyId)
+    String adminId = getAdminId();
+    Survey survey = fetchSurveyRepository.fetchBySurveyId(adminId, surveyId)
       .orElseThrow(() -> new SurveyException(SurveyErrorCode.FOUND_NOT_SURVEY));
     return survey.toDetailsResponse();
   }
