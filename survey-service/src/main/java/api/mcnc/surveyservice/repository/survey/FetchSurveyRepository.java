@@ -3,6 +3,7 @@ package api.mcnc.surveyservice.repository.survey;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
+import jakarta.ws.rs.HEAD;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
@@ -54,14 +55,6 @@ public class FetchSurveyRepository {
     return readTransactionOperations.execute(status ->
       surveyJpaRepository
         .findByIdAndAdminId(surveyId, adminId)
-        .map(SurveyEntity::toDomain)
-    );
-  }
-
-  public Optional<Survey> fetchBySurveyId(String adminId, String surveyId) {
-    return readTransactionOperations.execute(status ->
-      surveyJpaRepository
-        .findByIdAndAdminId(adminId, surveyId)
         .map(SurveyEntity::toDomain)
     );
   }

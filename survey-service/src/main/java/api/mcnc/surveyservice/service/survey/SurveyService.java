@@ -32,8 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static api.mcnc.surveyservice.client.notification.Type.*;
-import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.INVALID_REQUEST;
-import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.START_TIME_MUST_BE_BEFORE_END_TIME;
+import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.*;
 
 /**
  * please explain class!
@@ -132,10 +131,7 @@ public class SurveyService {
 
   // 응답을 위한 상세 보기
   public SurveyDetailsResponse getDetail(String surveyId) {
-    String adminId = getAdminId();
-    Survey survey = fetchSurveyRepository.fetchBySurveyId(adminId, surveyId)
-      .orElseThrow(() -> new SurveyException(SurveyErrorCode.FOUND_NOT_SURVEY));
-    return survey.toDetailsResponse();
+    return getSurvey(surveyId).toDetailsResponse();
   }
 
   // 설문 수정
@@ -226,7 +222,7 @@ public class SurveyService {
   private Survey getSurvey(String surveyId) {
     String adminId = getAdminId();
     return fetchSurveyRepository.fetchBySurveyIdAndAdminId(surveyId, adminId)
-      .orElseThrow(() -> new SurveyException(INVALID_REQUEST, "설문이 존재하지 않습니다."));
+      .orElseThrow(() -> new SurveyException(FOUND_NOT_SURVEY, "설문이 존재하지 않습니다."));
   }
 
   // 작성자 아이디 가져오기
