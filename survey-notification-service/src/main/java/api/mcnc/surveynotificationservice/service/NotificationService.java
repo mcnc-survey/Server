@@ -41,11 +41,10 @@ public class NotificationService {
      *
      * @param id 알림 ID
      */
-    @Transactional(readOnly = true)
-    public URI redirectNotificationDetail(Long id, String adminId) {
+    @Transactional
+    public void redirectNotificationDetail(Long id, String adminId) {
         NotificationEntity notificationEntity = notificationRepository.findByIdAndAdminId(id, adminId).orElseThrow(()-> new NotificationException("요청정보를 찾을 수 없습니다."));
         notificationEntity.setRead();
-        return URI.create(notificationEntity.getRedirectUrl());
     }
 
     /**
