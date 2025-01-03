@@ -197,7 +197,12 @@ public class SurveyService {
     Survey survey = getSurvey(surveyId);
     emailClientService.sendHtmlVerificationEmails(survey.title(), survey.surveyLink(),emails);
   }
-// TODO 2024-12-20 yhj : 생성, 수정, 삭제 되면 알림
+
+  public boolean isExist(String surveyId) {
+    String adminId = getAdminId();
+    return fetchSurveyRepository.existsBySurveyIdAndAdminId(surveyId, adminId);
+  }
+
   // ==============================
   // private method
   // ==============================
