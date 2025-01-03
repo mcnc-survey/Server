@@ -22,7 +22,7 @@ public class SurveyValidationService {
     return fetchSurveyRepository.existsBySurveyId(surveyId);
   }
 
-  public Survey getSruvey(String surveyId) {
+  public Survey getSurvey(String surveyId) {
     return fetchSurveyRepository.fetchBySurveyId(surveyId).orElse(null);
   }
 }
