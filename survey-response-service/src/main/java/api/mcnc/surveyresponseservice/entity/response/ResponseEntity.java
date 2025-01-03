@@ -29,6 +29,7 @@ public class ResponseEntity extends MutableBaseEntity {
   private String surveyId;
   @Column(name = "RESPONDENT_ID")
   private String respondentId;
+  @Getter
   @Column(name = "QUESTION_ID")
   private String questionId;
   @Enumerated(EnumType.STRING)
@@ -80,5 +81,9 @@ public class ResponseEntity extends MutableBaseEntity {
       .orderNumber(orderNumber)
       .response(response)
       .build();
+  }
+
+  public void updateType(QuestionType questionType) {
+    this.questionType = questionType;
   }
 }

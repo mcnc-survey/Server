@@ -1,8 +1,12 @@
 package api.mcnc.surveyresponseservice.controller;
 
+import api.mcnc.surveyresponseservice.controller.request.ResponseUpdate;
 import api.mcnc.surveyresponseservice.service.DeleteScheduleService;
+import api.mcnc.surveyresponseservice.service.ResponseClientService;
+import api.mcnc.surveyresponseservice.service.request.UpdateTypeCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,10 +22,20 @@ import java.util.List;
 public class ResponseClientController {
 
   private final DeleteScheduleService deleteService;
+  private final ResponseClientService responseService;
 
   @DeleteMapping("/deletion/responses")
   public void deleteResponse(List<String> surveyIdList) {
     deleteService.deleteResponse(surveyIdList);
+  }
+
+  @PutMapping("/update/response")
+  void updateResponse(List<ResponseUpdate> responseUpdateList) {
+    String surveyId = responseUpdateList.get(0).surveyId();
+    List<UpdateTypeCommand> updateCommandList = responseUpdateList.stream()
+      .map(UpdateTypeCommand::of)
+      .toList();
+    responseService.updateType(surveyId, updateCommandList);
   }
 
 }
