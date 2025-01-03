@@ -171,10 +171,12 @@ public class SurveyService {
     // 수정
     updateSurveyRepository.updateSurvey(surveyId, updateSurvey, withId, withoutId, updateIds);
 
-    List<ResponseUpdate> updateList = withId.stream()
-      .map(question -> ResponseUpdate.of(surveyId, question.id(), question.questionType()))
-      .toList();
-    responseServiceClientService.updateResponse(updateList);
+    if (!withId.isEmpty()) {
+      List<ResponseUpdate> updateList = withId.stream()
+        .map(question -> ResponseUpdate.of(surveyId, question.id(), question.questionType()))
+        .toList();
+      responseServiceClientService.updateResponse(updateList);
+    }
 
     // 수정 완료 하고 상태 변경
     updateSurveyStatusRepository.updateSurveyStatusToEndEdit(surveyId, changedStatus);
