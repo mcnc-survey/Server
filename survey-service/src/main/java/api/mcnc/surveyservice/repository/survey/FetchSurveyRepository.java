@@ -66,6 +66,14 @@ public class FetchSurveyRepository {
     );
   }
 
+  public Optional<Survey> fetchBySurveyId(String surveyId) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository
+        .findById(surveyId)
+        .map(SurveyEntity::toDomain)
+    );
+  }
+
   public List<Survey> fetchAllLikeSurveyByAdminId(String adminId) {
     return readTransactionOperations.execute(status ->
       surveyJpaRepository
