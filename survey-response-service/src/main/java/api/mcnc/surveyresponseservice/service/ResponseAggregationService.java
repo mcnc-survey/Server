@@ -2,20 +2,18 @@ package api.mcnc.surveyresponseservice.service;
 
 import api.mcnc.surveyresponseservice.client.survey.response.Question;
 import api.mcnc.surveyresponseservice.client.survey.response.Survey;
+import api.mcnc.surveyresponseservice.controller.response.aggregation.ResponseAggregationResponse;
 import api.mcnc.surveyresponseservice.controller.response.aggregation.SurveyResultValue;
 import api.mcnc.surveyresponseservice.controller.response.aggregation.SurveySummary;
 import api.mcnc.surveyresponseservice.domain.Response;
 import api.mcnc.surveyresponseservice.repository.response.ResponseAggregationRepository;
-import api.mcnc.surveyresponseservice.controller.response.aggregation.ResponseAggregationResponse;
 import api.mcnc.surveyresponseservice.service.response.ResponseResultByQuestionType;
 import api.mcnc.surveyresponseservice.service.validation.ValidOtherService;
 import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
