@@ -83,4 +83,10 @@ public class FetchSurveyRepository {
     );
   }
 
+  public Boolean existsBySurveyIdAndAdminId(String id, String adminId) {
+    return readTransactionOperations.execute(status ->
+      surveyJpaRepository.existsByIdAndAdminId(id, adminId)
+    );
+  }
+
 }

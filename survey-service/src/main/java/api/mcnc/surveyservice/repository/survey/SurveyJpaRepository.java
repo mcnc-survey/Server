@@ -23,6 +23,7 @@ public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String
   List<SurveyEntity> findAllByAdminIdAndStatus(String adminId, SurveyStatus status);
 
   boolean existsByIdAndStatus(String id, SurveyStatus status);
+  boolean existsByIdAndAdminId(String id, String adminId);
 
   @Query("SELECT s FROM SurveyEntity s WHERE s.status != 'DELETE' AND s.like = 'LIKE' AND s.adminId = :adminId")
   List<SurveyEntity> findAllLikeSurveyByAdminId(String adminId);
