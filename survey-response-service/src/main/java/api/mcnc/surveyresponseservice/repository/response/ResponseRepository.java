@@ -2,9 +2,12 @@ package api.mcnc.surveyresponseservice.repository.response;
 
 import api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode;
 import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
+import api.mcnc.surveyresponseservice.controller.request.ResponseUpdate;
 import api.mcnc.surveyresponseservice.domain.Response;
+import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import api.mcnc.surveyresponseservice.entity.response.ResponseEntity;
 import api.mcnc.surveyresponseservice.service.request.UpdateCommand;
+import api.mcnc.surveyresponseservice.service.request.UpdateTypeCommand;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
@@ -93,6 +96,20 @@ public class ResponseRepository {
         .map(ResponseEntity::toDomain)
         .toList()
     );
+  }
+
+  public void updateType(String surveyId, List<UpdateTypeCommand> question) {
+    writeTransactionOperations.executeWithoutResult(status -> {
+      List<ResponseEntity> responseList = responseJpaRepository.findAllBySurveyId(surveyId);
+      for (ResponseEntity response : responseList) {
+        for (UpdateTypeCommand update : question) {
+          if (response.getQuestionId().equals(update.questionId())) {
+            response.updateType(update.type());
+          }
+        }
+      }
+      responseJpaRepository.saveAll(responseList);
+    });
   }
 
   // 응답 한 적 있는 설문 인지

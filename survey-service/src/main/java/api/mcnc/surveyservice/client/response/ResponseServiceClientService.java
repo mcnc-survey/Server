@@ -23,4 +23,7 @@ public class ResponseServiceClientService {
     responseServiceClient.deleteResponse(surveyIdList);
   }
 
+  public void updateResponse(List<ResponseUpdate> responseUpdateList) {
+    responseServiceClient.updateResponse(responseUpdateList);
+  }
 }

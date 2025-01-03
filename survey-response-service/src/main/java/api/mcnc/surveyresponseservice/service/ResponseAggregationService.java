@@ -9,9 +9,11 @@ import api.mcnc.surveyresponseservice.repository.response.ResponseAggregationRep
 import api.mcnc.surveyresponseservice.controller.response.aggregation.ResponseAggregationResponse;
 import api.mcnc.surveyresponseservice.service.response.ResponseResultByQuestionType;
 import api.mcnc.surveyresponseservice.service.validation.ValidOtherService;
+import com.google.common.base.Strings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.web.format.DateTimeFormatters;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -62,11 +64,19 @@ public class ResponseAggregationService {
       // 질문 별
       Integer key = questionDetailsResponse.order();
       // 응답 데이터들
+        // TODO 2025-01-02 yhj : 응답이 null인 것들은 제외 하고, 장문, 단답의 경우 null은 되지만 빈문자열은 안되게 해야할 듯
       List<Response> responsesGroupByOrderNumber = responseList.getOrDefault(key, new ArrayList<>());
+      int responseCount = responsesGroupByOrderNumber.size();
+      for(Response res: responsesGroupByOrderNumber) {
+        // 값이 존재 하지 않는 경우는 응답으로 여기지 않음
+        if(!StringUtils.hasText(res.response())) {
+          responseCount -= 1;
+        }
+      }
 
       Object responses = null;
       // 응답 존재하지 않으면 null
-      if (!responsesGroupByOrderNumber.isEmpty()) {
+      if (responseCount > 0) {
         // 응답 데이터 집계 알고리즘
         responses = responseResult.calculateResponseResult(responsesGroupByOrderNumber);
       }
