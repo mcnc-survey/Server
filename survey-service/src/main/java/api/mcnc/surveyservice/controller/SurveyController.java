@@ -103,9 +103,9 @@ public class SurveyController {
   }
 
   @GetMapping("/surveys/survey-id/{surveyId}/check")
-  public Api<SurveyDetailsResponse> checkIsExist(@PathVariable("surveyId") String surveyId) {
-    surveyService.isExist(surveyId);
-    return Api.ok(SuccessCode.SUCCESS, null);
+  public Api<Boolean> checkIsExist(@PathVariable("surveyId") String surveyId) {
+    boolean exist = surveyService.isExist(surveyId);
+    return Api.ok(SuccessCode.SUCCESS, exist);
   }
 
 }
