@@ -2,12 +2,10 @@ package api.mcnc.surveyresponseservice.repository.response;
 
 import api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode;
 import api.mcnc.surveyresponseservice.common.exception.custom.ResponseException;
-import api.mcnc.surveyresponseservice.controller.request.ResponseUpdate;
 import api.mcnc.surveyresponseservice.domain.Response;
-import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import api.mcnc.surveyresponseservice.entity.response.ResponseEntity;
 import api.mcnc.surveyresponseservice.service.request.UpdateCommand;
-import api.mcnc.surveyresponseservice.service.request.UpdateTypeCommand;
+import api.mcnc.surveyresponseservice.service.request.UpdateSurveyCommand;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
@@ -15,7 +13,6 @@ import org.springframework.transaction.support.TransactionOperations;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * please explain class!
@@ -98,13 +95,13 @@ public class ResponseRepository {
     );
   }
 
-  public void updateType(String surveyId, List<UpdateTypeCommand> question) {
+  public void updateType(String surveyId, List<UpdateSurveyCommand> question) {
     writeTransactionOperations.executeWithoutResult(status -> {
       List<ResponseEntity> responseList = responseJpaRepository.findAllBySurveyId(surveyId);
       for (ResponseEntity response : responseList) {
-        for (UpdateTypeCommand update : question) {
+        for (UpdateSurveyCommand update : question) {
           if (response.getQuestionId().equals(update.questionId())) {
-            response.updateType(update.type());
+            response.update(update);
           }
         }
       }

@@ -12,12 +12,14 @@ import lombok.Builder;
 @Builder
 public record UpdateCommand(
   String id,
-  String response
+  String response,
+  String etc
 ) {
   public static UpdateCommand of(QuestionResponseUpdate updateRequest) {
     return UpdateCommand.builder()
       .id(updateRequest.id())
       .response(updateRequest.response())
+      .etc(updateRequest.etc())
       .build();
   }
 }

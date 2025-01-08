@@ -24,6 +24,7 @@ public interface ResponseJpaRepository extends ListCrudRepository<ResponseEntity
 
   // 설문 ID에 해당하는 모든 응답을 반환
   List<ResponseEntity> findAllBySurveyId(String surveyId);
+  List<ResponseEntity> findAllBySurveyIdOrderByOrderNumber(String surveyId);
 
   // 내가 한 설문 응답
   List<ResponseEntity> findAllBySurveyIdAndRespondentIdOrderByOrderNumber(String surveyId, String respondentId);

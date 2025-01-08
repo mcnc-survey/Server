@@ -17,6 +17,7 @@ public record QuestionResponseUpdate(
   QuestionType questionType,
   @NotNull
   Boolean isRequired,
-  String response
+  String response,
+  String etc
 ) {
 }

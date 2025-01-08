@@ -19,7 +19,7 @@ import java.util.List;
 public class ResponseResultByQuestionType {
   private QuestionTypeIfs questionType;
 
-  public Object calculateResponseResult(List<Response> values) {
+  public List<Object> calculateResponseResult(List<Response> values) {
     QuestionType currentQuestionType = values.get(0).questionType();
     setQuestionType(currentQuestionType);
     return questionType.calculateResponseResult(values);
@@ -27,11 +27,8 @@ public class ResponseResultByQuestionType {
 
   private void setQuestionType(QuestionType questionType) {
     switch (questionType) {
-      case SINGLE_CHOICE:
-        this.questionType = new SingleChoiceType();
-        break;
-      case MULTIPLE_CHOICE:
-        this.questionType = new MultipleChoiceType();
+      case SINGLE_CHOICE, MULTIPLE_CHOICE:
+        this.questionType = new ChoiceType();
         break;
       case SHORT_ANSWER: case LONG_ANSWER:
         this.questionType = new StringAnswerType();

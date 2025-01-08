@@ -11,13 +11,15 @@ import lombok.Builder;
  * @since :2025-01-03 오전 11:35
  */
 @Builder(access = lombok.AccessLevel.PRIVATE)
-public record UpdateTypeCommand(
+public record UpdateSurveyCommand(
   String questionId,
+  Integer orderNumber,
   QuestionType type
 ) {
-  public static UpdateTypeCommand of(ResponseUpdate responseUpdate) {
-    return UpdateTypeCommand.builder()
+  public static UpdateSurveyCommand of(ResponseUpdate responseUpdate) {
+    return UpdateSurveyCommand.builder()
       .questionId(responseUpdate.questionId())
+      .orderNumber(responseUpdate.orderNumber())
       .type(responseUpdate.questionType())
       .build();
   }

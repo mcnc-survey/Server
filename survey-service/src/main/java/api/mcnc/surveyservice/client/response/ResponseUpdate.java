@@ -13,9 +13,10 @@ import lombok.Builder;
 public record ResponseUpdate(
   String surveyId,
   String questionId,
+  Integer orderNumber,
   QuestionType questionType
 ) {
-  public static ResponseUpdate of(String surveyId, String questionId, QuestionType questionType) {
+  public static ResponseUpdate of(String surveyId, String questionId, Integer orderNumber, QuestionType questionType) {
     return ResponseUpdate.builder()
       .surveyId(surveyId)
       .questionId(questionId)
