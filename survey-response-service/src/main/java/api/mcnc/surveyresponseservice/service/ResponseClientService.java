@@ -1,7 +1,7 @@
 package api.mcnc.surveyresponseservice.service;
 
 import api.mcnc.surveyresponseservice.repository.response.ResponseRepository;
-import api.mcnc.surveyresponseservice.service.request.UpdateTypeCommand;
+import api.mcnc.surveyresponseservice.service.request.UpdateSurveyCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class ResponseClientService {
   private final ResponseRepository responseRepository;
 
-  public void updateType(String surveyId, List<UpdateTypeCommand> commandList) {
+  public void updateType(String surveyId, List<UpdateSurveyCommand> commandList) {
     responseRepository.updateType(surveyId, commandList);
   }
 

@@ -7,5 +7,6 @@ import lombok.Builder;
 public record ResponseUpdate(
   String surveyId,
   String questionId,
+  Integer orderNumber,
   QuestionType questionType
 ) {}

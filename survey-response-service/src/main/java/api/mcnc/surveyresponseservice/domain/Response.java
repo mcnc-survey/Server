@@ -25,7 +25,8 @@ public record Response(
   String questionId,
   QuestionType questionType,
   Integer orderNumber,
-  String response
+  String response,
+  String etc
 ) {
 
   public static Response of(String surveyId, String respondentId, QuestionResponse saveRequest) {
@@ -36,6 +37,7 @@ public record Response(
       .questionType(saveRequest.questionType())
       .orderNumber(saveRequest.orderNumber())
       .response(saveRequest.response())
+      .etc(saveRequest.etc())
       .build();
   }
 
@@ -43,6 +45,7 @@ public record Response(
     return Response.builder()
       .id(responseUpdateRecord.id())
       .response(responseUpdateRecord.response())
+      .etc(responseUpdateRecord.etc())
       .build();
   }
 
@@ -59,6 +62,7 @@ public record Response(
     return ResponseResult.builder()
       .id(this.id)
       .response(response)
+      .etc(this.etc)
       .build();
   }
 }

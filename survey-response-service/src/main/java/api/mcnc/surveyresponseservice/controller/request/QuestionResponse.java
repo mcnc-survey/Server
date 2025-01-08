@@ -20,6 +20,7 @@ public record QuestionResponse(
   Integer orderNumber,
   @NotNull
   Boolean isRequired,
-  String response
+  String response,
+  String etc
 ) {
 }

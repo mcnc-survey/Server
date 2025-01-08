@@ -13,7 +13,7 @@ import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPARATO
  * @author :Uheejoon
  * @since :2024-11-17 오후 8:00
  */
-public class MultipleChoiceType implements QuestionTypeIfs {
+public class ChoiceType implements QuestionTypeIfs {
   @Override
   public List<Object> calculateResponseResult(List<Response> values) {
     if (values == null || values.isEmpty()) {

@@ -15,8 +15,11 @@ import java.util.List;
 public record SurveyResultValue(
   String questionId,
   String questionTitle,
-  QuestionType  questionType,
+  QuestionType questionType,
   Integer totalResponseCount,
-  Object responses
+  Integer responseCount,
+  List<Object> responses,
+  Integer etcCount,
+  List<String> etc
 ) {
 }
