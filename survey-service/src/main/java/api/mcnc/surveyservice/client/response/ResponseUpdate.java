@@ -20,6 +20,7 @@ public record ResponseUpdate(
     return ResponseUpdate.builder()
       .surveyId(surveyId)
       .questionId(questionId)
+      .orderNumber(orderNumber)
       .questionType(questionType)
       .build();
   }
