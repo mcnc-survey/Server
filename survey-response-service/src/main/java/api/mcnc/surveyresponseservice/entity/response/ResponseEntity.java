@@ -3,11 +3,13 @@ package api.mcnc.surveyresponseservice.entity.response;
 import api.mcnc.surveyresponseservice.domain.Response;
 import api.mcnc.surveyresponseservice.entity.audit.MutableBaseEntity;
 import api.mcnc.surveyresponseservice.service.request.UpdateCommand;
+import api.mcnc.surveyresponseservice.service.request.UpdateSurveyCommand;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.util.UUID;
 
@@ -39,13 +41,19 @@ public class ResponseEntity extends MutableBaseEntity {
   private Integer orderNumber;
   @Column(name = "RESPONSE")
   private String response;
+  @Column(name = "ETC")
+  private String etc;
 
   public Integer orderNumber() {
     return this.orderNumber;
   }
 
+  public boolean isHasTextResponse() {
+    return StringUtils.hasText(this.response) || StringUtils.hasText(this.etc);
+  }
+
   @Builder
-  private ResponseEntity(String id, String surveyId, String respondentId, String questionId, QuestionType questionType, Integer orderNumber, String response) {
+  private ResponseEntity(String id, String surveyId, String respondentId, String questionId, QuestionType questionType, Integer orderNumber, String response, String etc) {
     this.id = id;
     this.surveyId = surveyId;
     this.respondentId = respondentId;
@@ -53,6 +61,7 @@ public class ResponseEntity extends MutableBaseEntity {
     this.questionType = questionType;
     this.orderNumber = orderNumber;
     this.response = response;
+    this.etc = etc;
   }
 
   public static ResponseEntity of(Response response) {
@@ -64,26 +73,30 @@ public class ResponseEntity extends MutableBaseEntity {
       .orderNumber(response.orderNumber())
       .respondentId(response.respondentId())
       .response(response.response())
+      .etc(response.etc())
       .build();
   }
 
   public void update(UpdateCommand updateCommand) {
     this.response = updateCommand.response();
+    this.etc = updateCommand.etc();
   }
 
   public Response toDomain() {
     return Response.builder()
-      .id(id)
-      .surveyId(surveyId)
-      .respondentId(respondentId)
-      .questionId(questionId)
-      .questionType(questionType)
-      .orderNumber(orderNumber)
-      .response(response)
+      .id(this.id)
+      .surveyId(this.surveyId)
+      .respondentId(this.respondentId)
+      .questionId(this.questionId)
+      .questionType(this.questionType)
+      .orderNumber(this.orderNumber)
+      .response(this.response)
+      .etc(this.etc)
       .build();
   }
 
-  public void updateType(QuestionType questionType) {
-    this.questionType = questionType;
+  public void update(UpdateSurveyCommand updateSurveyCommand) {
+    this.orderNumber = updateSurveyCommand.orderNumber();
+    this.questionType = updateSurveyCommand.type();
   }
 }

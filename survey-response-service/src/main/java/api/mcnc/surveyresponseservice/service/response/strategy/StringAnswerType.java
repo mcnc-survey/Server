@@ -1,10 +1,13 @@
 package api.mcnc.surveyresponseservice.service.response.strategy;
 
 import api.mcnc.surveyresponseservice.domain.Response;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPARATOR;
 
 /**
  * please explain class!
@@ -21,10 +24,12 @@ public class StringAnswerType implements QuestionTypeIfs {
     // 응답 개수 만큼 다양한 응답이 생김
     List<Object> results = new ArrayList<>(values.size());
 
-    for (Response value : values) {
-      String response = value.response();
-      if (response != null) {
-        results.add(response);
+    for (Response response : values) {
+      String[] responses = response.response().split(SEPARATOR);
+      for (String res : responses) {
+        if (StringUtils.hasText(res)) {
+          results.add(res);
+        }
       }
     }
 

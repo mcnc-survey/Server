@@ -169,7 +169,7 @@ public class SurveyService {
 
     if (!withId.isEmpty()) {
       List<ResponseUpdate> updateList = withId.stream()
-        .map(question -> ResponseUpdate.of(surveyId, question.id(), question.questionType()))
+        .map(question -> ResponseUpdate.of(surveyId, question.id(), question.order(), question.questionType()))
         .toList();
       responseServiceClientService.updateResponse(updateList);
     }

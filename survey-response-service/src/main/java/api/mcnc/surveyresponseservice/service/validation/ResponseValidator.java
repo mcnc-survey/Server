@@ -23,19 +23,24 @@ public class ResponseValidator {
 
   // 기존 QuestionResponse 검증
   public void validateResponses(List<QuestionResponse> responses) {
-    responses.forEach(response -> this.validate(response.response(), response.isRequired(), response.questionType()));
+    responses.forEach(response -> this.validate(response.response(), response.isRequired(), response.questionType(), response.etc()));
   }
 
   // QuestionResponseUpdate 검증
   public void validateResponseUpdates(List<QuestionResponseUpdate> responses) {
-    responses.forEach(response -> this.validate(response.response(), response.isRequired(), response.questionType()));
+    responses.forEach(response -> this.validate(response.response(), response.isRequired(), response.questionType(), response.etc()));
   }
 
-  private void validate(String response, boolean isRequired, QuestionType type) {
-    if (isRequired && !StringUtils.hasText(response)) {
+  private void validate(String response, boolean isRequired, QuestionType type, String etc) {
+    if (isNotHasResponseWhenIsRequire(response, etc, isRequired)) {
       throw new ResponseException(ResponseErrorCode.INVALID_REQUEST, "필수 응답은 비어있을 수 없습니다.");
     }
 
+    // 둘 다 빈 문자열은 허용 안함
+    if (isBlank(response, etc)) {
+      return;
+    }
+    
     if (!QuestionType.MULTIPLE_CHOICE.equals(type)) {
       return;
     }
@@ -44,6 +49,14 @@ public class ResponseValidator {
       throw new ResponseException(ResponseErrorCode.INVALID_REQUEST, "잘못된 요청 유형입니다.");
     }
 
+  }
+
+  private boolean isBlank(String response, String etc) {
+    return response.isBlank() || etc.isBlank();
+  }
+
+  private boolean isNotHasResponseWhenIsRequire(String response, String etc, boolean isRequired) {
+    return !StringUtils.hasText(response) && !StringUtils.hasText(etc) && isRequired;
   }
 
 }
