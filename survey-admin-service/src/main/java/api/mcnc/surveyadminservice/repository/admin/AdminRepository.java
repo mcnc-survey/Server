@@ -31,6 +31,11 @@ public class AdminRepository {
       .map(AdminEntity::toDomain);
   }
 
+  @Transactional(readOnly = true)
+  public boolean isExistById(String id) {
+    return adminJpaRepository.existsById(id);
+  }
+
   public Admin registerWithSocial(Admin admin) {
     return getByEmailAndProvider(admin.email(), admin.provider())
       .orElseGet(() -> adminJpaRepository.save(AdminEntity.fromDomain(admin)).toDomain());
