@@ -16,6 +16,7 @@ public class NotificationClientService {
 
   private final NotificationClient notificationClient;
 
+  @Async
   public void publishNotification(Request request, String adminId) {
     notificationClient.publishNotificationToRedis(request, adminId);
   }

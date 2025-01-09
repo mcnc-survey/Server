@@ -33,8 +33,7 @@ public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String
   @Modifying
   @Query(value = "UPDATE surveys s " +
     "SET status = :status " +
-    "WHERE s.status != 'EDIT' AND" +
-    " s.status != 'DELETE' AND" +
+    "WHERE s.status != 'DELETE' AND" +
     " s.status = :currentStatus AND" +
     " s.start_at <= :now " +
     "RETURNING *"
@@ -45,8 +44,7 @@ public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String
   @Modifying
   @Query(value = "UPDATE surveys s " +
     "SET status = :status" +
-    " WHERE s.status != 'EDIT' AND" +
-    " s.status != 'DELETE' AND" +
+    " WHERE s.status != 'DELETE' AND" +
     " s.status = :currentStatus AND" +
     " s.end_at <= :now " +
     "RETURNING *"

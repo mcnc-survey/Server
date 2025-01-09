@@ -6,7 +6,6 @@ import api.mcnc.surveyservice.domain.Question;
 import api.mcnc.surveyservice.domain.Survey;
 import api.mcnc.surveyservice.entity.question.QuestionEntity;
 import api.mcnc.surveyservice.entity.survey.SurveyEntity;
-import api.mcnc.surveyservice.entity.survey.SurveyLike;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionOperations;
@@ -36,38 +35,40 @@ public class UpdateSurveyRepository {
     this.writeTransactionOperations = writeTransactionOperations;
   }
 
-  public void updateSurvey(String surveyId, Survey survey, List<Question> withId, List<Question> withoutId, Set<String> updateIds) {
-    writeTransactionOperations.executeWithoutResult(execute -> {
+  public Survey updateSurvey(String surveyId, Survey survey, List<Question> withId, List<Question> withoutId, Set<String> updateIds) {
+    return writeTransactionOperations.execute(execute -> {
 //    1. 기존 설문 조회
-      surveyJpaRepository.findById(surveyId).ifPresent(surveyEntity -> {
+      SurveyEntity surveyEntity = surveyJpaRepository.findById(surveyId)
+        .orElseThrow(() -> new SurveyException(SurveyErrorCode.INVALID_REQUEST, "관리자 아이디가 일치하지 않습니다."));
+
 //      2. 업데이트 대상이 아닌 기존 질문들 삭제
-        surveyEntity.getQuestions().removeIf(question ->
-          !updateIds.contains(question.getId())
-        );
-        surveyEntity.updateFrom(survey);
+      surveyEntity.getQuestions().removeIf(question ->
+        !updateIds.contains(question.getId())
+      );
+      surveyEntity.updateFrom(survey);
 
 //      3. 기존 질문들을 Map으로 변환하여 조회
-        Map<String, QuestionEntity> existingQuestions = surveyEntity.getQuestions()
-          .stream()
-          .collect(Collectors.toMap(QuestionEntity::getId, q -> q));
+      Map<String, QuestionEntity> existingQuestions = surveyEntity.getQuestions()
+        .stream()
+        .collect(Collectors.toMap(QuestionEntity::getId, q -> q));
 
 //      4. ID가 있는 질문들 업데이트
-        withId.forEach(question -> {
-          QuestionEntity existingQuestion = existingQuestions.get(question.id());
-          if (existingQuestion != null) {
-            existingQuestion.updateFrom(question);  // 기존 질문 업데이트
-          }
-        });
+      withId.forEach(question -> {
+        QuestionEntity existingQuestion = existingQuestions.get(question.id());
+        if (existingQuestion != null) {
+          existingQuestion.updateFrom(question);  // 기존 질문 업데이트
+        }
+      });
 
 //      5. 새로운 질문들 생성 및 추가
-        withoutId.forEach(question -> {
-          QuestionEntity newQuestion = QuestionEntity.fromDomain(question);
-          newQuestion.addSurvey(surveyEntity);
-          surveyEntity.getQuestions().add(newQuestion);
-        });
-
-
+      withoutId.forEach(question -> {
+        QuestionEntity newQuestion = QuestionEntity.fromDomain(question);
+        newQuestion.addSurvey(surveyEntity);
+        surveyEntity.getQuestions().add(newQuestion);
       });
+
+      return surveyEntity.toDomain();
+
     });
   }
 

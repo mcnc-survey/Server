@@ -3,11 +3,10 @@ package api.mcnc.surveyadminservice.controller;
 import api.mcnc.surveyadminservice.auth.jwt.TokenProvider;
 import api.mcnc.surveyadminservice.controller.request.TokenValidateRequest;
 import api.mcnc.surveyadminservice.controller.response.TokenValidateResponse;
+import api.mcnc.surveyadminservice.service.AdminValidService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * please explain class!
@@ -20,9 +19,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class ValidationController {
 
   private final TokenProvider tokenProvider;
+  private final AdminValidService adminValidService;
 
   @PostMapping("/token-validation")
   public TokenValidateResponse validateToken(@RequestBody @Valid TokenValidateRequest request) {
     return tokenProvider.validateToken(request.accessToken());
+  }
+
+  @GetMapping("/admin-validation/{adminId}")
+  boolean adminValidation(@PathVariable String adminId) {
+    return adminValidService.isExistById(adminId);
   }
 }
