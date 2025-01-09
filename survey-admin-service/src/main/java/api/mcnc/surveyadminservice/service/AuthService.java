@@ -38,7 +38,6 @@ public class AuthService {
   private final TokenProvider tokenProvider;
   private final EmailClientService emailClientService;
   private final Vault vaultProvider;
-  private final DelegatingWebMvcConfiguration delegatingWebMvcConfiguration;
 
   /**
    * 이메일 중복 검사
