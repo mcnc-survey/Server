@@ -54,7 +54,7 @@ public class UpdateSurveyRepository {
 
 //      4. ID가 있는 질문들 업데이트
       withId.forEach(question -> {
-        QuestionEntity existingQuestion = existingQuestions.get(question.id());
+        QuestionEntity existingQuestion = existingQuestions.get(question.getId());
         if (existingQuestion != null) {
           existingQuestion.updateFrom(question);  // 기존 질문 업데이트
         }

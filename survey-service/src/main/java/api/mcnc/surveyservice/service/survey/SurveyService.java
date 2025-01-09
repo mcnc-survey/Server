@@ -1,12 +1,10 @@
 package api.mcnc.surveyservice.service.survey;
 
-import api.mcnc.surveyservice.client.admin.AdminServiceClientService;
 import api.mcnc.surveyservice.client.email.EmailClientService;
 import api.mcnc.surveyservice.client.notification.NotificationClientService;
 import api.mcnc.surveyservice.client.notification.Request;
 import api.mcnc.surveyservice.client.response.ResponseServiceClientService;
 import api.mcnc.surveyservice.client.response.ResponseUpdate;
-import api.mcnc.surveyservice.common.audit.authentication.RequestedByProvider;
 import api.mcnc.surveyservice.common.exception.custom.SurveyException;
 import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyCreateRequest;
@@ -22,9 +20,7 @@ import api.mcnc.surveyservice.entity.survey.SurveyStatus;
 import api.mcnc.surveyservice.repository.survey.*;
 import api.mcnc.surveyservice.service.validation.SurveyValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static api.mcnc.surveyservice.client.notification.Type.*;
-import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.*;
+import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.START_TIME_MUST_BE_BEFORE_END_TIME;
 
 /**
  * please explain class!
@@ -82,7 +78,7 @@ public class SurveyService {
     Survey survey = Survey.fromRequest(adminId, title, description, surveyStatus, startAt, endAt);
 
     String surveyId = insertSurveyAndQuestionListRepository.createSurvey(survey, questionList);
-    notificationClientService.publishNotification(Request.of(surveyId, survey.title(), SURVEY_CREATE), adminId);
+    notificationClientService.publishNotification(Request.of(surveyId, survey.getTitle(), SURVEY_CREATE), adminId);
     return surveyId;
   }
 
@@ -156,26 +152,26 @@ public class SurveyService {
     Map<Boolean, List<Question>> partitioned = questions.stream()
       .map(Question::fromRequest)
       .collect(Collectors.partitioningBy(
-        question -> question.id() != null && !question.id().isBlank()
+        question -> question.getId() != null && !question.getId().isBlank()
       ));
 
-    Survey updateSurvey = Survey.fromRequest(survey.adminId(), surveyUpdateRequest.title(), surveyUpdateRequest.description(), changedStatus, surveyUpdateRequest.startAt(), surveyUpdateRequest.endAt());
+    Survey updateSurvey = Survey.fromRequest(survey.getAdminId(), surveyUpdateRequest.title(), surveyUpdateRequest.description(), changedStatus, surveyUpdateRequest.startAt(), surveyUpdateRequest.endAt());
     List<Question> withId = partitioned.get(true);
     List<Question> withoutId = partitioned.get(false);
-    Set<String> updateIds = withId.stream().map(Question::id).collect(Collectors.toSet());
+    Set<String> updateIds = withId.stream().map(Question::getId).collect(Collectors.toSet());
 
     // 수정
     Survey updatedSurvey = updateSurveyRepository.updateSurvey(surveyId, updateSurvey, withId, withoutId, updateIds);
 
     if (!withId.isEmpty()) {
       List<ResponseUpdate> updateList = withId.stream()
-        .map(question -> ResponseUpdate.of(surveyId, question.id(), question.order(), question.questionType()))
+        .map(question -> ResponseUpdate.of(surveyId, question.getId(), question.getOrder(), question.getQuestionType()))
         .toList();
       responseServiceClientService.updateResponse(updateList);
     }
 
     // 수정 완료 알림
-    notificationClientService.publishNotification(Request.of(surveyId, updateSurvey.title(), SURVEY_EDIT), survey.adminId());
+    notificationClientService.publishNotification(Request.of(surveyId, updateSurvey.getTitle(), SURVEY_EDIT), survey.getAdminId());
     return updatedSurvey;
   }
 
@@ -193,7 +189,7 @@ public class SurveyService {
 
   public void invite(String surveyId, List<String> emails) {
     Survey survey = cacheService.getSurvey(surveyId);
-    emailClientService.sendHtmlVerificationEmails(survey.title(), survey.surveyLink(),emails);
+    emailClientService.sendHtmlVerificationEmails(survey.getTitle(), survey.surveyLink(),emails);
   }
 
   public boolean isExist(String surveyId) {

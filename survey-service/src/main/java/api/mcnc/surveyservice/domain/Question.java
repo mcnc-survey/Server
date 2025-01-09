@@ -4,7 +4,7 @@ import api.mcnc.surveyservice.controller.request.QuestionCreateRequest;
 import api.mcnc.surveyservice.controller.request.SurveyUpdateRequest;
 import api.mcnc.surveyservice.controller.response.QuestionDetailsResponse;
 import api.mcnc.surveyservice.entity.question.QuestionType;
-import lombok.Builder;
+import lombok.*;
 
 /**
  * please explain class!
@@ -13,16 +13,19 @@ import lombok.Builder;
  * @since :2024-11-19 오후 1:42
  */
 @Builder
-public record Question(
-  String id,
-  String title,
-  QuestionType questionType,
-  Integer order,
-  String columns,
-  String rows,
-  Boolean required,
-  Boolean etc
-) {
+@Data
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Question{
+  private String id;
+  private String title;
+  private QuestionType questionType;
+  private Integer order;
+  private String columns;
+  private String rows;
+  private Boolean required;
+  private Boolean etc;
+
   public static Question fromRequest(QuestionCreateRequest request) {
     return Question.builder()
       .title(request.title())

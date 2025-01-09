@@ -58,24 +58,24 @@ public class QuestionEntity extends MutableBaseEntity {
   public static QuestionEntity fromDomain(Question question) {
     return QuestionEntity.builder()
       .id(UUID.randomUUID().toString())
-      .questionType(question.questionType())
-      .title(question.title())
-      .order(question.order())
-      .columns(question.columns())
-      .rows(question.rows())
-      .required(question.required())
-      .etc(question.etc())
+      .questionType(question.getQuestionType())
+      .title(question.getTitle())
+      .order(question.getOrder())
+      .columns(question.getColumns())
+      .rows(question.getRows())
+      .required(question.getRequired())
+      .etc(question.getEtc())
       .build();
   }
 
   public void updateFrom(Question question) {
-    this.title = question.title();
-    this.questionType = question.questionType();
-    this.order = question.order();
-    this.columns = question.columns();
-    this.rows = question.rows();
-    this.required = question.required();
-    this.etc = question.etc();
+    this.title = question.getTitle();
+    this.questionType = question.getQuestionType();
+    this.order = question.getOrder();
+    this.columns = question.getColumns();
+    this.rows = question.getRows();
+    this.required = question.getRequired();
+    this.etc = question.getEtc();
   }
 
   public void addSurvey(SurveyEntity surveyEntity) {

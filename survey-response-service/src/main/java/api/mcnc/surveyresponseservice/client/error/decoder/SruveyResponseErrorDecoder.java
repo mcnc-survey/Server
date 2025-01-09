@@ -16,6 +16,27 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 @Component
 public class SruveyResponseErrorDecoder implements ErrorDecoder {
+//  @Bean
+//  public Decoder feignDecoder() {
+//    ObjectMapper objectMapper = new ObjectMapper();
+//    // @JsonTypeInfo를 처리하기 위한 설정
+//    objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_OBJECT);
+//    objectMapper.registerSubtypes(Survey.class);  // Survey 타입 등록
+//
+//    return new JacksonDecoder(objectMapper);
+//  }
+//
+//  @Bean
+//  public Encoder feignEncoder() {
+//    ObjectMapper objectMapper = new ObjectMapper();
+//
+//    // 동일한 ObjectMapper 설정
+//    objectMapper.activateDefaultTyping(objectMapper.getPolymorphicTypeValidator(),ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.WRAPPER_OBJECT);
+//    objectMapper.registerSubtypes(Survey.class);
+//
+//    return new JacksonEncoder(objectMapper);
+//  }
+
   @Override
   public Exception decode(String s, Response response) {
     // 상태 코드별 처리
