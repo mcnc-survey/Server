@@ -3,6 +3,9 @@ package api.mcnc.surveyservice.domain;
 import api.mcnc.surveyservice.controller.response.*;
 import api.mcnc.surveyservice.entity.survey.SurveyLike;
 import api.mcnc.surveyservice.entity.survey.SurveyStatus;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
+import com.fasterxml.jackson.databind.jsontype.impl.ClassNameIdResolver;
 import lombok.Builder;
 import org.apache.hc.client5.http.utils.Base64;
 
@@ -18,6 +21,10 @@ import static api.mcnc.surveyservice.common.constants.SurveyLink.SURVEY_LINK;
  * @since :2024-11-19 오전 9:52
  */
 @Builder
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.CLASS,
+  include = JsonTypeInfo.As.WRAPPER_OBJECT
+)
 public record Survey(
   String id,
   String adminId,
@@ -30,12 +37,12 @@ public record Survey(
   SurveyLike like,
   LocalDateTime modifiedAt
 ) {
-  public static Survey fromRequest(String adminId, String title, String description, LocalDateTime startAt, LocalDateTime endAt) {
+  public static Survey fromRequest(String adminId, String title, String description, SurveyStatus status, LocalDateTime startAt, LocalDateTime endAt) {
     return Survey.builder()
       .adminId(adminId)
       .title(title)
       .description(description)
-      .status(SurveyStatus.WAIT)
+      .status(status)
       .startAt(startAt)
       .endAt(endAt)
       .build();

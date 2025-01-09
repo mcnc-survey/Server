@@ -23,6 +23,7 @@ public class ResponseServiceClientService {
     responseServiceClient.deleteResponse(surveyIdList);
   }
 
+  @Async
   public void updateResponse(List<ResponseUpdate> responseUpdateList) {
     responseServiceClient.updateResponse(responseUpdateList);
   }
