@@ -52,12 +52,12 @@ public class SurveyEntity extends MutableBaseEntity {
   public static SurveyEntity fromDomain(Survey survey) {
     return SurveyEntity.builder()
       .id(UUID.randomUUID().toString())
-      .adminId(survey.adminId())
-      .title(survey.title())
-      .description(survey.description())
-      .status(survey.status())
-      .startAt(survey.startAt())
-      .endAt(survey.endAt())
+      .adminId(survey.getAdminId())
+      .title(survey.getTitle())
+      .description(survey.getDescription())
+      .status(survey.getStatus())
+      .startAt(survey.getStartAt())
+      .endAt(survey.getEndAt())
       .like(SurveyLike.DISLIKE)
       .build();
   }
@@ -65,7 +65,7 @@ public class SurveyEntity extends MutableBaseEntity {
   public Survey toDomain() {
     List<Question> questionList = questions.stream()
       .map(QuestionEntity::toDomain)
-      .sorted(Comparator.comparingInt(Question::order))
+      .sorted(Comparator.comparingInt(Question::getOrder))
       .toList();
     return Survey.builder()
       .id(id)
@@ -82,11 +82,11 @@ public class SurveyEntity extends MutableBaseEntity {
   }
 
   public void updateFrom(Survey survey) {
-    this.title = survey.title();
-    this.description = survey.description();
-    this.status = survey.status();
-    this.startAt = survey.startAt();
-    this.endAt = survey.endAt();
+    this.title = survey.getTitle();
+    this.description = survey.getDescription();
+    this.status = survey.getStatus();
+    this.startAt = survey.getStartAt();
+    this.endAt = survey.getEndAt();
   }
 
   public void updateLikeUpdate() {
