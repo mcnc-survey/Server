@@ -1,6 +1,7 @@
 package api.mcnc.surveyresponseservice.client.survey.response;
 
 import api.mcnc.surveyresponseservice.controller.response.SurveySnippet;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,10 @@ import java.util.List;
  * @since :2024-11-27 오후 2:01
  */
 @Builder
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.CLASS,
+  include = JsonTypeInfo.As.WRAPPER_OBJECT
+)
 public record Survey(
   String id,
   String adminId,
