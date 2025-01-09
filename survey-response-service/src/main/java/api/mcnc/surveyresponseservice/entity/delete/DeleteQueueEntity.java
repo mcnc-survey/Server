@@ -1,9 +1,6 @@
 package api.mcnc.surveyresponseservice.entity.delete;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,6 +19,7 @@ import java.time.LocalDateTime;
 public class DeleteQueueEntity {
   @Id
   @Column(name = "ID")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   @Getter
   @Column(name = "SURVEY_ID")
