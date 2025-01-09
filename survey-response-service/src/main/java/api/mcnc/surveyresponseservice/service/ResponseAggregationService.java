@@ -42,9 +42,9 @@ public class ResponseAggregationService {
 
     // snippet
     SurveySummary surveySummary = SurveySummary.of(
-      surveyDetailsResponse.title(),
+      surveyDetailsResponse.getTitle(),
       totalRespondentCount,
-      surveyDetailsResponse.endAt().toString(),
+      surveyDetailsResponse.getEndAt().toString(),
       surveyDetailsResponse.lastModifiedDate()
     );
 
@@ -52,14 +52,14 @@ public class ResponseAggregationService {
     Map<Integer, List<Response>> responseList = aggregationRepository.getResponseListMappingByOrderNumberBySurveyId(surveyId);
 
     // 설문 질문 정보들
-    List<Question> questionList = surveyDetailsResponse.question();
+    List<Question> questionList = surveyDetailsResponse.getQuestion();
 
     // 응답 집계
     Map<Integer, SurveyResultValue> result = new HashMap<>();
     
     for (Question questionDetailsResponse : questionList) {
       // 질문 별
-      Integer key = questionDetailsResponse.order();
+      Integer key = questionDetailsResponse.getOrder();
       // 응답 데이터들
 
       List<Response> responsesGroupByOrderNumber = responseList.getOrDefault(key, new ArrayList<>());
@@ -77,9 +77,9 @@ public class ResponseAggregationService {
       }
       // 항목별 응답 객체
       SurveyResultValue surveyResultValue = SurveyResultValue.builder()
-        .questionId(questionDetailsResponse.id())
-        .questionTitle(questionDetailsResponse.title())
-        .questionType(questionDetailsResponse.questionType())
+        .questionId(questionDetailsResponse.getId())
+        .questionTitle(questionDetailsResponse.getTitle())
+        .questionType(questionDetailsResponse.getQuestionType())
         .totalResponseCount(responsesGroupByOrderNumber.size())
         .responseCount(responses.size())
         .responses(responses)
