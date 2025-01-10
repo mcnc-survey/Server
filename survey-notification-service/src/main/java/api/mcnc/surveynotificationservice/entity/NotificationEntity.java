@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 
 import static api.mcnc.surveynotificationservice.constants.RedirectPrefix.REDIRECT_URI_PREFIX;
 
+/**
+ * 알림 엔티티 클래스.
+ * @author 차익현
+ */
 @Entity
 @Getter
 @Setter

@@ -13,6 +13,11 @@ import java.io.IOException;
 
 import static api.mcnc.surveynotificationservice.constants.Channel.CHANNEL_PREFIX;
 
+
+/**
+ * Redis의 메시지를 구독하여 해당 알림을 클라이언트로 전송하는 리스너
+ * @author 차익현
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

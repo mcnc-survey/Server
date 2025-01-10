@@ -20,6 +20,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 이메일 서비스 클래스
+ * @author 차익현
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,7 +37,9 @@ public class EmailService {
     private final Map<String, VerificationCode> verificationCodes = new ConcurrentHashMap<>();
 
 
-    // 애플리케이션 시작 시 템플릿을 메모리에 로드
+    /**
+     * 애플리케이션 시작 시 템플릿을 메모리에 로드
+     */
     @PostConstruct
     public void loadEmailTemplate() throws IOException {
         ClassPathResource resource = new ClassPathResource("templates/VerificationEmail.html");
@@ -49,11 +55,18 @@ public class EmailService {
 
     }
 
+    /**
+     * 6자리 인증 코드를 생성
+     */
     public String generateVerificationCode() {
         return UUID.randomUUID().toString().substring(0, 6);  // 앞의 6자리만 사용
     }
 
-
+    /**
+     * 여러 수신자를 위한 고유한 인증 코드를 생성
+     *
+     * @param index 고유 인덱스
+     */
     public String generateMultiVerificationCode(int index) {
         // UUID를 생성하고, 앞의 6자리만 사용
         String uuid = UUID.randomUUID().toString().substring(0, 6);
@@ -66,7 +79,12 @@ public class EmailService {
         return uuid.substring(0, uuid.length() - 1) + newChar;  // 최종 인증 코드 반환
     }
 
-    // 이메일을 비동기적으로 보내는 메서드
+    /**
+     * 단일 인증 이메일을 비동기적으로 전송
+     *
+     * @param toEmail 이메일 주소
+     * @param verificationCode 인증 코드
+     */
     @Async
     public void sendSingleVerificationEmail(String toEmail, String verificationCode) {
         try {
@@ -88,18 +106,30 @@ public class EmailService {
         }
     }
 
-    // 여러 이메일에 대해 비동기 전송
+    /**
+     * 다중 이메일에 대해 비동기 전송
+     *
+     * @param toEmails 이메일 주소 리스트
+     * @param verificationCode 인증 코드
+     */
     public void sendVerificationEmails(List<String> toEmails, String verificationCode) {
         toEmails.parallelStream().forEach(toEmail -> sendSingleVerificationEmail(toEmail, verificationCode));
     }
-    
-    //찾았다 저장 뛰발럼
+
+    /**
+     * 인증 코드를 저장
+     *
+     * @param email 이메일 주소
+     * @param code 인증 코드
+     */
     public void saveVerificationCode(String email, String code) {
         LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(3);
         verificationCodes.put(email, new VerificationCode(code, expirationTime, false));
     }
 
-    // 만료된 인증 코드 삭제를 위한 스케줄러
+    /**
+     * 만료된 인증 코드를 1분마다 삭제
+     */
     @Scheduled(fixedRate = 60000) // 1분마다 실행 (60000밀리초)
     public void removeExpiredVerificationCodes() {
         LocalDateTime now = LocalDateTime.now();
@@ -122,22 +152,41 @@ public class EmailService {
     }
 
 
-    //저장된 인증 코드들
+    /**
+     * 저장된 인증 코드들
+     *
+     * @return 인증 코드
+     */
     public Map<String, VerificationCode> getAllVerificationCodes() {
         return verificationCodes;
     }
-    
-    //뭐더라
+
+    /**
+     * 특정 이메일에 저장된 인증 코드 조회
+     *
+     * @param email 이메일
+     * @return 저장된 인증 코드
+     */
     public VerificationCode getVerificationCode(String email) {
         return verificationCodes.get(email);
     }
 
-    // VerificationCode 삭제를 위한 새로운 메서드
+    /**
+     * 특정 이메일에 저장된 인증 코드 삭제
+     *
+     * @param email 이메일
+     */
     public void removeVerificationCode(String email) {
         verificationCodes.remove(email); // 해당 이메일에 대한 인증 코드를 삭제
     }
 
-    // 프로젝트 초대 이메일을 비동기적으로 보내는 메서드
+    /**
+     * 초대 이메일을 전송
+     *
+     * @param toEmail 이메일 주소
+     * @param projectName 프로젝트 이름
+     * @param dynamicLink 동적 링크
+     */
     public void sendInviteEmail(String toEmail, String projectName, String dynamicLink) {
         try {
             // 동적 데이터 삽입
@@ -162,7 +211,13 @@ public class EmailService {
         }
     }
 
-    // 여러 초대 이메일을 비동기적으로 전송하는 메서드
+    /**
+     * 다중 초대 이메일을 전송
+     *
+     * @param toEmails 이메일 주소 리스트
+     * @param projectName 프로젝트 이름
+     * @param dynamicLink 동적 링크
+     */
     @Async
     public void sendInviteEmails(List<String> toEmails, String projectName, String dynamicLink) {
         toEmails.parallelStream().forEach(toEmail -> {
@@ -170,7 +225,14 @@ public class EmailService {
         });
     }
 
-    //재설정 뭐시기
+    /**
+     * 비밀번호 재설정 이메일을 전송
+     *
+     * @param toEmail 이메일 주소
+     * @param userName 사용자 이름
+     * @param dynamicLink 동적 링크
+     * @param token 인증 토큰
+     */
     public void sendPWEmail(String toEmail, String userName, String dynamicLink, String token) {
         try {
             // 동적 데이터 삽입

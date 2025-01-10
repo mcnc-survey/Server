@@ -9,15 +9,16 @@ import api.mcnc.surveynotificationservice.service.RedisMessageService;
 import api.mcnc.surveynotificationservice.service.SseEmitterService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.net.URI;
 import java.util.List;
 
+/**
+ * @author 차익현
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/notifications")
@@ -28,28 +29,48 @@ public class NotificationController {
     private final RedisMessageService redisMessageService;
     private final NotificationEventPublisher publisher;
 
-    // 미확인 알림 개수 조회
+    /**
+     *
+     * @param adminId 관리자 ID
+     * @return 미확인 알림 정보
+     */
     @GetMapping("/unread-count")
     public ResponseEntity<Long> getUnreadNotificationCount(@RequestHeader(value = "requested-by") String adminId) {
         long unreadCount = notificationService.countUnreadNotifications(adminId);
         return ResponseEntity.ok(unreadCount);
     }
 
-    // 알림 상태를 'READ'로 업데이트
+    /**
+     * 알림 상태를 'READ'로 업데이트
+     *
+     * @param id 알림 ID
+     * @param adminId 관리자 ID
+     * @return No Content
+     */
     @PatchMapping("/read/{id}")
     public ResponseEntity<Void> markNotificationAsRead(@PathVariable Long id, @RequestHeader(value = "requested-by") String adminId) {
          notificationService.redirectNotificationDetail(id, adminId);
         return ResponseEntity.noContent().build();
     }
 
-    // 관리자의 모든 알림 조회
+    /**
+     *
+     * @param adminId 관리자 ID
+     * @return 관리자의 모든 알림 정보
+     */
     @GetMapping
     public ResponseEntity<List<NotificationDto>> getAllNotifications(@RequestHeader(value = "requested-by") String adminId) {
         List<NotificationDto> notifications = notificationService.getAllNotificationsByAdmin(adminId);
         return ResponseEntity.ok(notifications);
     }
 
-    // 알림 삭제
+    /**
+     * 알림 삭제
+     *
+     * @param id 설문 ID
+     * @param adminId 관리자 ID
+     * @return No Content
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteNotification(@PathVariable Long id, @RequestHeader(value = "requested-by") String adminId) {
         notificationService.deleteNotificationById(id, adminId);
@@ -59,7 +80,7 @@ public class NotificationController {
     /**
      * SSE 구독
      *
-     * @param adminId 헤더로 전달된 관리자 ID
+     * @param adminId 관리자 ID
      * @return SseEmitter 객체
      */
     @GetMapping(value = "/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -73,7 +94,11 @@ public class NotificationController {
         return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
     }
 
-    // SSE 구독 해제
+    /**
+     *
+     * @param adminId 관리자 ID
+     * @return No Content SSE 구독 해제
+     */
     @DeleteMapping("/unsubscribe")
     public ResponseEntity<Void> unsubscribeFromNotifications(@RequestHeader(value = "requested-by") String adminId) {
         sseEmitterService.deleteEmitter(adminId);
@@ -81,7 +106,13 @@ public class NotificationController {
         return ResponseEntity.noContent().build();
     }
 
-    // Redis 메시지로 알림 전송 (옵션, 필요에 따라 사용)
+    /**
+     * Redis 메시지로 알림 전송 (옵션, 필요에 따라 사용)
+     *
+     * @param request request 객체 String surveyId, String message, NotificationEntity.Type type
+     * @param adminId 관리자 ID
+     * @return 요청성공
+     */
     @PostMapping("/publish")
     public ResponseEntity<Void> publishNotificationToRedis(@RequestBody Request request, @RequestHeader(value = "requested-by") String adminId) {
         publisher.publishEvent(request.toEvent(adminId));

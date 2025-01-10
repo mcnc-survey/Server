@@ -2,6 +2,10 @@ package api.mcnc.surveynotificationservice.exception;
 
 import lombok.Getter;
 
+/**
+ * 알림 관련 예외 클래스.
+ * @author 차익현
+ * */
 @Getter
 public class NotificationException extends RuntimeException {
 

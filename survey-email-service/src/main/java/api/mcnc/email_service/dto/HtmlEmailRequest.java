@@ -2,6 +2,10 @@ package api.mcnc.email_service.dto;
 
 import java.util.List;
 
+/**
+ * HTML 이메일 요청을 위한 DTO 클래스
+ * @author 차익현
+ */
 public class HtmlEmailRequest {
     private List<String> emails;
     private String userName;

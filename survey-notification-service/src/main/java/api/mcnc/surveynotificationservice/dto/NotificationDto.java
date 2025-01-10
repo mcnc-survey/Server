@@ -7,6 +7,10 @@ import lombok.Getter;
 
 import static api.mcnc.surveynotificationservice.entity.NotificationEntity.Status.READ;
 
+/**
+ * 알림 정보를 전달하기 위한 DTO 클래스
+ * @author 차익현
+ */
 @Getter
 @Builder(access = lombok.AccessLevel.PRIVATE)
 @AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
