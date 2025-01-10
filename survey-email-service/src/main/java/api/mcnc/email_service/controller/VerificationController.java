@@ -22,7 +22,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-
+/**
+ *
+ * @author 차익현
+ */
 @Slf4j
 @RestController
 @RequestMapping("/emails")
@@ -35,7 +38,12 @@ public class VerificationController {
     private final Map<String, VerificationCode> verificationCodes = new ConcurrentHashMap<>();
 
 
-    // 인증 코드 요청 API 이거 안쓰는걸 추천
+    /**
+     * 인증 코드 요청 API
+     *
+     * @param email 이메일
+     * @return 인증 코드 발송 완료
+     */
     @GetMapping("/request-code")
     public String requestVerificationCode(@RequestParam String email) throws MessagingException, IOException {
         String verificationCode = emailService.generateVerificationCode();
@@ -45,6 +53,11 @@ public class VerificationController {
         return "인증 코드 발송 완료.";
     }
 
+    /**
+     * 다중 인증 코드 요청 PI
+     * @param emails 이메일 리스트
+     * @return 모든 이메일로 인증 코드 발송
+     */
     @PostMapping("/multi-request")
     public ResponseEntity<String> requestVerificationCode(@RequestBody List<String> emails) {
         // 이메일 목록이 비어 있으면 오류 반환
@@ -79,7 +92,13 @@ public class VerificationController {
     }
 
 
-    // 인증 코드 검증 API
+    /**
+     * 인증 코드 검증 API
+     *
+     * @param email 이메일
+     * @param code 코드
+     * @return 인증성공 true
+     */
     @PostMapping("/check-code")
     public boolean verifyCode(@RequestParam String email, @RequestParam String code) {
         VerificationCode storedCode = emailService.getVerificationCode(email); // 해당 이메일에서 인증 UUID 가져오기
@@ -100,7 +119,12 @@ public class VerificationController {
         return true; // 인증 성공
     }
 
-    // 인증 검증이 됐는지 검증
+    /**
+     * 인증 검증이 됐는지 검증 API
+     *
+     * @param email 이메일
+     * @return 인증 검증 완료 true
+     */
     @PostMapping("/check-valid")
     public boolean isValidDeleteCodes(@RequestParam String email) {
         VerificationCode storedValid = emailService.getVerificationCode(email);
@@ -119,15 +143,22 @@ public class VerificationController {
     }
 
 
-    // 저장된 인증코드들 확인용
+    /**
+     * 저장된 인증코드들 확인용 test API
+     * @return 저장된 모든 인증코드
+     */
     @GetMapping("/verification-codes")
     public ResponseEntity<Map<String, VerificationCode>> getAllVerificationCodes() {
         return ResponseEntity.ok(emailService.getAllVerificationCodes());
     }
 
 
-
-
+    /**
+     * 초대 html 전송 API
+     *
+     * @param request List<String> toEmails, String projectName, String dynamicLink
+     * @return HTML 이메일 전송 완료
+     */
     @PostMapping("/invite")
     public ResponseEntity<String> sendHtmlVerificationEmails(@RequestBody Map<String, Object> request) {
         try {
@@ -146,6 +177,12 @@ public class VerificationController {
         }
     }
 
+    /**
+     * 비밀번호 재설정 html 전송 API
+     *
+     * @param request String toEmail, String userName, String dynamicLink, String token
+     * @return PW 이메일 전송 완료
+     */
     @PostMapping("/PW")
     public ResponseEntity<String> sendPWEmails(@RequestBody Map<String, Object> request) {
         try {

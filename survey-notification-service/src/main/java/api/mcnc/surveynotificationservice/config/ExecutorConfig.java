@@ -13,6 +13,10 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
+/**
+ * 비동기 작업 및 스케줄링 작업 실행 환경 설정
+ * @author 차익현
+ */
 @EnableScheduling
 @EnableAsync
 @Configuration

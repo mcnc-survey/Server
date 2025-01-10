@@ -16,6 +16,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * @author 차익현
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -72,6 +75,10 @@ public class NotificationService {
         notificationRepository.deleteByIdAndAdminId(id, adminId);
     }
 
+    /**
+     *
+     * @param event 이벤트
+     */
     @Transactional
     public void sendNotification(NotificationEvent event) {
         NotificationEntity notification =
@@ -81,6 +88,11 @@ public class NotificationService {
         redisMessageService.publish(event.adminId(), NotificationDto.fromEntity(savedNotification));
     }
 
+    /**
+     *
+     * @param adminId 관리자 ID
+     * @return SseEmitter 구독 정보
+     */
     public SseEmitter subscribe(String adminId) {
         SseEmitter sseEmitter = sseEmitterService.createEmitter(adminId);
         sseEmitterService.send(MsgFormat.SUBSCRIBE, adminId, sseEmitter); // send dummy

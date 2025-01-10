@@ -2,6 +2,10 @@ package api.mcnc.email_service.service;
 
 import java.time.LocalDateTime;
 
+/**
+ * 인증 코드 클래스
+ * @author 차익현
+ */
 public class VerificationCode {
     private String code;
     private LocalDateTime expirationTime;

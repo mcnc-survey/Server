@@ -8,6 +8,10 @@ import java.util.Map;
 
 import static api.mcnc.surveynotificationservice.entity.NotificationEntity.Type.*;
 
+/**
+ * 알림 요청 데이터를 담는 DTO 클래스
+ * @author 차익현
+ */
 public record Request(
         String surveyId,
         String message,

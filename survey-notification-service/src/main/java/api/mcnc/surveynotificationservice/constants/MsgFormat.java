@@ -1,5 +1,8 @@
 package api.mcnc.surveynotificationservice.constants;
 
+/**
+ * 알림 메시지 형식을 정의하는 클래스
+ */
 public class MsgFormat {
 
     public final static String SURVEY_CREATE = "[%s] 설문이 생성되었습니다.";

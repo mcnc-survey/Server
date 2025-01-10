@@ -7,6 +7,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
+/**
+ * 비동기 작업을 위한 스레드 풀 설정 클래스
+ * @author 차익현
+ */
 @Configuration
 @EnableAsync
 public class AsyncConfig {
