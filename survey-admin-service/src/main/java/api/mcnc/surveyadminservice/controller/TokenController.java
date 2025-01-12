@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-15 오후 11:58
  */
 @RestController

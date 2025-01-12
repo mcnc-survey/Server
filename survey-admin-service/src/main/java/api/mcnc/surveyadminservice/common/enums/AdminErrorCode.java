@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * please explain class!
+ * 관리자 관련 에러 코드
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-14 오후 9:41
  */
 @Getter

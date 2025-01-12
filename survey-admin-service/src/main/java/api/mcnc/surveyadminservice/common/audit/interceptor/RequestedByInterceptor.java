@@ -8,6 +8,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 
+/**
+ * 요청자 정보 인터셉터
+ * @author 유희준
+ */
 @Component
 @RequiredArgsConstructor
 public class RequestedByInterceptor implements WebRequestInterceptor {

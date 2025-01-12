@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * please explain class!
+ * 이메일 서비스로 요청 보내는 클라이언트
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-17 오후 8:43
  */
 @FeignClient(name = "survey-email-service")

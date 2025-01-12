@@ -8,9 +8,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;
 
 /**
- * please explain class!
+ * 쿠키 설정 클래스
  *
- * @author :Uheejoon
+ * @author 유희준
  * @since :2024-12-15 오후 11:53
  */
 public class CookieUtils {

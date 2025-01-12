@@ -10,7 +10,7 @@ import org.springframework.vault.support.VaultToken;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-08 오후 7:31
  */
 @Configuration

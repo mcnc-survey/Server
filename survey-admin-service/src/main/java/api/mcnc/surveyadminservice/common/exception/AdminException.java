@@ -4,9 +4,9 @@ import api.mcnc.surveyadminservice.common.enums.Code;
 import lombok.Getter;
 
 /**
- * please explain class!
+ * Admin 관련 예외
  *
- * @author :Uheejoon
+ * @author 유희준
  * @since :2024-11-26 오전 10:27
  */
 @Getter

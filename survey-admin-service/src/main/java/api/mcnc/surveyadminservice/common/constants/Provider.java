@@ -1,9 +1,9 @@
 package api.mcnc.surveyadminservice.common.constants;
 
 /**
- * please explain class!
+ * 상수 클래스
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-12 오후 1:25
  */
 public class Provider {

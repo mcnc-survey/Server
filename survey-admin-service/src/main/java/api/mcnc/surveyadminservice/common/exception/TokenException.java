@@ -3,9 +3,9 @@ package api.mcnc.surveyadminservice.common.exception;
 import api.mcnc.surveyadminservice.common.enums.Code;
 
 /**
- * please explain class!
+ * 토큰 관련 예외
  *
- * @author :Uheejoon
+ * @author 유희준
  * @since :2024-11-26 오후 12:52
  */
 public class TokenException extends AdminException{

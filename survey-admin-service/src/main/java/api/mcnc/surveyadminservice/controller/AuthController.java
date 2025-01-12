@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-12 오전 10:46
  */
 @RestController

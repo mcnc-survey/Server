@@ -3,9 +3,9 @@ package api.mcnc.surveyadminservice.common.exception;
 import api.mcnc.surveyadminservice.common.enums.Code;
 
 /**
- * please explain class!
+ * Vault 관련 예외
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-08 오후 8:06
  */
 public class VaultException extends AdminException{

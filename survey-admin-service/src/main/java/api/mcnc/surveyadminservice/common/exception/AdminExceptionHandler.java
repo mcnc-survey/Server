@@ -17,17 +17,19 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /**
- * please explain class!
+ * exception handler
  *
- * @author :Uheejoon
+ * @author 유희준
  * @since :2024-11-26 오전 10:30
  */
 @RestControllerAdvice
 public class AdminExceptionHandler {
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<Api<String>> handleRuntimeException(RuntimeException e) {
+    // 임시 메시지
+    // TODO : 에러 메시지 정의 필요
     Api<String> response = Api.fail(AdminErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
-    e.printStackTrace();
+//    e.printStackTrace();
     return ResponseEntity.internalServerError().body(response);
   }
 

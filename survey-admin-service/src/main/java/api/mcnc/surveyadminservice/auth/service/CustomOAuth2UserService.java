@@ -15,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
+/**
+ * OAuth2 사용자 정보를 가져오는 서비스
+ * @author 유희준
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor

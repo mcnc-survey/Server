@@ -7,6 +7,11 @@ import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
 
+/**
+ * JPA Auditing을 위한 클래스<br>
+ * 현재 시간 저장 
+ * @author 유희준
+ */
 @Component
 public record RequestedAtAuditorAware() implements DateTimeProvider {
     @Override

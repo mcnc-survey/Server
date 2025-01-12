@@ -11,10 +11,9 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * please explain class!
+ * OAuth2 User 객체
  *
- * @author :Uheejoon
- * @since :2024-11-26 오전 11:24
+ * @author :유희준
  */
 public record AdminPrincipalDetails(
   Admin admin,

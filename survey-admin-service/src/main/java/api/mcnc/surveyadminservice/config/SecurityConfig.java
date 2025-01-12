@@ -26,7 +26,7 @@ import java.util.Collections;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-18 오후 1:47
  */
 @Configuration
