@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * please explain class!
+ * google user info
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-21 오후 10:23
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

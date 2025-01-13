@@ -8,9 +8,9 @@ import reactor.core.publisher.Mono;
 import java.util.Objects;
 
 /**
- * please explain class!
+ * ratelimit
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-10 오후 6:40
  */
 @Configuration

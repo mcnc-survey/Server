@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-29 오후 4:24
  */
 public record SurveyDeleteRequest(

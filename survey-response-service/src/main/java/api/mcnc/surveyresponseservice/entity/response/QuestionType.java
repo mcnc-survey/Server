@@ -1,9 +1,9 @@
 package api.mcnc.surveyresponseservice.entity.response;
 
 /**
- * please explain class!
+ * 질문 타입
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-13 오후 10:11
  */
 public enum QuestionType {

@@ -3,7 +3,7 @@ package api.mcnc.surveyservice.common.enums;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-14 오후 9:41
  */
 public interface Code {

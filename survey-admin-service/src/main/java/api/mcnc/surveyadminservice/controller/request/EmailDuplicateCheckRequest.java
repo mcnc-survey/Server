@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * please explain class!
+ * 이메일 중복 여부 요청 객체
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-15 오후 9:41
  */
 public class EmailDuplicateCheckRequest{

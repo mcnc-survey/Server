@@ -13,9 +13,9 @@ import java.util.Optional;
 import static api.mcnc.surveyadminservice.common.constants.Provider.EMAIL;
 
 /**
- * please explain class!
+ * 관리자 관련 Repository 구현
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-12 오후 1:47
  */
 @Repository

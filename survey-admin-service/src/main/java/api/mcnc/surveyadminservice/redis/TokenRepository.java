@@ -5,9 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 /**
- * please explain class!
+ * redis + jpa
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 12:57
  */
 public interface TokenRepository extends CrudRepository<TokenEntity, String>{

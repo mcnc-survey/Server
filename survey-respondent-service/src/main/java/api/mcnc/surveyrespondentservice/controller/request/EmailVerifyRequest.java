@@ -3,9 +3,9 @@ package api.mcnc.surveyrespondentservice.controller.request;
 import jakarta.validation.constraints.Email;
 
 /**
- * please explain class!
+ * 이메일 검증 요청
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-19 오전 11:03
  */
 public record EmailVerifyRequest(

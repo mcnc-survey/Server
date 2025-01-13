@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-14 오후 9:37
  */
 @RestControllerAdvice

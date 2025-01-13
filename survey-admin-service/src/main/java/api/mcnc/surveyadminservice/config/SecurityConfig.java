@@ -24,7 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Collections;
 
 /**
- * please explain class!
+ * security bean 설정
  *
  * @author :유희준
  * @since :2024-11-18 오후 1:47

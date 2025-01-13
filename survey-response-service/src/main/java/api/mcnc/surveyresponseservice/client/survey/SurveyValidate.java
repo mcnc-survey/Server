@@ -1,9 +1,9 @@
 package api.mcnc.surveyresponseservice.client.survey;
 
 /**
- * please explain class!
+ * 설문 유효성
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 11:23
  */
 public interface SurveyValidate {

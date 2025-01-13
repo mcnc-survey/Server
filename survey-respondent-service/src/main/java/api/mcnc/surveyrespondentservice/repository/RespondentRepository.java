@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * please explain class!
+ * 레파지토리 구현체
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-22 오후 5:01
  */
 @Repository

@@ -21,10 +21,11 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+// TODO 2024-12-29 yhj : 수정 필요
 /**
- * please explain class!
+ * 히스토리 필터
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-10-22 오후 8:24
  */
 @Component

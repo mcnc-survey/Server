@@ -11,6 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ * 수정 가능한 테이블
+ *
+ * @author :유희준
+ * @since :2024-11-18 오후 5:40
+ */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

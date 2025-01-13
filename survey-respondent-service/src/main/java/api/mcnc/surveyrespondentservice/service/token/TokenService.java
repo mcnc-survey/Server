@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * please explain class!
+ * 토큰 서비스
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-23 오후 3:16
  */
 @Service
@@ -22,6 +22,11 @@ import java.util.Optional;
 public class TokenService {
   private final JwtProvider tokenProvider;
 
+  /**
+   *  토큰 생성
+   * @param respondent  응답자
+   * @return             토큰
+   */
   public Token generateTokenByRespondent(Respondent respondent) {
     String subject = respondent.id();
     Map<String, Object> claims = new HashMap<>();

@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * please explain class!
+ * 내부 요청 컨트롤러
  *
  * @author :유희준
  * @since :2024-12-09 오후 12:34

@@ -6,9 +6,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 /**
- * please explain class!
+ * 관리자 관련 JPA
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 2:26
  */
 public interface AdminJpaRepository extends CrudRepository<AdminEntity, String>{

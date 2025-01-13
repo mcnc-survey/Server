@@ -12,6 +12,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+/**
+ * 인증/인가
+ * @author :유희준
+ */
 @Component
 public class AuthenticationFilter extends AbstractGatewayFilterFactory<AuthenticationFilter.Config> {
 

@@ -25,9 +25,9 @@ import static api.mcnc.surveyrespondentservice.common.constant.ProviderConstant.
 import static api.mcnc.surveyrespondentservice.common.enums.RespondentErrorCode.NOT_VERIFIED_EMAIL;
 
 /**
- * please explain class!
+ * 인증 컨트롤러
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-20 오후 11:19
  */
 @RestController

@@ -1,9 +1,9 @@
 package api.mcnc.surveyrespondentservice.domain;
 
 /**
- * please explain class!
+ * 토큰
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-23 오후 3:03
  */
 public record Token(

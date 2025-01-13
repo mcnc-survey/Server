@@ -24,9 +24,9 @@ import java.util.Optional;
 import static api.mcnc.surveyadminservice.common.enums.AdminErrorCode.*;
 
 /**
- * please explain class!
+ * 인증 서비스
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-12 오후 2:32
  */
 @Service

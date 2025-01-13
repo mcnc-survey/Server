@@ -12,7 +12,7 @@ import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPARATO
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-17 오후 8:00
  */
 public class StringAnswerType implements QuestionTypeIfs {

@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-20 오후 12:43
  */
 @Configuration

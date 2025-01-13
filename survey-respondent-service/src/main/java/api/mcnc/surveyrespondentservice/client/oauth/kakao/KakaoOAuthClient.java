@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * please explain class!
+ * 카카오 oauth 요청
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-21 오후 8:49
  */
 @FeignClient(

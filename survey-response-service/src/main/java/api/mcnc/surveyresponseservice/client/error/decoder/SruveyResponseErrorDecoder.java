@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * please explain class!
+ * decoder 설정
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-10 오전 10:31
  */
 @Slf4j

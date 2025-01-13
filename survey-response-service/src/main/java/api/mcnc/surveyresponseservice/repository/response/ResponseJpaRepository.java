@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-13 오후 10:15
  */
 @Repository

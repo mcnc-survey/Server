@@ -3,9 +3,9 @@ package api.mcnc.surveyrespondentservice.authentication.jwt;
 import lombok.Builder;
 
 /**
- * please explain class!
+ * 토큰에서 응답자 아이디, 설문 아이디 추출 결과
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-18 오전 11:16
  */
 @Builder(access = lombok.AccessLevel.PRIVATE)

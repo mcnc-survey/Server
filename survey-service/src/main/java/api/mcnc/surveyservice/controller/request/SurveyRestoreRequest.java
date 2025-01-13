@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-23 오전 11:00
  */
 public record SurveyRestoreRequest(

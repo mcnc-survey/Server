@@ -1,6 +1,5 @@
 package api.mcnc.surveyresponseservice.domain;
 
-import api.mcnc.surveyresponseservice.common.constants.Constants;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponse;
 import api.mcnc.surveyresponseservice.controller.request.QuestionResponseUpdate;
 import api.mcnc.surveyresponseservice.controller.response.ResponseResult;
@@ -8,15 +7,13 @@ import api.mcnc.surveyresponseservice.entity.response.QuestionType;
 import api.mcnc.surveyresponseservice.entity.response.ResponseEntity;
 import lombok.Builder;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
-import org.yaml.snakeyaml.util.EnumUtils;
 
 import static api.mcnc.surveyresponseservice.common.constants.Constants.SEPARATOR;
 
 /**
- * please explain class!
+ * 응답
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-13 오후 11:22
  */
 @Builder

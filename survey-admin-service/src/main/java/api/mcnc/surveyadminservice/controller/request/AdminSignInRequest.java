@@ -8,9 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 /**
- * please explain class!
+ * 로그인 요청 객체
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-10 오후 10:59
  */
 @Getter

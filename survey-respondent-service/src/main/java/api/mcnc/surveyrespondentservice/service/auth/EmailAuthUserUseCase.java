@@ -3,9 +3,9 @@ package api.mcnc.surveyrespondentservice.service.auth;
 import api.mcnc.surveyrespondentservice.domain.AuthenticatedRespondent;
 
 /**
- * please explain class!
+ * 이메일 유저 usecase
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-22 오후 4:48
  */
 public interface EmailAuthUserUseCase {

@@ -19,9 +19,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 import javax.sql.DataSource;
 
 /**
- * please explain class!
+ * hikari, transaction 설정
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-13 오후 7:57
  */
 @Configuration

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-21 오후 10:27
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

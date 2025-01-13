@@ -6,9 +6,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 /**
- * please explain class!
+ * 큐에 모아서 특정 시간에 제거하기 위한 큐
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-19 오후 8:12
  */
 @Entity

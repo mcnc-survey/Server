@@ -9,9 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * please explain class!
+ * 설문
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-27 오후 2:01
  */
 @Builder

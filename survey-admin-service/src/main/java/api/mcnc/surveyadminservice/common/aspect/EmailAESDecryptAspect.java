@@ -13,7 +13,7 @@ import org.springframework.util.ObjectUtils;
 /**
  * AES 복호화 하는 AOP
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-16 오전 12:54
  */
 @Aspect

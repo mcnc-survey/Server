@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 /**
- * please explain class!
+ * 카카오 유저 정보
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-21 오후 12:47
  */
 

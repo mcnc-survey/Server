@@ -4,9 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 /**
- * please explain class!
+ * 이메일 인증 번호 검증 요청 객체
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-19 오전 11:25
  */
 public record EmailVerifyCheckRequest(

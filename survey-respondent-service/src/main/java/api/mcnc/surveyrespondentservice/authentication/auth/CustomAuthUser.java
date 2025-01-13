@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * please explain class!
+ * auth2 user
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-11 오전 9:20
  */
 public record CustomAuthUser(

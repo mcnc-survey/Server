@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * please explain class!
+ * 항목 응답
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-15 오후 1:13
  */
 public record QuestionResponse(

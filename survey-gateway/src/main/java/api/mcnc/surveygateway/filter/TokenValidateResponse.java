@@ -3,9 +3,9 @@ package api.mcnc.surveygateway.filter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * please explain class!
+ * 토큰 결과 값
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-16 오후 8:03
  */
 @JsonIgnoreProperties(ignoreUnknown = true)

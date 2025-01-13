@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * please explain class!
+ * 이메일 open feign
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-19 오전 10:47
  */
 @FeignClient(name = "survey-email-service")

@@ -36,7 +36,7 @@ import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.START_TIME_MUS
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-19 오후 10:56
  */
 @Service

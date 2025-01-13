@@ -17,7 +17,7 @@ import static api.mcnc.surveyservice.common.enums.SurveyErrorCode.INVALID_REQUES
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2025-01-09 오후 2:45
  */
 @Service

@@ -9,9 +9,9 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * please explain class!
+ * fallback
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-10 오전 10:39
  */
 @Component

@@ -3,9 +3,9 @@ package api.mcnc.surveyrespondentservice.service.respondent;
 import api.mcnc.surveyrespondentservice.authentication.jwt.TokenExtractResponse;
 
 /**
- * please explain class!
+ * 검증 usecase
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 9:41
  */
 public interface ValidateUseCase {

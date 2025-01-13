@@ -19,9 +19,9 @@ import static api.mcnc.surveyrespondentservice.common.enums.TokenErrorCode.INVAL
 import static api.mcnc.surveyrespondentservice.common.enums.TokenErrorCode.INVALID_TOKEN;
 
 /**
- * please explain class!
+ * jwt
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-20 오후 10:25
  */
 @Component

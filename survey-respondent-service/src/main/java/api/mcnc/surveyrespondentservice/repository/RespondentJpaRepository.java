@@ -6,9 +6,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 /**
- * please explain class!
+ * 레파지토리
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-22 오전 9:17
  */
 public interface RespondentJpaRepository extends CrudRepository<RespondentEntity, String> {

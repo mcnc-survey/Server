@@ -9,7 +9,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2025-01-09 오후 1:27
  */
 @Configuration

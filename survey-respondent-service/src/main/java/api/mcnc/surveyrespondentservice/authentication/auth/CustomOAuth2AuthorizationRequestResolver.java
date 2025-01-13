@@ -6,9 +6,9 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 
 /**
- * please explain class!
+ * url에 파라미터 추가하기 위한 resolver
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-11 오후 9:03
  */
 @RequiredArgsConstructor

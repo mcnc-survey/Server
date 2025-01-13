@@ -7,9 +7,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 /**
- * please explain class!
+ * 회원 가입 요청 객체
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-09 오전 9:44
  */
 @Getter

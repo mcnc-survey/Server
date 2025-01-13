@@ -1,9 +1,9 @@
 package api.mcnc.surveyresponseservice.client.respondent;
 
 /**
- * please explain class!
+ * 기능 명세
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 9:47
  */
 public interface RespondentValidate {

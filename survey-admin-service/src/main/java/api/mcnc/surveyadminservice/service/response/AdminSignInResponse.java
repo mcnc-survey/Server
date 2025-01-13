@@ -5,9 +5,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 
 /**
- * please explain class!
+ * 응답
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-16 오후 2:58
  */
 @Builder(access = AccessLevel.PRIVATE)

@@ -9,7 +9,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-15 오전 10:11
  */
 @TestConfiguration

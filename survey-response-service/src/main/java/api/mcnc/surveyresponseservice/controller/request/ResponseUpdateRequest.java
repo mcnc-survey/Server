@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
- * please explain class!
+ * 응답 수정
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-15 오후 5:09
  */
 public record ResponseUpdateRequest(

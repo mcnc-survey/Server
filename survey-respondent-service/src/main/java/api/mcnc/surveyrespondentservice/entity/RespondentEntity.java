@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 /**
- * please explain class!
+ * 엔티티
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-20 오후 10:13
  */
 @Entity

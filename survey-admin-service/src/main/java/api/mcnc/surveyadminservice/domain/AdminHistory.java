@@ -2,10 +2,11 @@ package api.mcnc.surveyadminservice.domain;
 
 import lombok.Builder;
 
+// TODO 2024-12-29 yhj : 로직 위치를 변경 해야함 수정 필요
 /**
- * please explain class!
+ * 히스토리
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-25 오후 10:18
  */
 @Builder
