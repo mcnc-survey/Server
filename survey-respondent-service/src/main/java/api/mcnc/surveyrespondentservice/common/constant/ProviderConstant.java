@@ -1,9 +1,9 @@
 package api.mcnc.surveyrespondentservice.common.constant;
 
 /**
- * please explain class!
+ * 상수 풀
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-05 오후 4:38
  */
 public class ProviderConstant {

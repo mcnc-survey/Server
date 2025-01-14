@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- * please explain class!
+ * 카카오 요청 서비스
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-21 오후 9:18
  */
 @Service

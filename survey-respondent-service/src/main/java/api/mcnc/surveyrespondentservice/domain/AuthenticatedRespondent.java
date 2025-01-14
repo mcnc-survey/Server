@@ -7,9 +7,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 
 /**
- * please explain class!
+ * 인증된 응답자 정보
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-22 오후 4:43
  */
 @Builder(access = AccessLevel.PRIVATE)

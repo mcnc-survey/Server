@@ -21,7 +21,7 @@ import static api.mcnc.surveyservice.entity.survey.SurveyStatus.*;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-20 오후 1:20
  */
 @Service

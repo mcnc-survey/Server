@@ -3,10 +3,11 @@ package api.mcnc.surveyrespondentservice.common.result;
 import api.mcnc.surveyrespondentservice.common.enums.Code;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+// TODO 2024-12-05 yhj : common 다 공통 로직으로 분리 해야하는데
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-15 오전 9:26
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * please explain class!
+ * 응답의 삭제 수정 컨트롤러
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-19 오후 5:01
  */
 @RestController

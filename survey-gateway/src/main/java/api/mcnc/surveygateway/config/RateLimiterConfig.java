@@ -7,6 +7,12 @@ import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 
+/**
+ * rate limit
+ *
+ * @author :유희준
+ * @since :2024-11-18 오후 2:40
+ */
 @Configuration
 public class RateLimiterConfig {
 

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * please explain class!
+ * 응답 컨트롤러
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-15 오전 9:22
  */
 @RestController

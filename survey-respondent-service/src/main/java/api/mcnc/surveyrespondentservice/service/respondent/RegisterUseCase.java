@@ -4,9 +4,9 @@ import api.mcnc.surveyrespondentservice.domain.AuthenticatedRespondent;
 import api.mcnc.surveyrespondentservice.domain.Token;
 
 /**
- * please explain class!
+ * 등록 usecase
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-23 오후 3:37
  */
 public interface RegisterUseCase {

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * please explain class!
+ * 관리자 검증 서비스
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2025-01-09 오후 1:39
  */
 @Service

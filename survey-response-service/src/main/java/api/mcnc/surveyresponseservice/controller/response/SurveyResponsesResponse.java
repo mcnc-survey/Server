@@ -3,9 +3,9 @@ package api.mcnc.surveyresponseservice.controller.response;
 import java.util.Map;
 
 /**
- * please explain class!
+ * 설문 응답 내역
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-11 오후 2:01
  */
 public record SurveyResponsesResponse(

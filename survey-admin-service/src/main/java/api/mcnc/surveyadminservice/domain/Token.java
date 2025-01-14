@@ -3,9 +3,9 @@ package api.mcnc.surveyadminservice.domain;
 import lombok.Builder;
 
 /**
- * please explain class!
+ * 토큰
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 12:55
  */
 @Builder

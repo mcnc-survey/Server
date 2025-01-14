@@ -7,6 +7,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * 요청자 정보 인터셉터 설정
+ * @author 유희준
+ */
 @EnableWebMvc
 @Configuration
 @RequiredArgsConstructor

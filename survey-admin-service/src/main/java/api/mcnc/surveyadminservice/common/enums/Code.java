@@ -1,9 +1,9 @@
 package api.mcnc.surveyadminservice.common.enums;
 
 /**
- * please explain class!
+ * 코드 enum marked interface
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-14 오후 9:41
  */
 public interface Code {

@@ -14,9 +14,9 @@ import org.springframework.util.StringUtils;
 import java.util.UUID;
 
 /**
- * please explain class!
+ * 응답 엔티티
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-13 오후 10:00
  */
 @Entity

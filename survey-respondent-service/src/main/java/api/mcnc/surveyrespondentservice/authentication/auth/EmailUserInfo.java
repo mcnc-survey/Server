@@ -4,9 +4,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 /**
- * please explain class!
+ * email 유저 정보
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-05 오후 4:40
  */
 public record EmailUserInfo(

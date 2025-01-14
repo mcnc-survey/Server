@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-25 오후 10:21
  */
 @Repository

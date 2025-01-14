@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- * please explain class!
+ * 응답자 유효성 체크 open feign
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-23 오후 8:20
  */
 @FeignClient(name = "SURVEY-RESPONDENT-SERVICE")

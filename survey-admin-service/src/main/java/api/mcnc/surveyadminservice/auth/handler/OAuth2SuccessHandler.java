@@ -17,6 +17,10 @@ import org.yaml.snakeyaml.util.UriEncoder;
 
 import java.io.IOException;
 
+/**
+ * OAuth2 로그인 성공 시 처리 로직
+ * @author :유희준
+ */
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
@@ -33,16 +37,25 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     AdminPrincipalDetails principal = (AdminPrincipalDetails) authentication.getPrincipal();
     Admin admin = principal.admin();
 
+    // 토큰 생성
     Token token = tokenProvider.issue(admin);
     String accessToken = token.accessToken();
     String refreshToken = token.refreshToken();
 
+    // 리프레시 토큰은 쿠키에
     CookieUtils.setCookie(refreshToken, response);
 
+    // accessToken은 queryParameter로
     response.sendRedirect(makeRedirectUrl(accessToken, admin.name()));
   }
 
-  public String makeRedirectUrl(String accessToken, String userName) {
+  /**
+   * 리다이렉트 URL 생성
+   * @param accessToken : 액세스 토큰
+   * @param userName : 사용자 이름
+   * @return : 리다이렉트 URL
+   */
+  private String makeRedirectUrl(String accessToken, String userName) {
     return UriComponentsBuilder.fromUriString(uri)
       .queryParam(ACCESS_TOKEN, accessToken)
       .queryParam(USER_NAME, userName)

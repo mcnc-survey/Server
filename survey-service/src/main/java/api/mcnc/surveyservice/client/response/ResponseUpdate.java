@@ -6,7 +6,7 @@ import lombok.Builder;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2025-01-03 오전 11:23
  */
 @Builder(access = lombok.AccessLevel.PRIVATE)

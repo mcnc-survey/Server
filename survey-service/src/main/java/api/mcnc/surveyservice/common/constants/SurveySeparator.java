@@ -3,7 +3,7 @@ package api.mcnc.surveyservice.common.constants;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-09 오후 10:35
  */
 public class SurveySeparator {

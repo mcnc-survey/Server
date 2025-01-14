@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
- * please explain class!
+ * 구글 userinfo 요청
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-21 오후 10:07
  */
 @FeignClient(

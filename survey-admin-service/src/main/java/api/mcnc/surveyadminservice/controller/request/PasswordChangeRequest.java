@@ -8,9 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * please explain class!
+ * 비밀번호 변경 요청 객체
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-17 오후 4:43
  */
 @Getter

@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 /**
- * please explain class!
+ * 설문 유효성
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 11:21
  */
 @FeignClient(name = "SURVEY-SERVICE", configuration = SruveyResponseErrorDecoder.class, fallback = SurveyClientFallback.class)

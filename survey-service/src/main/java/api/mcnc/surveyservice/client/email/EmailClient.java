@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-18 오후 4:12
  */
 @FeignClient(name = "survey-email-service")

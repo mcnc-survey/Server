@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-19 오전 10:52
  */
 public interface SurveyJpaRepository extends CrudRepository<SurveyEntity, String> {

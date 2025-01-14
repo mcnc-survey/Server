@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * please explain class!
+ * 비밀번호 암호화 어노테이션
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-10-16 오후 9:43
  */
 @Retention(RetentionPolicy.RUNTIME)

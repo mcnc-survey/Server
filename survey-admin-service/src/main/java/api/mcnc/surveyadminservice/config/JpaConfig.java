@@ -13,9 +13,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import javax.sql.DataSource;
 
 /**
- * please explain class!
+ * hikari 설정
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-18 오후 12:49
  */
 @Configuration

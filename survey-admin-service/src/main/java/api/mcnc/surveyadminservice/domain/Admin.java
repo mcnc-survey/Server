@@ -10,9 +10,9 @@ import static api.mcnc.surveyadminservice.common.constants.Provider.EMAIL;
 import static api.mcnc.surveyadminservice.entity.admin.AdminRole.ADMIN;
 
 /**
- * please explain class!
+ * 관리자
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-25 오후 10:22
  */
 @Builder

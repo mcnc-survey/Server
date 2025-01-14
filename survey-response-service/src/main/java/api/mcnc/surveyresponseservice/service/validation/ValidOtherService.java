@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 11:29
  */
 @Component

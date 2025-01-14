@@ -8,9 +8,9 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
 /**
- * please explain class!
+ * redis 토큰
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 12:40
  */
 @Builder(access = AccessLevel.PRIVATE)

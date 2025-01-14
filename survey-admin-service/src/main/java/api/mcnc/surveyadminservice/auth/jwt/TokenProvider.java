@@ -24,8 +24,12 @@ import java.util.Date;
 import java.util.Optional;
 
 
-@RequiredArgsConstructor
+/**
+ * JWT 토큰 생성 및 검증
+ * @author : 유희준
+ */
 @Component
+@RequiredArgsConstructor
 public class TokenProvider {
 
     @Value("${jwt.secret-key}")
@@ -38,6 +42,9 @@ public class TokenProvider {
     private static final String KEY_ROLE = "role";
     private final TokenService tokenService;
 
+    /**
+     * secretKey 생성
+     */
     @PostConstruct
     private void setSecretKey() {
         secretKey = Keys.hmacShaKeyFor(key.getBytes());
@@ -56,6 +63,7 @@ public class TokenProvider {
     /**
      * 토큰 재발급
      * @param accessToken 요청 토큰
+     * @param refreshToken 리프레시 토큰
      * @return {@link Token}
      */
     public Token reissueAccessToken(String accessToken, String refreshToken) {
@@ -107,6 +115,11 @@ public class TokenProvider {
         }
     }
 
+    /**
+     * 관리자 아이디 추출
+     * @param accessToken 요청 토큰
+     * @return 관리자 아이디
+     */
     public Optional<String> validateTokenAndExtractAdminId(String accessToken) {
         if (!StringUtils.hasText(accessToken)) {
             throw new TokenException(TokenErrorCode.INVALID_TOKEN);
@@ -134,17 +147,29 @@ public class TokenProvider {
     /**
      * 토큰 생성
      * @param authentication {@link Admin }(관리자) 정보
-     * @return 토큰 - String
+     * @return 토큰
      */
     public String generateAccessToken(Admin authentication, long expireTime) {
         return generateToken(authentication, expireTime);
     }
 
+    /**
+     * 리프레시 토큰 생성 및 저장
+     * @param authentication {@link Admin }(관리자) 정보
+     * @param accessToken 액세스 토큰
+     * @return {@link Token}
+     */
     private Token generateRefreshToken(Admin authentication, String accessToken) {
         String refreshToken = generateToken(authentication, refreshTokenExpireTime);
         return tokenService.saveOrUpdate(authentication.id(), refreshToken, accessToken);
     }
 
+    /**
+     * 토큰 생성
+     * @param authentication {@link Admin }(관리자) 정보
+     * @param expireTime 만료 시간
+     * @return 토큰
+     */
     private String generateToken(Admin authentication, long expireTime) {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + expireTime);
@@ -160,6 +185,11 @@ public class TokenProvider {
                 .compact();
     }
 
+    /**
+     * 토큰에서 관리자 정보 추출
+     * @param token 요청 토큰
+     * @return {@link Admin}
+     */
     private Admin getAuthentication(String token) {
         Claims claims = parseClaims(token);
 
@@ -169,6 +199,11 @@ public class TokenProvider {
                 .build();
     }
 
+    /**
+     * 토큰 파싱
+     * @param token 요청 토큰
+     * @return {@link Claims}
+     */
     private Claims parseClaims(String token) {
         try {
             return Jwts.parser().verifyWith(secretKey).build()

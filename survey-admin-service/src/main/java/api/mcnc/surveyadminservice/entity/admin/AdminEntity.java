@@ -15,9 +15,9 @@ import javax.crypto.KeyGenerator;
 import java.util.UUID;
 
 /**
- * please explain class!
+ * 관리자 엔티티
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-18 오후 5:37
  */
 @Entity

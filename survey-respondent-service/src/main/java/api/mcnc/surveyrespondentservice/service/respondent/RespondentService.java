@@ -15,9 +15,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * please explain class!
+ * 등록 서비스 구현체
+ * 응답자 등록, 응답자 유효성 검사, 토큰 발급 서비스
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-22 오후 4:58
  */
 @Service
@@ -27,6 +28,12 @@ public class RespondentService implements RegisterUseCase,  ValidateUseCase{
   private final SurveyValidationService surveyValidationService;
   private final TokenService tokenService;
 
+  /**
+   * 등록
+   * @param authenticatedUser  인증된 사용자 정보
+   * @param surveyId          설문 아이디
+   * @return                  토큰
+   */
   @Override
   public Token registerRespondent(AuthenticatedRespondent authenticatedUser, String surveyId) {
 //   존재하는 설문인지
@@ -44,11 +51,21 @@ public class RespondentService implements RegisterUseCase,  ValidateUseCase{
     return getToken(token);
   }
 
+  /**
+   * 응답자 유효성 검사
+   * @param respondentId  응답자 아이디
+   * @return              응답자 유효성 검사 결과
+   */
   @Override
   public boolean validateRespondent(String respondentId) {
     return respondentRepository.isExist(respondentId);
   }
 
+  /**
+   *  토큰에서 응답자 아이디, 설문 아이디 추출
+   * @param token  토큰
+   * @return       응답자 아이디, 설문 아이디
+   */
   @Override
   public TokenExtractResponse extractSubject(String token) {
     return tokenService.extractSubject(token);

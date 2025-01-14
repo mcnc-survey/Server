@@ -3,9 +3,9 @@ package api.mcnc.surveyresponseservice.controller.response;
 import lombok.Builder;
 
 /**
- * please explain class!
+ * 응답 결과
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-15 오전 9:49
  */
 @Builder

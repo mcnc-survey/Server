@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * please explain class!
+ * 로그인 방식에 맞는 요청 처리
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-22 오후 2:16
  */
 @Service

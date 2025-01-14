@@ -19,9 +19,9 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * please explain class!
+ * redis bean 설정
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-15 오후 5:16
  */
 @Configuration

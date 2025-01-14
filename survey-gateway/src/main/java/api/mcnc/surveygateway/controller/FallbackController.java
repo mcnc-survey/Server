@@ -8,6 +8,12 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+/**
+ * fall back
+ *
+ * @author :유희준
+ * @since :2024-11-18 오후 5:40
+ */
 @Slf4j
 @RestController
 @RequestMapping("/fallback")

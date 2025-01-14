@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 /**
- * please explain class!
+ * 이메일 중복 검사 결과
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-15 오후 9:43
  */
 @Getter

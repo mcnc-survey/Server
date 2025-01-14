@@ -10,9 +10,9 @@ import java.util.Optional;
 import static api.mcnc.surveyresponseservice.common.enums.ResponseErrorCode.NOT_FOUND_SURVEY;
 
 /**
- * please explain class!
+ * 유효성 서비스
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-26 오후 11:24
  */
 @Service

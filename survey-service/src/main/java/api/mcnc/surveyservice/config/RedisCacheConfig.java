@@ -20,7 +20,7 @@ import java.time.Duration;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2025-01-09 오후 1:28
  */
 @Configuration

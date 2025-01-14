@@ -13,9 +13,9 @@ import org.springframework.util.ObjectUtils;
 import java.util.Arrays;
 
 /**
- * please explain class!
+ * 비밀번호 암호화 AOP
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-10-16 오후 9:47
  */
 @Aspect
@@ -25,6 +25,12 @@ public class PasswordEncryptionAspect {
 
   private final PasswordEncoder passwordEncoder;
 
+  /**
+   * Controller 전체에 적용 <br>
+   * 입력으로 들어온 객체에 @PasswordEncryption 어노테이션이 있으면 BCrypt 암호화
+   * @param pjp 입력 객체
+   * @throws Throwable
+   */
   @Around("execution(* api.mcnc.surveyadminservice.controller..*.*(..))")
   public Object passwordEncryptionAspect(ProceedingJoinPoint pjp) throws Throwable {
     Arrays.stream(pjp.getArgs())
@@ -33,6 +39,10 @@ public class PasswordEncryptionAspect {
     return pjp.proceed();
   }
 
+  /**
+   * 입력으로 들어온 객체에 @PasswordEncryption 어노테이션이 있으면 BCrypt 암호화
+   * @param obj 입력 객체
+   */
   private void fieldEncryption(Object obj) {
     if(ObjectUtils.isEmpty(obj)) {
       return;

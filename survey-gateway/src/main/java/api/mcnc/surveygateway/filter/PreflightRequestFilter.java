@@ -10,9 +10,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * please explain class!
+ * prefligth 설정
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-30 오후 5:46
  */
 @Component

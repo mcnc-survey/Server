@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 /**
- * please explain class!
+ * AES 복호화 하는 AOP
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-16 오전 12:54
  */
 @Aspect
@@ -22,6 +22,10 @@ import org.springframework.util.ObjectUtils;
 public class EmailAESDecryptAspect {
   private final Vault vaultEncrypt;
 
+  /**
+   * 회원가입 이메일 복호화
+   * @param result : 리턴 객체
+   */
   @AfterReturning(pointcut = "execution(* api.mcnc.surveyadminservice.controller.AuthController.*(..))", returning = "result")
   public void beforeSignup(Object result) {
     // 반환 객체가 Api로 래핑된 경우에만 처리
@@ -37,6 +41,10 @@ public class EmailAESDecryptAspect {
     }
   }
 
+  /**
+   * 이메일 복호화
+   * @param arg : 이메일 복호화 대상
+   */
   private void emailDecrypt(Object arg) {
     if (ObjectUtils.isEmpty(arg)) return;
     FieldUtils.getAllFieldsList(arg.getClass())

@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-19 오후 8:16
  */
 @Repository
@@ -23,6 +23,9 @@ public class DeleteQueueRepository {
   private final ResponseJpaRepository responseJpaRepository;
   private final TransactionOperations writeTransactionOperations;
 
+  /**
+   * 트랜잭션 직접 생성
+   */
   public DeleteQueueRepository(
     ResponseJpaRepository responseJpaRepository,
     DeleteQueueJpaRepository deleteQueueJpaRepository,

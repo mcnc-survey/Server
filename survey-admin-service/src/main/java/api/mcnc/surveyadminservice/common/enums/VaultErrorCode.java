@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * please explain class!
+ * Vault 관련 실패 코드
  *
- * @author :Uheejoon
+ * @author 유희준
  * @since :2024-12-08 오후 8:08
  */
 @Getter

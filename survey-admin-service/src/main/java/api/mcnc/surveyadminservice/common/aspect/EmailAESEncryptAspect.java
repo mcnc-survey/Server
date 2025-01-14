@@ -18,9 +18,9 @@ import java.lang.reflect.Parameter;
 import java.util.Arrays;
 
 /**
- * please explain class!
+ * AES 암호화 AOP
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-08 오후 8:32
  */
 @Aspect
@@ -30,6 +30,13 @@ public class EmailAESEncryptAspect {
 
   private final Vault vaultEncrypt;
 
+  /**
+   * Controller 전체에 적용 <br>
+   * 입력으로 들어온 객체에 @EmailEncryption 어노테이션이 있으면 AES 암호화
+   *
+   * @param joinPoint 입력 객체
+   * @throws Throwable
+   */
   @Around("execution(* api.mcnc.surveyadminservice.controller.AuthController.*(..))")
   public Object before(ProceedingJoinPoint joinPoint) throws Throwable {
     MethodSignature signature = (MethodSignature)joinPoint.getSignature();
@@ -47,6 +54,10 @@ public class EmailAESEncryptAspect {
     return joinPoint.proceed(args);
   }
 
+  /**
+   * AES 암호화
+   * @param arg 입력 객체
+   */
   private void emailEncrypt(Object arg) {
     if (ObjectUtils.isEmpty(arg)) return;
     FieldUtils.getAllFieldsList(arg.getClass())

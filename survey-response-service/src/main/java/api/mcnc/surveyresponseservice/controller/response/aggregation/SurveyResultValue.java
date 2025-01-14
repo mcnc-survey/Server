@@ -6,9 +6,9 @@ import lombok.Builder;
 import java.util.List;
 
 /**
- * please explain class!
+ * 설문 응답 정보
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-09 오후 4:37
  */
 @Builder

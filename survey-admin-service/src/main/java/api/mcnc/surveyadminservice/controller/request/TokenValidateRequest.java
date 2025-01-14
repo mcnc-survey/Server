@@ -3,9 +3,9 @@ package api.mcnc.surveyadminservice.controller.request;
 import jakarta.validation.constraints.NotBlank;
 
 /**
- * please explain class!
+ * 토큰 검증 요청 객체
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-16 오후 8:01
  */
 public record TokenValidateRequest(

@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-17 오후 8:00
  */
 public class TableSelectType implements QuestionTypeIfs {

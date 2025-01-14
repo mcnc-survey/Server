@@ -5,7 +5,7 @@ import api.mcnc.surveyrespondentservice.common.enums.Code;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-27 오후 10:38
  */
 public class TokenException extends RespondentException{

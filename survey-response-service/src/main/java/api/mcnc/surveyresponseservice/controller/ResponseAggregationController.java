@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * please explain class!
+ * 집계 데이터
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-15 오후 8:50
  */
 @RestController

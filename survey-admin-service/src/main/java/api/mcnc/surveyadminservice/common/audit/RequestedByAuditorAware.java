@@ -7,6 +7,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+/**
+ * JPA Auditing을 위한 클래스<br>
+ * 요청자 저장
+ * @author 유희준
+ */
 @Component
 public record RequestedByAuditorAware(ApplicationContext applicationContext) implements AuditorAware<String> {
     private static final String SYSTEM = "SYSTEM";

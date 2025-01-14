@@ -9,7 +9,7 @@ import lombok.*;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-19 오후 1:42
  */
 @Builder

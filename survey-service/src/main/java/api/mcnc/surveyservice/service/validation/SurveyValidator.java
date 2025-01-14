@@ -16,7 +16,7 @@ import static api.mcnc.surveyservice.common.constants.SurveySeparator.SEPARATOR;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-18 오전 9:44
  */
 @Component

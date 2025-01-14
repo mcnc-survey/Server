@@ -6,7 +6,7 @@ import org.springframework.data.repository.ListCrudRepository;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-19 오후 8:11
  */
 public interface DeleteQueueJpaRepository extends ListCrudRepository<DeleteQueueEntity, Long> {

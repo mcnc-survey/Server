@@ -13,9 +13,9 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * please explain class!
+ * oauth2 설정
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-11-21 오전 10:06
  */
 @Configuration

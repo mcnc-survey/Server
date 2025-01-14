@@ -3,9 +3,9 @@ package api.mcnc.surveyadminservice.controller.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * please explain class!
+ * 토큰 검증 결과
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-16 오후 8:03
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

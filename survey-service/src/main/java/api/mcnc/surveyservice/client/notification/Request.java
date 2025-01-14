@@ -5,7 +5,7 @@ import lombok.Builder;
 /**
  * please explain class!
  *
- * @author :Uheejoon
+ * @author :유희준
  * @since :2024-12-23 오전 10:07
  */
 @Builder
